@@ -1,0 +1,43 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@1,2&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --glow-gold: #ffbf00;
+    --glow-gold-dark: #c59400;
+    --glow-gold-soft: rgba(255, 191, 0, 0.14);
+    --glow-text: #282828;
+    --glow-text-muted: rgba(40, 40, 40, 0.4);
+    --glow-text-soft: rgba(40, 40, 40, 0.8);
+    --glow-text-subtle: rgba(40, 40, 40, 0.5);
+    --glow-border-soft: rgba(40, 40, 40, 0.25);
+    --glow-surface: #f3f3f3;
+    --glow-canvas: #e5e5e5;
+    --glow-primary: #3c5ccf;
+    --glow-purple: #6c63ff;
+    --glow-purple-soft: #4f47d2;
+    --glow-gold-cta: #e6ad01;
+    --glow-secondary: #a38a2d;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-satoshi text-glow-text antialiased;
+  }
+}
+
+@layer utilities {
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-glow-gold focus:px-4 focus:py-2 focus:text-white;
+  }
+}

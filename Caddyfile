@@ -1,0 +1,46 @@
+# Usado apenas em desenvolvimento local. Em producao o caddy-entrypoint.sh
+# gera /tmp/Caddyfile.generated (mTLS ou HTTP interno).
+{
+	admin off
+	persist_config off
+	auto_https off
+
+	log {
+		format json
+	}
+
+	servers {
+		trusted_proxies static private_ranges 100.0.0.0/8
+	}
+}
+
+:{$PORT:3000} {
+	log {
+		format json
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data: blob: https://api.fontshare.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://api.fontshare.com https://fonts.googleapis.com; font-src 'self' data: https://api.fontshare.com https://fonts.gstatic.com; frame-ancestors 'none'"
+	}
+
+	respond /health 200
+
+	route {
+		handle /api* {
+			reverse_proxy {$API_UPSTREAM:http://host.docker.internal:8080} {
+				header_up X-Glow-Proxy-Secret {$GLOW_PROXY_SECRET:dev-local-secret}
+			}
+		}
+
+		handle {
+			root * dist
+			encode gzip
+			try_files {path} /index.html
+			file_server
+		}
+	}
+}
