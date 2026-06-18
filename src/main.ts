@@ -21,6 +21,9 @@ export const createApp = ViteSSG(
     const consentStore = useConsentStore(pinia)
     if (isClient) {
       consentStore.hydrate()
+      import('@/composables/useRequestProof').then(({ ensureRequestProofPool }) => {
+        void ensureRequestProofPool()
+      })
     }
   },
 )

@@ -19,6 +19,8 @@ npm run preview
 
 ## Variáveis de ambiente
 
+### Build (Vite)
+
 | Variável | Descrição |
 |---|---|
 | `VITE_API_BASE_URL` | Base da API (`/api` em produção) |
@@ -26,6 +28,19 @@ npm run preview
 | `VITE_SITE_URL` | URL canônica do site (SEO, sitemap) |
 | `VITE_APP_NAME` | Nome da marca |
 | `VITE_WHATSAPP_NUMBER` | Número do FAB WhatsApp |
+
+### Runtime (Caddy no Railway)
+
+O proxy `/api` injeta `X-Glow-Proxy-Secret` na API. Sem isso, `GET /api/planos` retorna **403 Acesso negado**.
+
+| Variável | Descrição |
+|---|---|
+| `GLOW_PROXY_SECRET` | **Obrigatório** — mesmo valor da API e do app |
+| `API_INTERNAL_HOST` | Host privado da API (`<servico>.railway.internal`) |
+| `API_INTERNAL_URL` | Opcional — `https://<servico-api>.railway.internal` (sem porta) |
+| `MTLS_*` | Se o app staging usa mTLS, copie as mesmas variáveis para a landing |
+
+Dev local: defina `GLOW_PROXY_SECRET` no `.env` (igual à API) para o proxy do Vite.
 
 ## Deploy
 

@@ -122,6 +122,11 @@ elif [ -n "${MTLS_CLIENT_CERT:-}" ] || [ -n "${MTLS_CLIENT_KEY:-}" ]; then
 	exit 1
 fi
 
+if [ -n "$GLOW_PROXY_SECRET" ]; then
+	GLOW_PROXY_SECRET=$(printf '%s' "$GLOW_PROXY_SECRET" | sed -e 's/^"//' -e 's/"$//' -e "s/^'//" -e "s/'$//")
+	export GLOW_PROXY_SECRET
+fi
+
 if [ -z "$GLOW_PROXY_SECRET" ]; then
 	echo "GLOW_PROXY_SECRET obrigatorio para proxy /api." >&2
 	exit 1
