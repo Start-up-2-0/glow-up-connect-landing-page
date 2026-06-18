@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import heroBg from '@/assets/landing/hero-bg.jpg'
+import scrollIndicator from '@/assets/landing/scroll-indicator.svg'
 import { LANDING_SECTIONS } from '@/constants/landing'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
@@ -50,11 +51,11 @@ const { goToSection } = useLandingScroll()
       </div>
     </div>
 
-    <div
-      class="absolute bottom-24 right-8 hidden h-[85px] w-[45px] rounded-[200px] border-4 border-glow-gold lg:block"
+    <img
+      :src="scrollIndicator"
+      alt=""
+      class="absolute bottom-24 right-8 hidden h-[85px] w-[45px] lg:block"
       aria-hidden="true"
-    >
-      <div class="absolute left-1/2 top-4 size-3 -translate-x-1/2 rounded-full bg-glow-gold" />
-    </div>
+    />
   </section>
 </template>

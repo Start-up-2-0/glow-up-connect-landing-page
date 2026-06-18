@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { LANDING_SECTIONS } from '@/constants/landing'
 import { ROUTE_PATHS } from '@/constants/routes'
+import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
 
@@ -102,6 +103,18 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
             class="absolute -bottom-3 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-glow-gold"
           />
         </button>
+        <a
+          :href="`${APP_URL}/auth/login`"
+          class="font-satoshi text-base font-normal text-white transition hover:text-white/90"
+        >
+          Entrar
+        </a>
+        <a
+          :href="`${APP_URL}/auth/register`"
+          class="font-satoshi text-base font-normal text-white transition hover:text-white/90"
+        >
+          Cadastrar
+        </a>
       </nav>
 
       <div class="hidden lg:block">
@@ -144,6 +157,20 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
         >
           {{ link.label }}
         </button>
+        <a
+          :href="`${APP_URL}/auth/login`"
+          class="rounded-lg px-3 py-2.5 font-satoshi text-base text-white hover:bg-white/5"
+          @click="menuOpen = false"
+        >
+          Entrar
+        </a>
+        <a
+          :href="`${APP_URL}/auth/register`"
+          class="rounded-lg px-3 py-2.5 font-satoshi text-base text-white hover:bg-white/5"
+          @click="menuOpen = false"
+        >
+          Cadastrar
+        </a>
         <button type="button" class="pt-2" @click="handleNavClick(LANDING_SECTIONS.planos)">
           <LandingCtaButton label="Começar agora!" class="w-full justify-center" />
         </button>

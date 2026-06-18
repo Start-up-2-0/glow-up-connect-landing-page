@@ -39,5 +39,5 @@ export function getSeoForPath(path: string): SeoMeta {
 }
 
 export function defaultOgImage(): string {
-  return siteUrl('/og-image.png')
+  return siteUrl('/og-image.jpg')
 }

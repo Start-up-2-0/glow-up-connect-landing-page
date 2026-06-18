@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import LandingLogo from '@/components/landing/LandingLogo.vue'
 import { FOOTER_TAGLINE } from '@/constants/landing'
 import { ROUTE_PATHS } from '@/constants/routes'
 </script>
@@ -8,10 +9,7 @@ import { ROUTE_PATHS } from '@/constants/routes'
   <footer class="relative bg-[#282828] px-4 py-12 text-white lg:px-8">
     <div class="mx-auto grid max-w-[1280px] gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-start">
       <div>
-        <p class="font-satoshi text-2xl">
-          <span class="font-light">Glow Up </span>
-          <span class="font-black">Connect</span>
-        </p>
+        <LandingLogo variant="footer" />
         <div class="mt-5 font-satoshi text-base text-white/60">
           <p v-for="(line, index) in FOOTER_TAGLINE" :key="index">{{ line }}</p>
         </div>
