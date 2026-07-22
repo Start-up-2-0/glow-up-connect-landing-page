@@ -41,16 +41,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section :id="LANDING_SECTIONS.planos" class="bg-[#f3f3f3] px-4 py-20 lg:px-8 lg:py-28">
+  <section :id="LANDING_SECTIONS.planos" class="bg-glow-surface px-4 py-20 lg:px-8 lg:py-28">
     <div class="mx-auto max-w-[1280px]">
       <h2
-        class="text-center font-montserrat text-4xl font-light leading-[1.09] text-[#282828] sm:text-5xl lg:text-6xl xl:text-[96px]"
+        class="text-center font-montserrat text-4xl font-light leading-[1.09] text-glow-text sm:text-5xl lg:text-6xl xl:text-[96px]"
       >
         <span class="block">Invista no seu </span>
         <span class="block font-black text-glow-gold">estabelecimento</span>
       </h2>
 
-      <p class="mx-auto mt-10 max-w-3xl text-center font-montserrat text-xl leading-[1.09] text-[#282828]">
+      <p class="mx-auto mt-10 max-w-3xl text-center font-montserrat text-xl leading-[1.09] text-glow-text">
         <span class="font-light">Escolha o plano ideal para o momento do seu negócio. </span>
         <span class="font-bold">Sem surpresas, sem taxas escondidas</span>
         <span class="font-light">.</span>

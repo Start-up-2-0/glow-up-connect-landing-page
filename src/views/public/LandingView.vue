@@ -63,7 +63,7 @@ watch(() => route.hash, handleHashScroll)
 </script>
 
 <template>
-  <div class="overflow-x-hidden bg-[#f3f3f3]">
+  <div class="overflow-x-hidden bg-glow-surface">
     <LandingNavbar />
     <main id="conteudo-principal">
       <LandingHero />

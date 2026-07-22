@@ -25,7 +25,7 @@ const classes = computed(() => [
   props.variant === 'gold' && 'bg-glow-gold-cta text-white focus:ring-glow-gold-cta/50',
   props.variant === 'purple' && 'bg-glow-purple text-white focus:ring-glow-purple/50',
   props.variant === 'outline' &&
-    'border border-[#282828]/50 bg-transparent text-[#282828] focus:ring-[#282828]/20',
+    'border border-glow-text/50 bg-transparent text-glow-text focus:ring-glow-text/20',
 ])
 </script>
 

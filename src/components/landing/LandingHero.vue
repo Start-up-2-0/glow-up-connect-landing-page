@@ -21,7 +21,7 @@ const { goToSection } = useLandingScroll()
       width="1920"
       height="1080"
     />
-    <div class="absolute inset-0 bg-[#282828]/40" aria-hidden="true" />
+    <div class="absolute inset-0 bg-glow-inverse-surface/40" aria-hidden="true" />
 
     <div class="relative z-10 mx-auto flex min-h-[929px] max-w-[1280px] flex-col items-center justify-center px-4 pb-24 pt-32 text-center lg:px-8">
       <div class="max-w-3xl">

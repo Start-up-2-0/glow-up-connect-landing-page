@@ -19,11 +19,11 @@ const activeTab = ref<BeneficioTab>('usuarios')
 </script>
 
 <template>
-  <section :id="LANDING_SECTIONS.beneficios" class="bg-[#f3f3f3] px-4 py-20 lg:px-8 lg:py-28">
+  <section :id="LANDING_SECTIONS.beneficios" class="bg-glow-surface px-4 py-20 lg:px-8 lg:py-28">
     <div class="mx-auto max-w-[1280px]">
       <LandingSectionTitle before="Benefícios para cada " highlight="perfil" size="xl" />
 
-      <div class="mx-auto mt-14 flex max-w-[711px] flex-col gap-2 rounded-[80px] border border-[#282828]/40 bg-[#f3f3f3] p-2 sm:flex-row sm:items-center sm:justify-between">
+      <div class="mx-auto mt-14 flex max-w-[711px] flex-col gap-2 rounded-[80px] border border-glow-text/40 bg-glow-surface p-2 sm:flex-row sm:items-center sm:justify-between">
         <button
           v-for="tab in tabs"
           :key="tab.id"
@@ -32,7 +32,7 @@ const activeTab = ref<BeneficioTab>('usuarios')
           :class="
             activeTab === tab.id
               ? 'bg-glow-purple font-semibold text-white/80'
-              : 'font-normal text-[#282828]/80 hover:text-[#282828]'
+              : 'font-normal text-glow-text/80 hover:text-glow-text'
           "
           @click="activeTab = tab.id"
         >
@@ -40,7 +40,7 @@ const activeTab = ref<BeneficioTab>('usuarios')
         </button>
       </div>
 
-      <p class="mx-auto mt-10 max-w-3xl text-center font-montserrat text-xl leading-[1.09] text-[#282828]">
+      <p class="mx-auto mt-10 max-w-3xl text-center font-montserrat text-xl leading-[1.09] text-glow-text">
         <span class="font-light">{{ BENEFICIOS_INTRO[activeTab].linha1 }}</span>
         <span class="font-bold">{{ BENEFICIOS_INTRO[activeTab].destaque1 }}</span>
         <span class="font-light">{{ BENEFICIOS_INTRO[activeTab].linha2 }}</span>
@@ -52,7 +52,7 @@ const activeTab = ref<BeneficioTab>('usuarios')
         <article
           v-for="item in BENEFICIOS_POR_TAB[activeTab]"
           :key="item.titulo"
-          class="relative min-h-[288px] rounded-[20px] border border-[#282828]/40 p-8 pt-[88px]"
+          class="relative min-h-[288px] rounded-[20px] border border-glow-text/40 p-8 pt-[88px]"
         >
           <span
             class="absolute left-8 top-8 flex size-[58px] items-center justify-center rounded-2xl bg-glow-gold"
@@ -63,7 +63,7 @@ const activeTab = ref<BeneficioTab>('usuarios')
           <h3 class="font-montserrat text-2xl font-bold text-glow-gold">
             {{ item.titulo }}
           </h3>
-          <p class="mt-4 font-poppins text-base font-light leading-[1.09] text-[#282828]/60">
+          <p class="mt-4 font-poppins text-base font-light leading-[1.09] text-glow-text/60">
             {{ item.descricao }}
           </p>
         </article>

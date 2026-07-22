@@ -4,7 +4,7 @@ import { LANDING_SECTIONS, LANDING_STATS } from '@/constants/landing'
 </script>
 
 <template>
-  <section :id="LANDING_SECTIONS.usuarios" class="relative bg-[#f3f3f3] px-4 py-20 lg:px-8 lg:py-28">
+  <section :id="LANDING_SECTIONS.usuarios" class="relative bg-glow-surface px-4 py-20 lg:px-8 lg:py-28">
     <div
       class="pointer-events-none absolute inset-x-0 -top-8 h-24 bg-gradient-to-b from-glow-purple/10 to-transparent"
       aria-hidden="true"
@@ -13,7 +13,7 @@ import { LANDING_SECTIONS, LANDING_STATS } from '@/constants/landing'
     <div class="mx-auto max-w-[1280px]">
       <LandingSectionTitle before="Nossos " highlight="números" size="xl" centered />
 
-      <p class="mx-auto mt-10 max-w-3xl text-center font-montserrat text-xl leading-[1.09] text-[#282828]">
+      <p class="mx-auto mt-10 max-w-3xl text-center font-montserrat text-xl leading-[1.09] text-glow-text">
         <span class="font-light">Faça parte do nosso ecossistema e </span>
         <span class="font-bold">alavanque</span>
         <span class="font-light"> seus números!</span>

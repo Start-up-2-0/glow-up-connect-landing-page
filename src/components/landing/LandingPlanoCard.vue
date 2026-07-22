@@ -31,7 +31,7 @@ const ctaVariant = computed(() => (props.popular ? 'purple' : 'outline'))
 
 <template>
   <article
-    class="relative flex h-full flex-col rounded-[20px] border border-[#282828]/40 p-8 sm:p-10"
+    class="relative flex h-full flex-col rounded-[20px] border border-glow-text/40 p-8 sm:p-10"
     :class="popular ? 'border-glow-purple bg-glow-purple/[0.08]' : 'bg-white/60'"
   >
     <div class="mb-6 flex h-6 items-center justify-center">
@@ -60,7 +60,7 @@ const ctaVariant = computed(() => (props.popular ? 'purple' : 'outline'))
 
     <p
       class="mt-5 min-h-[3.25rem] line-clamp-3 font-poppins text-base font-light leading-[1.2]"
-      :class="popular ? 'text-glow-purple-soft' : 'text-[#282828]'"
+      :class="popular ? 'text-glow-purple-soft' : 'text-glow-text'"
     >
       {{ plano.descricao }}
     </p>
@@ -99,7 +99,7 @@ const ctaVariant = computed(() => (props.popular ? 'purple' : 'outline'))
         </svg>
         <span
           class="line-clamp-2 font-poppins text-sm font-light leading-snug"
-          :class="popular ? 'text-glow-purple-soft' : 'text-[#282828]'"
+          :class="popular ? 'text-glow-purple-soft' : 'text-glow-text'"
         >
           {{ feature }}
         </span>

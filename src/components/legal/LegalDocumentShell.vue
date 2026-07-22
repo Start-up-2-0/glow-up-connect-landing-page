@@ -48,7 +48,7 @@ withDefaults(
   margin-top: 1.5rem;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--glow-text, #282828);
+  color: var(--glow-text);
 }
 
 .prose-legal :deep(ul) {

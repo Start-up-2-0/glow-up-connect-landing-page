@@ -6,7 +6,7 @@ import { ROUTE_PATHS } from '@/constants/routes'
 </script>
 
 <template>
-  <footer class="relative bg-[#282828] px-4 py-12 text-white lg:px-8">
+  <footer class="relative bg-glow-inverse-surface px-4 py-12 text-white lg:px-8">
     <div class="mx-auto grid max-w-[1280px] gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-start">
       <div>
         <LandingLogo variant="footer" />

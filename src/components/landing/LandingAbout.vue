@@ -11,7 +11,7 @@ const featureIcons = [sobreIcon1, sobreIcon2, sobreIcon3]
 <template>
   <section
     :id="LANDING_SECTIONS.sobre"
-    class="relative overflow-hidden bg-[#f3f3f3] px-4 pb-24 pt-20 lg:px-8 lg:pt-28"
+    class="relative overflow-hidden bg-glow-surface px-4 pb-24 pt-20 lg:px-8 lg:pt-28"
   >
     <div
       class="pointer-events-none absolute left-1/2 top-32 h-40 w-[min(1156px,90%)] -translate-x-1/2 rounded-full bg-glow-purple/15 blur-3xl"
@@ -44,7 +44,7 @@ const featureIcons = [sobreIcon1, sobreIcon2, sobreIcon3]
       </div>
 
       <div class="lg:pt-4">
-        <h2 class="font-montserrat text-4xl font-light leading-[1.09] text-[#282828] sm:text-5xl lg:text-6xl xl:text-[96px]">
+        <h2 class="font-montserrat text-4xl font-light leading-[1.09] text-glow-text sm:text-5xl lg:text-6xl xl:text-[96px]">
           <span class="block">Beleza e </span>
           <span class="block">
             tecnologia em
@@ -52,7 +52,7 @@ const featureIcons = [sobreIcon1, sobreIcon2, sobreIcon3]
           </span>
         </h2>
 
-        <div class="mt-11 space-y-0 font-poppins text-lg font-light leading-[1.09] text-[#282828]/50">
+        <div class="mt-11 space-y-0 font-poppins text-lg font-light leading-[1.09] text-glow-text/50">
           <p v-for="(line, index) in SOBRE_BODY" :key="index">{{ line }}</p>
         </div>
 
@@ -72,7 +72,7 @@ const featureIcons = [sobreIcon1, sobreIcon2, sobreIcon3]
               <h3 class="font-montserrat text-lg font-bold leading-[1.09] text-glow-gold">
                 {{ feature.titulo }}
               </h3>
-              <p class="mt-3 font-poppins text-base font-light leading-[1.09] text-[#282828]">
+              <p class="mt-3 font-poppins text-base font-light leading-[1.09] text-glow-text">
                 {{ feature.descricao }}
               </p>
             </div>

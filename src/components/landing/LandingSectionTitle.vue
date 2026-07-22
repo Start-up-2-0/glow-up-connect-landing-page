@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <h2
-    class="font-montserrat font-light leading-[1.09] text-[#282828]"
+    class="font-montserrat font-light leading-[1.09] text-glow-text"
     :class="[
       centered ? 'text-center' : 'text-left',
       size === 'xl' ? 'text-4xl sm:text-5xl lg:text-7xl xl:text-[96px]' : 'text-3xl sm:text-4xl lg:text-6xl xl:text-[80px]',

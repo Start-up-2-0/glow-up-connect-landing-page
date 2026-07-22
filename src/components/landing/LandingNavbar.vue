@@ -86,7 +86,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
       </RouterLink>
 
       <nav
-        class="relative hidden items-center gap-9 rounded-[80px] bg-[#282828] px-10 py-6 lg:flex"
+        class="relative hidden items-center gap-9 rounded-[80px] bg-glow-inverse-surface px-10 py-6 lg:flex"
         aria-label="Navegação principal"
       >
         <button
@@ -144,7 +144,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 
     <div
       v-if="menuOpen"
-      class="mx-auto mt-3 max-w-[1280px] rounded-2xl border border-white/10 bg-[#282828] px-4 py-4 lg:hidden"
+      class="mx-auto mt-3 max-w-[1280px] rounded-2xl border border-white/10 bg-glow-inverse-surface px-4 py-4 lg:hidden"
     >
       <nav class="flex flex-col gap-2" aria-label="Menu mobile">
         <button

@@ -10,21 +10,50 @@
 
 @layer base {
   :root {
-    --glow-gold: #ffbf00;
-    --glow-gold-dark: #c59400;
-    --glow-gold-soft: rgba(255, 191, 0, 0.14);
+    /* Marca */
+    --brand-gold: #ffbf00;
+    --brand-gold-dark: #c59400;
+    --brand-blue: #3c5ccf;
+    --brand-purple: #6c63ff;
+    --brand-purple-soft: #4f47d2;
+    --brand-secondary: #a38a2d;
+
+    /* Semânticos — landing (light) */
+    --glow-bg-base: #e5e5e5;
+    --glow-bg-surface: #f3f3f3;
+    --glow-bg-elevated: #ffffff;
+
+    --glow-canvas: var(--glow-bg-base);
+    --glow-surface: var(--glow-bg-surface);
+
     --glow-text: #282828;
     --glow-text-muted: rgba(40, 40, 40, 0.4);
     --glow-text-soft: rgba(40, 40, 40, 0.8);
     --glow-text-subtle: rgba(40, 40, 40, 0.5);
     --glow-border-soft: rgba(40, 40, 40, 0.25);
-    --glow-surface: #f3f3f3;
-    --glow-canvas: #e5e5e5;
-    --glow-primary: #3c5ccf;
-    --glow-purple: #6c63ff;
-    --glow-purple-soft: #4f47d2;
+
+    --glow-gold: var(--brand-gold);
+    --glow-gold-dark: var(--brand-gold-dark);
+    --glow-gold-soft: rgba(255, 191, 0, 0.14);
     --glow-gold-cta: #e6ad01;
-    --glow-secondary: #a38a2d;
+    --glow-primary: var(--brand-blue);
+    --glow-purple: var(--brand-purple);
+    --glow-purple-soft: var(--brand-purple-soft);
+    --glow-secondary: var(--brand-secondary);
+
+    --glow-inverse-surface: #282828;
+    --glow-error: #cf3f3f;
+    --glow-error-bg: rgba(207, 63, 63, 0.1);
+
+    --glow-promo-border: #c3a600;
+    --glow-promo-bg-soft: #fff3cc;
+    --glow-promo-bg-dashboard: #fff8e1;
+    --glow-promo-text: #524917;
+    --glow-promo-accent: #a67c00;
+
+    --glow-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    --glow-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --glow-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
   }
 
   html {
@@ -32,7 +61,7 @@
   }
 
   body {
-    @apply font-satoshi text-glow-text antialiased;
+    @apply bg-glow-surface font-satoshi text-glow-text antialiased;
   }
 }
 
