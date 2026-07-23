@@ -17,6 +17,10 @@ const { resolveError } = useApiError()
 const erro = ref<string | null>(null)
 const planoDetalhesAberto = ref<Plano | null>(null)
 
+const percentualDescontoPromocao = computed(() =>
+  promocao.value?.disponivel ? promocao.value.percentualDescontoMensalidade : null,
+)
+
 const planoEssencial = computed(() => planos.value.find((p) => p.nome === 'Essencial'))
 
 function isPopular(plano: Plano): boolean {
@@ -82,6 +86,7 @@ onMounted(async () => {
           :key="plano.id"
           :plano="plano"
           :popular="isPopular(plano)"
+          :percentual-desconto="percentualDescontoPromocao"
           @ver-detalhes="abrirDetalhesPlano"
         />
       </div>
@@ -90,6 +95,7 @@ onMounted(async () => {
         :open="planoDetalhesAberto !== null"
         :plano="planoDetalhesAberto"
         :popular="planoDetalhesAberto ? isPopular(planoDetalhesAberto) : false"
+        :percentual-desconto="percentualDescontoPromocao"
         @close="fecharDetalhesPlano"
       />
     </div>

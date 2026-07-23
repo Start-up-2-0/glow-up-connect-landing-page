@@ -3,13 +3,14 @@ import { computed } from 'vue'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
 import LandingPlanoLimites from '@/components/landing/LandingPlanoLimites.vue'
 import { appOnboardingUrl } from '@/constants/urls'
-import { formatBRL } from '@/utils/formatters'
+import { aplicarDescontoPercentual, formatBRL } from '@/utils/formatters'
 import { getPlanoFeatures, LANDING_PLANO_MAX_FEATURES } from '@/utils/planoDisplay'
 import type { Plano } from '@/types/plano.types'
 
 const props = defineProps<{
   plano: Plano
   popular?: boolean
+  percentualDesconto?: number | null
 }>()
 
 const emit = defineEmits<{
@@ -27,6 +28,16 @@ const hiddenFeaturesCount = computed(() =>
 )
 
 const ctaVariant = computed(() => (props.popular ? 'purple' : 'outline'))
+
+const temDesconto = computed(() => (props.percentualDesconto ?? 0) > 0)
+
+const precoComDesconto = computed(() =>
+  temDesconto.value
+    ? aplicarDescontoPercentual(props.plano.preco, props.percentualDesconto!)
+    : props.plano.preco,
+)
+
+const priceAccent = computed(() => (props.popular ? 'text-glow-purple' : 'text-glow-gold'))
 </script>
 
 <template>
@@ -66,18 +77,37 @@ const ctaVariant = computed(() => (props.popular ? 'purple' : 'outline'))
     </p>
 
     <div class="mt-6">
-      <p
-        class="inline font-montserrat text-2xl font-black leading-[1.09]"
-        :class="popular ? 'text-glow-purple' : 'text-glow-gold'"
-      >
-        {{ formatBRL(plano.preco) }}
-      </p>
-      <span
-        class="ml-1 font-montserrat text-[10px] font-bold"
-        :class="popular ? 'text-glow-purple' : 'text-glow-gold'"
-      >
-        /mês
-      </span>
+      <template v-if="temDesconto">
+        <p
+          class="font-montserrat text-sm font-medium line-through opacity-60"
+          :class="priceAccent"
+        >
+          {{ formatBRL(plano.preco) }}/mês
+        </p>
+        <p
+          class="inline font-montserrat text-2xl font-black leading-[1.09]"
+          :class="priceAccent"
+        >
+          {{ formatBRL(precoComDesconto) }}
+        </p>
+        <span class="ml-1 font-montserrat text-[10px] font-bold" :class="priceAccent">
+          /mês
+        </span>
+        <p class="mt-1 font-montserrat text-xs font-semibold" :class="priceAccent">
+          {{ percentualDesconto }}% off para sempre
+        </p>
+      </template>
+      <template v-else>
+        <p
+          class="inline font-montserrat text-2xl font-black leading-[1.09]"
+          :class="priceAccent"
+        >
+          {{ formatBRL(plano.preco) }}
+        </p>
+        <span class="ml-1 font-montserrat text-[10px] font-bold" :class="priceAccent">
+          /mês
+        </span>
+      </template>
     </div>
 
     <LandingPlanoLimites class="mt-5" :plano="plano" :popular="popular" variant="card" />

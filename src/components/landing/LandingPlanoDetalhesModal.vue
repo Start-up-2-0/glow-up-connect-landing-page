@@ -3,7 +3,7 @@ import { computed, onUnmounted, watch } from 'vue'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
 import { appOnboardingUrl } from '@/constants/urls'
 import LandingPlanoLimites from '@/components/landing/LandingPlanoLimites.vue'
-import { formatBRL } from '@/utils/formatters'
+import { aplicarDescontoPercentual, formatBRL } from '@/utils/formatters'
 import { getPlanoFeatures } from '@/utils/planoDisplay'
 import type { Plano } from '@/types/plano.types'
 
@@ -11,6 +11,7 @@ const props = defineProps<{
   open: boolean
   plano: Plano | null
   popular?: boolean
+  percentualDesconto?: number | null
 }>()
 
 const emit = defineEmits<{
@@ -25,6 +26,13 @@ const checkoutHref = computed(() =>
 
 const accentText = computed(() => (props.popular ? 'text-glow-purple' : 'text-glow-gold'))
 const accentSoft = computed(() => (props.popular ? 'text-glow-purple-soft' : 'text-glow-text'))
+
+const temDesconto = computed(() => (props.percentualDesconto ?? 0) > 0 && props.plano !== null)
+
+const precoComDesconto = computed(() => {
+  if (!props.plano || !temDesconto.value) return 0
+  return aplicarDescontoPercentual(props.plano.preco, props.percentualDesconto!)
+})
 
 function handleKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') {
@@ -111,12 +119,28 @@ onUnmounted(() => {
               </button>
             </div>
 
-            <p class="mt-4">
-              <span class="font-montserrat text-2xl font-black" :class="accentText">
-                {{ formatBRL(plano.preco) }}
-              </span>
-              <span class="ml-1 font-montserrat text-xs font-bold" :class="accentText">/mês</span>
-            </p>
+            <div class="mt-4">
+              <template v-if="temDesconto">
+                <p class="font-montserrat text-sm font-medium line-through opacity-60" :class="accentText">
+                  {{ formatBRL(plano.preco) }}/mês
+                </p>
+                <p>
+                  <span class="font-montserrat text-2xl font-black" :class="accentText">
+                    {{ formatBRL(precoComDesconto) }}
+                  </span>
+                  <span class="ml-1 font-montserrat text-xs font-bold" :class="accentText">/mês</span>
+                </p>
+                <p class="mt-1 font-montserrat text-xs font-semibold" :class="accentText">
+                  {{ percentualDesconto }}% off para sempre
+                </p>
+              </template>
+              <p v-else>
+                <span class="font-montserrat text-2xl font-black" :class="accentText">
+                  {{ formatBRL(plano.preco) }}
+                </span>
+                <span class="ml-1 font-montserrat text-xs font-bold" :class="accentText">/mês</span>
+              </p>
+            </div>
           </div>
 
           <div class="flex-1 overflow-y-auto px-6 py-5 sm:px-8">
