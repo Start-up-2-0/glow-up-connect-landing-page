@@ -19,6 +19,7 @@ export interface PromocaoLancamento {
   disponivel: boolean
   vagasRestantes: number
   diasTrial: number
+  percentualDescontoMensalidade: number
   diasVencimentoPermitidos: number[]
   diasAntecedenciaAlertaFatura: number
   diasAntecedenciaGeracaoCobranca: number
