@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import LandingNavbar from '@/components/landing/LandingNavbar.vue'
 import LandingExplorarLojas from '@/components/landing/LandingExplorarLojas.vue'
-import LandingFooter from '@/components/landing/LandingFooter.vue'
 import LandingWhatsappFab from '@/components/landing/LandingWhatsappFab.vue'
 import { useSeo } from '@/composables/useSeo'
 import { ROUTE_PATHS } from '@/constants/routes'
@@ -10,12 +8,11 @@ useSeo({ path: ROUTE_PATHS.EXPLORAR_LOJAS })
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col overflow-x-hidden bg-glow-inverse-surface text-white">
-    <LandingNavbar />
-    <main id="conteudo-principal" class="flex-1 pt-20 md:pt-24">
+  <div class="relative h-dvh overflow-hidden bg-[#0b0b0b] text-white">
+    <h1 class="sr-only">Explorar Lojas</h1>
+    <main id="conteudo-principal" class="h-full">
       <LandingExplorarLojas variant="page" />
     </main>
-    <LandingFooter />
     <LandingWhatsappFab />
   </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { RouterLink } from 'vue-router'
 import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
 import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import ExplorarLojasMapa from '@/components/explorar/ExplorarLojasMapa.vue'
@@ -24,7 +25,7 @@ import { formatDistanciaKm } from '@/utils/formatters'
 
 const props = withDefaults(
   defineProps<{
-    /** `page` = tela dedicada; `section` = bloco embutido (legado). */
+    /** `page` = tela dedicada imersiva; `section` = bloco embutido. */
     variant?: 'page' | 'section'
   }>(),
   { variant: 'page' },
@@ -37,7 +38,6 @@ const { resolveError } = useApiError()
 const {
   coords,
   loading: geoLoading,
-  errorMessage: geoError,
   request: requestGeo,
 } = useGeolocation()
 
@@ -121,6 +121,12 @@ const categoriaModel = computed({
   },
 })
 
+const statusLabel = computed(() => {
+  if (loading.value || geoLoading.value) return 'Buscando…'
+  const n = itensFiltrados.value.length
+  return `${n} ${n === 1 ? 'loja' : 'lojas'}`
+})
+
 async function carregar(opts?: { latitude: number; longitude: number }) {
   const location =
     opts
@@ -157,7 +163,19 @@ async function carregar(opts?: { latitude: number; longitude: number }) {
       selectedGuid.value = null
     }
   } catch (err) {
-    error.value = resolveError(err, 'Não foi possível carregar estabelecimentos.')
+    const status =
+      err && typeof err === 'object' && 'response' in err
+        ? (err as { response?: { status?: number } }).response?.status
+        : undefined
+    error.value =
+      status != null && status >= 500
+        ? 'Serviço temporariamente indisponível. Tente novamente em instantes.'
+        : resolveError(
+            err,
+            'Não foi possível carregar estabelecimentos. Tente novamente em instantes.',
+          )
+    itens.value = []
+    total.value = 0
   } finally {
     loading.value = false
   }
@@ -192,7 +210,6 @@ function selecionarSugestao(item: EstabelecimentoProximo) {
   buscaAberta.value = false
   focusGuid.value = item.publicGuid
   selectedGuid.value = item.publicGuid
-  // re-trigger focus watch
   requestAnimationFrame(() => {
     focusGuid.value = item.publicGuid
   })
@@ -213,21 +230,227 @@ watch(
 onMounted(async () => {
   mapMounted.value = true
   await Promise.all([carregarCategorias(), bootstrapLocation()])
+  await nextTick()
+  mapaRef.value?.invalidateSize()
 })
 </script>
 
 <template>
+  <!-- ========== Página imersiva (referência PDX Shootings) ========== -->
+  <section
+    v-if="isPage"
+    :id="LANDING_SECTIONS.explorarLojas"
+    class="explorar-immersive"
+    aria-label="Explorar lojas no mapa"
+  >
+    <div class="explorar-immersive__stage">
+      <ExplorarLojasMapa
+        ref="mapaRef"
+        v-model:selected-guid="selectedGuid"
+        immersive
+        :itens="itensFiltrados"
+        :user-lat="userLat"
+        :user-lng="userLng"
+        :user-accuracy="userAccuracy"
+        :focus-guid="focusGuid"
+        :bootstrap-lat="bootstrapLat"
+        :bootstrap-lng="bootstrapLng"
+        @bounds-change="onBoundsChange"
+      />
+
+      <!-- Top chrome (estilo PDX) -->
+      <header class="explorar-pdx__top">
+        <div class="explorar-pdx__search-wrap">
+          <RouterLink :to="'/'" class="explorar-pdx__brand" aria-label="Glow Up Connect — início">
+            <span class="font-light">GlowUp</span>
+            <span class="font-black">Connect</span>
+          </RouterLink>
+          <div class="explorar-pdx__search">
+            <svg class="explorar-pdx__search-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.4" />
+              <path d="M13.5 13.5 17 17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+            </svg>
+            <input
+              v-model="busca"
+              type="search"
+              class="explorar-pdx__search-input"
+              placeholder="Buscar loja, bairro ou cidade…"
+              autocomplete="off"
+              aria-label="Buscar estabelecimentos"
+              @focus="buscaAberta = true"
+              @blur="buscaAberta = false"
+            />
+            <ul
+              v-if="buscaAberta && sugestoesBusca.length > 0"
+              class="explorar-pdx__dropdown"
+              role="listbox"
+            >
+              <li v-for="item in sugestoesBusca" :key="item.publicGuid">
+                <button
+                  type="button"
+                  class="explorar-pdx__option"
+                  @mousedown.prevent="selecionarSugestao(item)"
+                >
+                  <span class="font-semibold text-white">{{ item.nome }}</span>
+                  <span class="text-white/45">
+                    {{ item.endereco?.bairro || item.endereco?.cidade }}
+                    · {{ formatDistanciaKm(item.distanciaKm) }}
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="explorar-pdx__status">
+          <span class="explorar-pdx__status-label">Exibindo:</span>
+          {{ localLabel }}
+          <span class="explorar-pdx__status-sep">·</span>
+          <strong>Lojas: {{ loading || geoLoading ? '…' : itensFiltrados.length }}</strong>
+        </p>
+
+        <div class="explorar-pdx__actions">
+          <button
+            type="button"
+            class="explorar-pdx__square"
+            :class="{ 'explorar-pdx__square--active': filtrosAbertos }"
+            :aria-expanded="filtrosAbertos"
+            title="Filtros"
+            aria-label="Abrir filtros"
+            @click="filtrosAbertos = !filtrosAbertos"
+          >
+            <svg class="size-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 6h16M7 12h10M10 18h4"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span v-if="filtrosAtivosCount > 0" class="explorar-pdx__badge">{{ filtrosAtivosCount }}</span>
+          </button>
+          <button
+            type="button"
+            class="explorar-pdx__square"
+            :disabled="geoLoading"
+            title="Minha localização"
+            aria-label="Usar minha localização"
+            @click="bootstrapLocation"
+          >
+            <svg class="size-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
+              <path
+                d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <RouterLink
+            :to="'/'"
+            class="explorar-pdx__square"
+            title="Voltar ao início"
+            aria-label="Voltar ao início"
+          >
+            <svg class="size-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-8.5Z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </RouterLink>
+        </div>
+      </header>
+
+      <p v-if="error" class="explorar-pdx__alert" role="alert">{{ error }}</p>
+
+      <div v-if="loading && itens.length === 0" class="explorar-pdx__toast">
+        <span class="explorar-pdx__spinner" aria-hidden="true" />
+        Carregando mapa…
+      </div>
+
+      <div
+        v-else-if="!loading && !error && itensFiltrados.length === 0"
+        class="explorar-pdx__toast explorar-pdx__toast--panel"
+      >
+        <p class="text-sm font-semibold text-white">Nenhuma loja nesta área</p>
+        <p class="mt-1 text-xs text-white/50">Amplie o raio ou mova o mapa.</p>
+        <button type="button" class="explorar-pdx__link-btn mt-2" @click="limparFiltros">
+          Limpar filtros
+        </button>
+      </div>
+
+      <!-- Dock inferior de filtros (estilo PDX) -->
+      <Transition name="explorar-dock">
+        <aside
+          v-if="filtrosAbertos"
+          class="explorar-pdx__dock"
+          aria-labelledby="explorar-filtros-title"
+        >
+          <div class="explorar-pdx__dock-head">
+            <h2 id="explorar-filtros-title" class="explorar-pdx__dock-title">Filtros</h2>
+            <button
+              type="button"
+              class="explorar-pdx__square"
+              aria-label="Fechar filtros"
+              @click="filtrosAbertos = false"
+            >
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="explorar-pdx__dock-grid">
+            <label class="explorar-pdx__field">
+              <span>Categoria</span>
+              <select v-model="categoriaModel" class="explorar-pdx__select">
+                <option value="">Todas</option>
+                <option v-for="cat in categorias" :key="cat.id" :value="String(cat.id)">
+                  {{ cat.nome }}
+                </option>
+              </select>
+            </label>
+            <label class="explorar-pdx__field">
+              <span>Distância</span>
+              <select v-model.number="filtros.raioKm" class="explorar-pdx__select">
+                <option v-for="raio in EXPLORAR_RAIO_KM_OPTIONS" :key="raio" :value="raio">
+                  Até {{ raio }} km
+                </option>
+              </select>
+            </label>
+            <label class="explorar-pdx__field">
+              <span>Avaliação</span>
+              <select v-model.number="filtros.notaMinima" class="explorar-pdx__select">
+                <option v-for="opt in EXPLORAR_NOTA_MIN_OPTIONS" :key="opt.value" :value="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </label>
+            <div class="explorar-pdx__dock-actions">
+              <button type="button" class="explorar-pdx__ghost" @click="limparFiltros">Limpar</button>
+              <button type="button" class="explorar-pdx__primary" @click="filtrosAbertos = false">
+                Aplicar
+              </button>
+            </div>
+          </div>
+        </aside>
+      </Transition>
+    </div>
+  </section>
+
+  <!-- ========== Variante seção (legado / embutida) ========== -->
   <LandingStorySection
+    v-else
     :id="LANDING_SECTIONS.explorarLojas"
     tone="dark"
-    :chapter-index="isPage ? undefined : chapter.index"
-    :chapter-label="isPage ? undefined : chapter.label"
-    :show-progress="!isPage"
+    :chapter-index="chapter.index"
+    :chapter-label="chapter.label"
   >
-    <div
-      class="px-4 lg:px-8"
-      :class="isPage ? 'pb-10 pt-2 lg:pb-12' : 'pb-20 pt-4 lg:pb-28 lg:pt-6'"
-    >
+    <div class="px-4 pb-20 pt-4 lg:px-8 lg:pb-28 lg:pt-6">
       <div class="mx-auto max-w-[1280px]">
         <div
           ref="revealRoot"
@@ -239,170 +462,42 @@ onMounted(async () => {
             eyebrow="Rede ao vivo"
             title="Explore lojas"
             highlight="perto de você"
-            subtitle="Mapa interativo com barbearias e salões reais da plataforma — escolha, veja detalhes e agende sem criar conta."
+            subtitle="Mapa interativo com barbearias e salões reais da plataforma."
           />
         </div>
 
-        <div
-          class="explorar-lojas-shell"
-          :class="isPage ? 'mt-8 lg:mt-10' : 'mt-10 lg:mt-14'"
-        >
+        <div class="explorar-lojas-shell mt-10 lg:mt-14">
           <div class="explorar-lojas-shell__chrome">
             <div class="explorar-lojas-shell__meta">
               <p class="explorar-lojas-shell__local">
                 <span class="explorar-lojas-shell__pulse" aria-hidden="true" />
                 {{ localLabel }}
               </p>
-              <p class="explorar-lojas-shell__count">
-                <template v-if="loading || geoLoading">Buscando estabelecimentos…</template>
-                <template v-else>
-                  {{ itensFiltrados.length }}
-                  {{ itensFiltrados.length === 1 ? 'loja' : 'lojas' }}
-                  <span v-if="total > itensFiltrados.length" class="text-white/35">
-                    · {{ total }} na área
-                  </span>
-                </template>
-              </p>
+              <p class="explorar-lojas-shell__count">{{ statusLabel }}</p>
             </div>
-
             <div class="explorar-lojas-shell__tools">
               <div class="explorar-lojas-search">
-                <svg
-                  class="explorar-lojas-search__icon"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.4" />
-                  <path
-                    d="M13.5 13.5 17 17"
-                    stroke="currentColor"
-                    stroke-width="1.4"
-                    stroke-linecap="round"
-                  />
-                </svg>
                 <input
                   v-model="busca"
                   type="search"
-                  class="explorar-lojas-search__input"
-                  placeholder="Buscar por nome, cidade, bairro…"
-                  autocomplete="off"
-                  aria-label="Buscar estabelecimentos"
+                  class="explorar-lojas-search__input pl-4"
+                  placeholder="Buscar…"
                   @focus="buscaAberta = true"
                   @blur="buscaAberta = false"
                 />
-                <ul
-                  v-if="buscaAberta && sugestoesBusca.length > 0"
-                  class="explorar-lojas-search__dropdown"
-                  role="listbox"
-                >
-                  <li v-for="item in sugestoesBusca" :key="item.publicGuid">
-                    <button
-                      type="button"
-                      class="explorar-lojas-search__option"
-                      @mousedown.prevent="selecionarSugestao(item)"
-                    >
-                      <span class="font-semibold text-white">{{ item.nome }}</span>
-                      <span class="text-white/45">
-                        {{ item.endereco?.bairro || item.endereco?.cidade }}
-                        · {{ formatDistanciaKm(item.distanciaKm) }}
-                      </span>
-                    </button>
-                  </li>
-                </ul>
               </div>
-
-              <div class="explorar-lojas-filters-desktop hidden lg:flex">
-                <select
-                  v-model="categoriaModel"
-                  class="explorar-lojas-select"
-                  aria-label="Categoria"
-                >
-                  <option value="">Todas as categorias</option>
-                  <option
-                    v-for="cat in categorias"
-                    :key="cat.id"
-                    :value="String(cat.id)"
-                  >
-                    {{ cat.nome }}
-                  </option>
-                </select>
-
-                <select
-                  v-model.number="filtros.raioKm"
-                  class="explorar-lojas-select"
-                  aria-label="Distância"
-                >
-                  <option
-                    v-for="raio in EXPLORAR_RAIO_KM_OPTIONS"
-                    :key="raio"
-                    :value="raio"
-                  >
-                    Até {{ raio }} km
-                  </option>
-                </select>
-
-                <select
-                  v-model.number="filtros.notaMinima"
-                  class="explorar-lojas-select"
-                  aria-label="Avaliação mínima"
-                >
-                  <option
-                    v-for="opt in EXPLORAR_NOTA_MIN_OPTIONS"
-                    :key="opt.value"
-                    :value="opt.value"
-                  >
-                    {{ opt.label }}
-                  </option>
-                </select>
-              </div>
-
-              <button
-                type="button"
-                class="explorar-lojas-chip lg:hidden"
-                :aria-expanded="filtrosAbertos"
-                @click="filtrosAbertos = true"
-              >
-                Filtros
-                <span
-                  v-if="filtrosAtivosCount > 0"
-                  class="explorar-lojas-chip__badge"
-                >
-                  {{ filtrosAtivosCount }}
-                </span>
-              </button>
-
               <button
                 type="button"
                 class="explorar-lojas-locate"
                 :disabled="geoLoading"
-                title="Usar minha localização"
                 @click="bootstrapLocation"
               >
-                <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
-                  <path
-                    d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                <span class="hidden sm:inline">Minha localização</span>
+                Minha localização
               </button>
             </div>
-
-            <p v-if="geoError && usedFallbackLocation" class="explorar-lojas-shell__hint">
-              {{ geoError }}
-            </p>
-            <p v-if="error" class="explorar-lojas-shell__error">{{ error }}</p>
           </div>
-
           <div class="explorar-lojas-shell__stage">
-            <div
-              class="explorar-lojas-shell__frame"
-              :class="{ 'explorar-lojas-shell__frame--page': isPage }"
-            >
+            <div class="explorar-lojas-shell__frame">
               <ExplorarLojasMapa
                 ref="mapaRef"
                 v-model:selected-guid="selectedGuid"
@@ -415,256 +510,122 @@ onMounted(async () => {
                 :bootstrap-lng="bootstrapLng"
                 @bounds-change="onBoundsChange"
               />
-
-              <div
-                v-if="loading && itens.length === 0"
-                class="explorar-lojas-shell__loading"
-              >
-                <span class="explorar-lojas-shell__spinner" aria-hidden="true" />
-                Carregando mapa…
-              </div>
-
-              <div
-                v-else-if="!loading && itensFiltrados.length === 0"
-                class="explorar-lojas-shell__empty"
-              >
-                <p class="font-satoshi text-base font-semibold text-white">
-                  Nenhuma loja nesta área
-                </p>
-                <p class="mt-1 font-poppins text-sm font-light text-white/50">
-                  Amplie o raio, limpe os filtros ou mova o mapa para outra região.
-                </p>
-                <button
-                  type="button"
-                  class="explorar-lojas-chip mt-4"
-                  @click="limparFiltros"
-                >
-                  Limpar filtros
-                </button>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Painel de filtros (mobile) -->
-    <Teleport to="body">
-      <div
-        v-if="filtrosAbertos"
-        class="explorar-lojas-sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="explorar-filtros-title"
-      >
-        <button
-          type="button"
-          class="explorar-lojas-sheet__backdrop"
-          aria-label="Fechar filtros"
-          @click="filtrosAbertos = false"
-        />
-        <div class="explorar-lojas-sheet__panel">
-          <div class="flex items-center justify-between gap-3">
-            <h3
-              id="explorar-filtros-title"
-              class="font-satoshi text-lg font-semibold text-white"
-            >
-              Filtros
-            </h3>
-            <button
-              type="button"
-              class="rounded-full p-2 text-white/50 hover:bg-white/10 hover:text-white"
-              aria-label="Fechar"
-              @click="filtrosAbertos = false"
-            >
-              <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M6 6l12 12M18 6L6 18"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <label class="explorar-lojas-sheet__field">
-            <span>Categoria</span>
-            <select v-model="categoriaModel" class="explorar-lojas-select w-full">
-              <option value="">Todas as categorias</option>
-              <option v-for="cat in categorias" :key="cat.id" :value="String(cat.id)">
-                {{ cat.nome }}
-              </option>
-            </select>
-          </label>
-
-          <label class="explorar-lojas-sheet__field">
-            <span>Distância</span>
-            <select v-model.number="filtros.raioKm" class="explorar-lojas-select w-full">
-              <option
-                v-for="raio in EXPLORAR_RAIO_KM_OPTIONS"
-                :key="raio"
-                :value="raio"
-              >
-                Até {{ raio }} km
-              </option>
-            </select>
-          </label>
-
-          <label class="explorar-lojas-sheet__field">
-            <span>Avaliação</span>
-            <select v-model.number="filtros.notaMinima" class="explorar-lojas-select w-full">
-              <option
-                v-for="opt in EXPLORAR_NOTA_MIN_OPTIONS"
-                :key="opt.value"
-                :value="opt.value"
-              >
-                {{ opt.label }}
-              </option>
-            </select>
-          </label>
-
-          <label class="explorar-lojas-sheet__check">
-            <input v-model="filtros.apenasAbertos" type="checkbox" class="rounded border-white/20" />
-            <span>Apenas abertos agora <em>(em breve)</em></span>
-          </label>
-
-          <div class="mt-6 flex gap-3">
-            <button type="button" class="explorar-lojas-chip flex-1" @click="limparFiltros">
-              Limpar
-            </button>
-            <button
-              type="button"
-              class="explorar-lojas-locate flex-1 justify-center"
-              @click="filtrosAbertos = false"
-            >
-              Aplicar
-            </button>
-          </div>
-        </div>
-      </div>
-    </Teleport>
   </LandingStorySection>
 </template>
 
 <style scoped>
-.explorar-lojas-shell {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.explorar-lojas-shell__chrome {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  border-radius: 1.5rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background: linear-gradient(
-    160deg,
-    rgb(255 255 255 / 0.06),
-    rgb(255 255 255 / 0.02)
-  );
-  padding: 1rem 1rem 1.1rem;
-  backdrop-filter: blur(12px);
-}
-
-@media (min-width: 1024px) {
-  .explorar-lojas-shell__chrome {
-    padding: 1.15rem 1.35rem 1.25rem;
-  }
-}
-
-.explorar-lojas-shell__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-}
-
-.explorar-lojas-shell__local {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.explorar-lojas-shell__pulse {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 9999px;
-  background: #6ee7b7;
-  box-shadow: 0 0 0 0 rgb(110 231 183 / 0.55);
-  animation: explorar-pulse 2s ease-out infinite;
-}
-
-@keyframes explorar-pulse {
-  70% {
-    box-shadow: 0 0 0 10px rgb(110 231 183 / 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgb(110 231 183 / 0);
-  }
-}
-
-.explorar-lojas-shell__count {
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.8rem;
-  color: rgb(255 255 255 / 0.5);
-}
-
-.explorar-lojas-shell__tools {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.explorar-lojas-search {
+/* —— PDX-style immersive map —— */
+.explorar-immersive {
   position: relative;
-  flex: 1 1 14rem;
-  min-width: 0;
+  height: 100%;
+  min-height: 100dvh;
 }
 
-.explorar-lojas-search__icon {
+.explorar-immersive__stage {
   position: absolute;
-  left: 0.85rem;
-  top: 50%;
-  width: 1rem;
-  height: 1rem;
-  transform: translateY(-50%);
-  color: rgb(255 255 255 / 0.4);
+  inset: 0;
+  overflow: hidden;
+  background: #0b0b0b;
+}
+
+.explorar-pdx__top {
+  position: absolute;
+  z-index: 650;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem 0.75rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.72), rgb(0 0 0 / 0.28) 70%, transparent);
   pointer-events: none;
 }
 
-.explorar-lojas-search__input {
-  width: 100%;
-  height: 2.65rem;
-  border-radius: 0.9rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  background: rgb(13 8 37 / 0.55);
-  padding: 0 0.9rem 0 2.35rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.875rem;
-  color: #fff;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.explorar-pdx__top > * {
+  pointer-events: auto;
 }
 
-.explorar-lojas-search__input::placeholder {
+@media (min-width: 900px) {
+  .explorar-pdx__top {
+    grid-template-columns: minmax(14rem, 22rem) minmax(0, 1fr) auto;
+    padding: 0.75rem 1rem;
+  }
+}
+
+.explorar-pdx__search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.explorar-pdx__brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: baseline;
+  gap: 0.15rem;
+  max-width: 7.5rem;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+@media (min-width: 640px) {
+  .explorar-pdx__brand {
+    max-width: none;
+    font-size: 0.9rem;
+  }
+}
+
+.explorar-pdx__search {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.explorar-pdx__search-icon {
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  width: 0.9rem;
+  height: 0.9rem;
+  transform: translateY(-50%);
+  color: rgb(255 255 255 / 0.45);
+  pointer-events: none;
+}
+
+.explorar-pdx__search-input {
+  width: 100%;
+  height: 2.15rem;
+  border: 1px solid rgb(255 255 255 / 0.24);
+  border-radius: 3px;
+  background: rgb(0 0 0 / 0.45);
+  padding: 0 0.7rem 0 2rem;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.82rem;
+  color: rgb(255 255 255 / 0.9);
+  outline: none;
+}
+
+.explorar-pdx__search-input:focus {
+  border-color: var(--glow-gold, #c9a227);
+}
+
+.explorar-pdx__search-input::placeholder {
   color: rgb(255 255 255 / 0.35);
 }
 
-.explorar-lojas-search__input:focus {
-  border-color: rgb(201 162 39 / 0.45);
-  box-shadow: 0 0 0 3px rgb(201 162 39 / 0.12);
-}
-
-.explorar-lojas-search__dropdown {
+.explorar-pdx__dropdown {
   position: absolute;
   z-index: 40;
   left: 0;
@@ -672,244 +633,361 @@ onMounted(async () => {
   top: calc(100% + 0.35rem);
   margin: 0;
   list-style: none;
-  padding: 0.35rem;
-  border-radius: 0.9rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  background: rgb(22 14 51 / 0.98);
-  box-shadow: 0 18px 40px -20px rgb(0 0 0 / 0.7);
+  padding: 0.3rem;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 4px;
+  background: rgb(18 18 18 / 0.96);
+  box-shadow: 0 16px 36px -18px rgb(0 0 0 / 0.8);
 }
 
-.explorar-lojas-search__option {
+.explorar-pdx__option {
   display: flex;
   width: 100%;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.1rem;
-  border-radius: 0.65rem;
-  padding: 0.55rem 0.7rem;
+  gap: 0.05rem;
+  border-radius: 3px;
+  padding: 0.45rem 0.55rem;
   text-align: left;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.8rem;
-  transition: background 0.15s ease;
+  font-size: 0.78rem;
 }
 
-.explorar-lojas-search__option:hover {
+.explorar-pdx__option:hover {
   background: rgb(255 255 255 / 0.06);
 }
 
-.explorar-lojas-filters-desktop {
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.explorar-lojas-select {
-  height: 2.65rem;
-  border-radius: 0.9rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  background: rgb(13 8 37 / 0.55);
-  padding: 0 2rem 0 0.85rem;
+.explorar-pdx__status {
+  display: none;
+  margin: 0;
+  text-align: center;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.8rem;
-  color: #fff;
-  outline: none;
+  font-size: 0.82rem;
+  color: rgb(255 255 255 / 0.82);
 }
 
-.explorar-lojas-chip,
-.explorar-lojas-locate {
+.explorar-pdx__status-label {
+  color: rgb(255 255 255 / 0.45);
+  margin-right: 0.25rem;
+}
+
+.explorar-pdx__status-sep {
+  margin: 0 0.35rem;
+  color: rgb(255 255 255 / 0.3);
+}
+
+.explorar-pdx__status strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+@media (min-width: 900px) {
+  .explorar-pdx__status {
+    display: block;
+  }
+}
+
+.explorar-pdx__actions {
+  display: flex;
+  justify-self: end;
+  gap: 0.4rem;
+}
+
+.explorar-pdx__square {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  height: 2.65rem;
-  border-radius: 0.9rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  background: rgb(255 255 255 / 0.05);
-  padding: 0 0.95rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #fff;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.15s ease;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border: 1px solid rgb(255 255 255 / 0.24);
+  border-radius: 3px;
+  background: transparent;
+  color: rgb(255 255 255 / 0.82);
+  text-decoration: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.explorar-lojas-chip:hover,
-.explorar-lojas-locate:hover:not(:disabled) {
-  background: rgb(255 255 255 / 0.09);
-  border-color: rgb(201 162 39 / 0.35);
+.explorar-pdx__square:hover:not(:disabled),
+.explorar-pdx__square--active {
+  color: var(--glow-gold, #c9a227);
+  border-color: var(--glow-gold, #c9a227);
 }
 
-.explorar-lojas-locate {
-  background: color-mix(in srgb, var(--glow-gold) 16%, transparent);
-  border-color: color-mix(in srgb, var(--glow-gold) 35%, transparent);
-  color: var(--glow-gold);
-}
-
-.explorar-lojas-locate:disabled {
-  opacity: 0.55;
+.explorar-pdx__square:disabled {
+  opacity: 0.45;
   cursor: wait;
 }
 
-.explorar-lojas-chip__badge {
-  display: inline-grid;
-  place-items: center;
-  min-width: 1.15rem;
-  height: 1.15rem;
-  border-radius: 9999px;
-  background: var(--glow-gold);
-  color: #0d0825;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0 0.25rem;
-}
-
-.explorar-lojas-shell__hint,
-.explorar-lojas-shell__error {
-  margin: 0;
-  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.75rem;
-  font-weight: 300;
-}
-
-.explorar-lojas-shell__hint {
-  color: rgb(255 255 255 / 0.45);
-}
-
-.explorar-lojas-shell__error {
-  color: #fca5a5;
-}
-
-.explorar-lojas-shell__stage {
-  position: relative;
-}
-
-.explorar-lojas-shell__frame {
-  position: relative;
-  height: min(72vh, 640px);
-  min-height: 420px;
-  overflow: hidden;
-  border-radius: 1.75rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  box-shadow:
-    0 40px 80px -40px rgb(0 0 0 / 0.75),
-    inset 0 1px 0 rgb(255 255 255 / 0.06);
-  background: #120a2a;
-}
-
-@media (min-width: 1024px) {
-  .explorar-lojas-shell__frame {
-    height: min(78vh, 720px);
-  }
-
-  .explorar-lojas-shell__frame--page {
-    height: min(calc(100vh - 14rem), 820px);
-  }
-}
-
-.explorar-lojas-shell__loading,
-.explorar-lojas-shell__empty {
+.explorar-pdx__badge {
   position: absolute;
-  inset: 0;
-  z-index: 20;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 9999px;
+  background: #63e2b7;
+  color: #0b0b0b;
+  font-size: 0.58rem;
+  font-weight: 700;
   display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 0.5rem;
-  background: rgb(13 8 37 / 0.55);
-  backdrop-filter: blur(4px);
-  text-align: center;
-  padding: 1.5rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.9rem;
-  color: rgb(255 255 255 / 0.7);
+  place-items: center;
+  padding: 0 0.15rem;
 }
 
-.explorar-lojas-shell__spinner {
-  width: 1.75rem;
-  height: 1.75rem;
+.explorar-pdx__alert {
+  position: absolute;
+  z-index: 640;
+  top: 3.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(36rem, calc(100% - 1.5rem));
+  margin: 0;
+  border: 1px solid rgb(252 165 165 / 0.35);
+  border-radius: 3px;
+  background: rgb(0 0 0 / 0.72);
+  padding: 0.45rem 0.75rem;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #fecaca;
+  text-align: center;
+}
+
+.explorar-pdx__toast {
+  position: absolute;
+  z-index: 640;
+  left: 50%;
+  bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: translateX(-50%);
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 9999px;
+  background: rgb(0 0 0 / 0.78);
+  padding: 0.55rem 0.9rem;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.explorar-pdx__toast--panel {
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 6px;
+  bottom: 5.5rem;
+}
+
+.explorar-pdx__spinner {
+  width: 0.9rem;
+  height: 0.9rem;
   border-radius: 9999px;
   border: 2px solid rgb(255 255 255 / 0.15);
-  border-top-color: var(--glow-gold);
+  border-top-color: #63e2b7;
   animation: explorar-spin 0.8s linear infinite;
 }
 
 @keyframes explorar-spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
-.explorar-lojas-sheet {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.explorar-lojas-sheet__backdrop {
-  position: absolute;
-  inset: 0;
+.explorar-pdx__link-btn {
   border: none;
-  background: rgb(0 0 0 / 0.55);
-  backdrop-filter: blur(4px);
-}
-
-.explorar-lojas-sheet__panel {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 28rem;
-  border-radius: 1.5rem 1.5rem 0 0;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  border-bottom: none;
-  background: #160e33;
-  padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
-  animation: explorar-sheet-up 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@keyframes explorar-sheet-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.explorar-lojas-sheet__field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-top: 1rem;
+  background: transparent;
+  color: #7fe7c4;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.explorar-pdx__dock {
+  position: absolute;
+  z-index: 660;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top: 1px solid rgb(255 255 255 / 0.14);
+  background: rgb(18 18 18 / 0.94);
+  backdrop-filter: blur(10px);
+  padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom));
+}
+
+.explorar-pdx__dock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.explorar-pdx__dock-title {
+  margin: 0;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.explorar-pdx__dock-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 720px) {
+  .explorar-pdx__dock-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    align-items: end;
+  }
+}
+
+.explorar-pdx__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.72rem;
   font-weight: 600;
   color: rgb(255 255 255 / 0.55);
 }
 
-.explorar-lojas-sheet__check {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  margin-top: 1.1rem;
+.explorar-pdx__select {
+  height: 2.15rem;
+  border: 1px solid rgb(255 255 255 / 0.24);
+  border-radius: 3px;
+  background: rgb(0 0 0 / 0.35);
+  padding: 0 1.75rem 0 0.7rem;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.85rem;
-  color: rgb(255 255 255 / 0.75);
+  font-size: 0.82rem;
+  color: rgb(255 255 255 / 0.9);
+  outline: none;
 }
 
-.explorar-lojas-sheet__check em {
-  font-style: normal;
-  color: rgb(255 255 255 / 0.35);
-  font-size: 0.75rem;
+.explorar-pdx__select:focus {
+  border-color: var(--glow-gold, #c9a227);
+}
+
+.explorar-pdx__dock-actions {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.explorar-pdx__ghost,
+.explorar-pdx__primary {
+  height: 2.15rem;
+  border-radius: 3px;
+  padding: 0 0.9rem;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.explorar-pdx__ghost {
+  border: 1px solid rgb(255 255 255 / 0.24);
+  background: transparent;
+  color: rgb(255 255 255 / 0.85);
+}
+
+.explorar-pdx__primary {
+  border: none;
+  background: var(--glow-gold, #c9a227);
+  color: #0d0825;
+}
+
+.explorar-dock-enter-active,
+.explorar-dock-leave-active {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s ease;
+}
+
+.explorar-dock-enter-from,
+.explorar-dock-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .explorar-lojas-shell__pulse,
-  .explorar-lojas-shell__spinner,
-  .explorar-lojas-sheet__panel {
+  .explorar-pdx__spinner,
+  .explorar-dock-enter-active,
+  .explorar-dock-leave-active {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* section variant leftovers */
+.explorar-lojas-shell__chrome {
+  border-radius: 1.5rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(255 255 255 / 0.04);
+  padding: 1rem;
+}
+
+.explorar-lojas-shell__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.explorar-lojas-shell__local,
+.explorar-lojas-shell__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+.explorar-lojas-shell__pulse {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: #6ee7b7;
+}
+
+.explorar-lojas-shell__tools {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.explorar-lojas-search {
+  flex: 1;
+}
+
+.explorar-lojas-search__input,
+.explorar-lojas-locate {
+  height: 2.5rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(13 8 37 / 0.55);
+  color: #fff;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.85rem;
+}
+
+.explorar-lojas-locate {
+  padding: 0 0.9rem;
+  font-weight: 600;
+}
+
+.explorar-lojas-shell__frame {
+  position: relative;
+  margin-top: 1rem;
+  height: min(60vh, 520px);
+  min-height: 360px;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explorar-immersive__toolbar,
+  .explorar-immersive__pulse,
+  .explorar-immersive__spinner {
     animation: none !important;
   }
 }
