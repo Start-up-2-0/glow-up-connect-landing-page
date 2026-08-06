@@ -13,6 +13,8 @@ const props = defineProps<{
   focusGuid?: string | null
   bootstrapLat: number
   bootstrapLng: number
+  /** Full-bleed map experience (card bottom-right, no frame chrome). */
+  immersive?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -68,6 +70,26 @@ function markerHtml(
   item: EstabelecimentoProximo,
   state: 'default' | 'selected' | 'destaque',
 ) {
+  const immersive = Boolean(props.immersive)
+  const nome = item.nome || 'Estabelecimento'
+  const label = escapeHtml(nome)
+  const initial = escapeHtml(nome.charAt(0).toUpperCase())
+  const logoSrc = item.logo?.trim()
+  const avatar = logoSrc
+    ? `<img class="explorar-landing-marker__logo" src="${escapeHtml(logoSrc)}" alt="" width="28" height="28" loading="lazy" decoding="async" />`
+    : `<span class="explorar-landing-marker__initial">${initial}</span>`
+
+  if (immersive) {
+    const classes = [
+      'explorar-landing-dot',
+      state === 'selected' ? 'explorar-landing-dot--selected' : '',
+      state === 'destaque' || item.destaqueMarketplace ? 'explorar-landing-dot--destaque' : '',
+    ]
+      .filter(Boolean)
+      .join(' ')
+    return `<button type="button" class="${classes}" aria-label="${label}" title="${label}"><span class="explorar-landing-dot__core">${avatar}</span></button>`
+  }
+
   const classes = [
     'explorar-landing-marker',
     state === 'selected' ? 'explorar-landing-marker--selected' : '',
@@ -77,14 +99,6 @@ function markerHtml(
   ]
     .filter(Boolean)
     .join(' ')
-
-  const nome = item.nome || 'Estabelecimento'
-  const label = escapeHtml(nome)
-  const initial = escapeHtml(nome.charAt(0).toUpperCase())
-  const logoSrc = item.logo?.trim()
-  const avatar = logoSrc
-    ? `<img class="explorar-landing-marker__logo" src="${escapeHtml(logoSrc)}" alt="" width="28" height="28" loading="lazy" decoding="async" />`
-    : `<span class="explorar-landing-marker__initial">${initial}</span>`
 
   return `<button type="button" class="${classes}" aria-label="${label}"><span class="explorar-landing-marker__avatar">${avatar}</span><span class="explorar-landing-marker__name">${label}</span></button>`
 }
@@ -278,11 +292,13 @@ onMounted(async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     iconCreateFunction(c: any) {
       const count = c.getChildCount()
+      // Estilo PDX: círculos por densidade (teal → lime → gold)
       const size = count > 20 ? 'lg' : count > 8 ? 'md' : 'sm'
+      const tone = count > 20 ? 'hot' : count > 8 ? 'warm' : 'cool'
       return L!.divIcon({
-        html: `<div class="explorar-landing-cluster explorar-landing-cluster--${size}"><span>${count}</span></div>`,
+        html: `<div class="explorar-landing-cluster explorar-landing-cluster--${size} explorar-landing-cluster--${tone}"><span>${count}</span></div>`,
         className: 'explorar-landing-cluster-wrap',
-        iconSize: L!.point(44, 44),
+        iconSize: L!.point(size === 'lg' ? 52 : size === 'md' ? 44 : 36, size === 'lg' ? 52 : size === 'md' ? 44 : 36),
       })
     },
   })
@@ -369,7 +385,13 @@ defineExpose({
 </script>
 
 <template>
-  <div class="explorar-landing-mapa" :class="{ 'explorar-landing-mapa--ready': ready }">
+  <div
+    class="explorar-landing-mapa"
+    :class="{
+      'explorar-landing-mapa--ready': ready,
+      'explorar-landing-mapa--immersive': immersive,
+    }"
+  >
     <div
       ref="mapEl"
       class="explorar-landing-mapa__canvas"
@@ -430,6 +452,22 @@ defineExpose({
 
 .explorar-landing-mapa__card-slot > * {
   pointer-events: auto;
+}
+
+.explorar-landing-mapa--immersive .explorar-landing-mapa__card-slot {
+  left: auto;
+  right: 1rem;
+  bottom: 1.15rem;
+  width: min(22.5rem, calc(100% - 2rem));
+}
+
+.explorar-landing-mapa--immersive .explorar-landing-mapa__canvas {
+  border-radius: 0;
+}
+
+.explorar-landing-mapa--immersive .leaflet-control-zoom {
+  margin-bottom: 1.1rem !important;
+  margin-right: 0.85rem !important;
 }
 
 .explorar-landing-mapa__hint {
@@ -556,28 +594,102 @@ defineExpose({
 .explorar-landing-cluster {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 9999px;
-  border: 2px solid rgb(255 255 255 / 0.9);
-  background: linear-gradient(145deg, #c9a227, #8a6a1e);
-  color: #0d0825;
+  border: 2px solid rgb(255 255 255 / 0.92);
+  background: #51c4e0;
+  color: #fff;
   font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  box-shadow: 0 10px 20px -10px rgb(0 0 0 / 0.55);
+  box-shadow: 0 6px 16px -6px rgb(0 0 0 / 0.55);
+}
+
+.explorar-landing-cluster--cool {
+  background: #51c4e0;
+}
+
+.explorar-landing-cluster--warm {
+  background: #a8e063;
+  color: #1a1a1a;
+}
+
+.explorar-landing-cluster--hot {
+  background: #c9a227;
+  color: #0d0825;
 }
 
 .explorar-landing-cluster--sm {
-  width: 40px;
-  height: 40px;
-  font-size: 0.8rem;
+  width: 36px;
+  height: 36px;
+  font-size: 0.78rem;
+}
+
+.explorar-landing-cluster--md {
+  width: 44px;
+  height: 44px;
+  font-size: 0.85rem;
 }
 
 .explorar-landing-cluster--lg {
   width: 52px;
   height: 52px;
   font-size: 0.95rem;
+}
+
+/* Marcadores estilo ponto (modo imersivo / PDX) */
+.explorar-landing-dot {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.explorar-landing-dot__core {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  background: #51c4e0;
+  box-shadow: 0 6px 14px -6px rgb(0 0 0 / 0.55);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.explorar-landing-dot:hover .explorar-landing-dot__core,
+.explorar-landing-dot--selected .explorar-landing-dot__core {
+  transform: scale(1.12);
+  box-shadow:
+    0 8px 18px -6px rgb(0 0 0 / 0.6),
+    0 0 0 4px rgb(99 226 183 / 0.35);
+}
+
+.explorar-landing-dot--destaque .explorar-landing-dot__core {
+  background: #c9a227;
+}
+
+.explorar-landing-dot--selected .explorar-landing-dot__core {
+  background: #63e2b7;
+}
+
+.explorar-landing-dot .explorar-landing-marker__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.explorar-landing-dot .explorar-landing-marker__initial {
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0d0825;
 }
 
 .explorar-landing-mapa .leaflet-container {
