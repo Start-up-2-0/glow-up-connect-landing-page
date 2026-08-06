@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { EstabelecimentoProximo } from '@/types/estabelecimento.types'
 import { estabelecimentoTemCoordenadas } from '@/utils/explorarMapa'
+import { formatDistanciaKm } from '@/utils/formatters'
 import ExplorarLojasCard from './ExplorarLojasCard.vue'
 
 const props = defineProps<{
@@ -32,7 +33,6 @@ const selectedItem = computed(
 type LeafletNs = typeof import('leaflet')
 type LeafletMap = import('leaflet').Map
 type Marker = import('leaflet').Marker
-type CircleMarker = import('leaflet').CircleMarker
 type Circle = import('leaflet').Circle
 
 let L: LeafletNs | null = null
@@ -40,7 +40,7 @@ let map: LeafletMap | null = null
 // MarkerClusterGroup vem de leaflet.markercluster (augmentação em runtime).
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let cluster: any = null
-let userMarker: CircleMarker | null = null
+let userMarker: Marker | null = null
 let userAccuracyCircle: Circle | null = null
 const markersByGuid = new Map<string, Marker>()
 let moveTimer: ReturnType<typeof setTimeout> | null = null
@@ -66,6 +66,25 @@ function escapeHtml(value: string) {
     .replaceAll('>', '&gt;')
 }
 
+function markerMetaBits(item: EstabelecimentoProximo): string[] {
+  const bits: string[] = []
+  if (typeof item.distanciaKm === 'number' && Number.isFinite(item.distanciaKm)) {
+    bits.push(formatDistanciaKm(item.distanciaKm))
+  }
+  if (item.categoria?.trim()) bits.push(item.categoria.trim())
+  if (typeof item.notaMedia === 'number' && Number.isFinite(item.notaMedia) && item.notaMedia > 0) {
+    const nota = item.notaMedia.toFixed(1).replace('.', ',')
+    const total =
+      typeof item.totalAvaliacoes === 'number' && item.totalAvaliacoes > 0
+        ? ` (${item.totalAvaliacoes})`
+        : ''
+    bits.push(`★ ${nota}${total}`)
+  }
+  const bairro = item.endereco?.bairro?.trim()
+  if (bairro && bits.length < 3) bits.push(bairro)
+  return bits
+}
+
 function markerHtml(
   item: EstabelecimentoProximo,
   state: 'default' | 'selected' | 'destaque',
@@ -78,6 +97,11 @@ function markerHtml(
   const avatar = logoSrc
     ? `<img class="explorar-landing-marker__logo" src="${escapeHtml(logoSrc)}" alt="" width="28" height="28" loading="lazy" decoding="async" />`
     : `<span class="explorar-landing-marker__initial">${initial}</span>`
+  const metaBits = markerMetaBits(item)
+  const metaHtml = metaBits.length
+    ? `<span class="explorar-landing-dot__sub">${escapeHtml(metaBits.join(' · '))}</span>`
+    : ''
+  const ariaExtra = metaBits.length ? ` — ${metaBits.join(' · ')}` : ''
 
   if (immersive) {
     const classes = [
@@ -87,7 +111,14 @@ function markerHtml(
     ]
       .filter(Boolean)
       .join(' ')
-    return `<button type="button" class="${classes}" aria-label="${label}" title="${label}"><span class="explorar-landing-dot__core">${avatar}</span></button>`
+    return `<button type="button" class="${classes}" aria-label="${label}${escapeHtml(ariaExtra)}" title="${label}">
+      <span class="explorar-landing-dot__core">${avatar}</span>
+      <span class="explorar-landing-dot__meta">
+        <span class="explorar-landing-dot__kind">Loja</span>
+        <span class="explorar-landing-dot__name">${label}</span>
+        ${metaHtml}
+      </span>
+    </button>`
   }
 
   const classes = [
@@ -100,7 +131,28 @@ function markerHtml(
     .filter(Boolean)
     .join(' ')
 
-  return `<button type="button" class="${classes}" aria-label="${label}"><span class="explorar-landing-marker__avatar">${avatar}</span><span class="explorar-landing-marker__name">${label}</span></button>`
+  const sub =
+    metaBits.length > 0
+      ? `<span class="explorar-landing-marker__sub">${escapeHtml(metaBits.join(' · '))}</span>`
+      : ''
+
+  return `<button type="button" class="${classes}" aria-label="${label}${escapeHtml(ariaExtra)}">
+    <span class="explorar-landing-marker__avatar">${avatar}</span>
+    <span class="explorar-landing-marker__text">
+      <span class="explorar-landing-marker__name">${label}</span>
+      ${sub}
+    </span>
+  </button>`
+}
+
+function userMarkerHtml() {
+  return `<div class="explorar-landing-you" role="img" aria-label="Você está aqui">
+    <span class="explorar-landing-you__core" aria-hidden="true"></span>
+    <span class="explorar-landing-you__meta">
+      <span class="explorar-landing-you__label">Você</span>
+      <span class="explorar-landing-you__sub">Sua localização</span>
+    </span>
+  </div>`
 }
 
 function markerIcon(item: EstabelecimentoProximo, selected: boolean) {
@@ -175,14 +227,16 @@ function syncUserMarker() {
   }
 
   if (!userMarker) {
-    userMarker = L.circleMarker(latlng, {
-      radius: 8,
-      color: '#fff',
-      weight: 2,
-      fillColor: '#c9a227',
-      fillOpacity: 1,
+    userMarker = L.marker(latlng, {
+      icon: L.divIcon({
+        className: 'explorar-landing-marker-wrap',
+        html: userMarkerHtml(),
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+      }),
+      interactive: false,
+      zIndexOffset: 1000,
     }).addTo(map)
-    userMarker.bindTooltip('Você está aqui', { direction: 'top', offset: [0, -8] })
   } else {
     userMarker.setLatLng(latlng)
   }
@@ -493,8 +547,9 @@ defineExpose({
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  max-width: 11rem;
-  height: 2.3rem;
+  max-width: 12.5rem;
+  min-height: 2.3rem;
+  height: auto;
   margin: 0;
   padding: 0.2rem 0.7rem 0.2rem 0.2rem;
   border: 1px solid rgb(201 162 39 / 0.35);
@@ -586,6 +641,27 @@ defineExpose({
   padding-right: 0.15rem;
 }
 
+.explorar-landing-marker__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.05rem;
+  text-align: left;
+}
+
+.explorar-landing-marker__sub {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: rgb(255 255 255 / 0.62);
+  padding-right: 0.15rem;
+}
+
 .explorar-landing-cluster-wrap {
   background: transparent !important;
   border: none !important;
@@ -638,21 +714,24 @@ defineExpose({
   font-size: 0.95rem;
 }
 
-/* Marcadores estilo ponto (modo imersivo / PDX) */
+/* Marcadores estilo ponto + rótulo (modo imersivo) */
 .explorar-landing-dot {
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   margin: 0;
   padding: 0;
   border: none;
   background: transparent;
   cursor: pointer;
-  transform: translate(-50%, -50%);
+  transform: translate(-1rem, -50%);
+  text-align: left;
 }
 
 .explorar-landing-dot__core {
   display: grid;
   place-items: center;
+  flex: 0 0 auto;
   width: 2rem;
   height: 2rem;
   overflow: hidden;
@@ -663,12 +742,57 @@ defineExpose({
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.explorar-landing-dot__meta {
+  display: flex;
+  min-width: 0;
+  max-width: 11.5rem;
+  flex-direction: column;
+  gap: 0.08rem;
+  padding: 0.28rem 0.55rem 0.32rem;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 6px;
+  background: rgb(8 6 18 / 0.88);
+  box-shadow: 0 8px 18px -10px rgb(0 0 0 / 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.explorar-landing-dot__kind {
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(201 162 39 / 0.95);
+}
+
+.explorar-landing-dot__name {
+  overflow: hidden;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #fff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.explorar-landing-dot__sub {
+  overflow: hidden;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: rgb(255 255 255 / 0.62);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .explorar-landing-dot:hover .explorar-landing-dot__core,
 .explorar-landing-dot--selected .explorar-landing-dot__core {
   transform: scale(1.12);
   box-shadow:
     0 8px 18px -6px rgb(0 0 0 / 0.6),
-    0 0 0 4px rgb(99 226 183 / 0.35);
+    0 0 0 4px rgb(201 162 39 / 0.35);
 }
 
 .explorar-landing-dot--destaque .explorar-landing-dot__core {
@@ -676,7 +800,11 @@ defineExpose({
 }
 
 .explorar-landing-dot--selected .explorar-landing-dot__core {
-  background: #63e2b7;
+  background: #c9a227;
+}
+
+.explorar-landing-dot--selected .explorar-landing-dot__meta {
+  border-color: rgb(201 162 39 / 0.55);
 }
 
 .explorar-landing-dot .explorar-landing-marker__logo {
@@ -690,6 +818,55 @@ defineExpose({
   font-size: 0.72rem;
   font-weight: 700;
   color: #0d0825;
+}
+
+/* Ponto do usuário */
+.explorar-landing-you {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transform: translate(-0.55rem, -50%);
+  pointer-events: none;
+}
+
+.explorar-landing-you__core {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  background: #c9a227;
+  box-shadow:
+    0 0 0 6px rgb(201 162 39 / 0.22),
+    0 6px 14px -6px rgb(0 0 0 / 0.55);
+}
+
+.explorar-landing-you__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  padding: 0.22rem 0.5rem 0.26rem;
+  border: 1px solid rgb(201 162 39 / 0.45);
+  border-radius: 6px;
+  background: rgb(8 6 18 / 0.9);
+  box-shadow: 0 8px 18px -10px rgb(0 0 0 / 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.explorar-landing-you__label {
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.explorar-landing-you__sub {
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgb(201 162 39 / 0.95);
 }
 
 .explorar-landing-mapa .leaflet-container {
