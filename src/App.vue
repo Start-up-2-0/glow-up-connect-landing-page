@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import LandingLayout from '@/layouts/LandingLayout.vue'
 import PublicLayout from '@/layouts/PublicLayout.vue'
+import AgendarPublicoLayout from '@/layouts/AgendarPublicoLayout.vue'
 import CookieConsentBanner from '@/components/legal/CookieConsentBanner.vue'
 import CookiePreferencesModal from '@/components/legal/CookiePreferencesModal.vue'
 import { useConsent } from '@/composables/useConsent'
@@ -11,6 +12,7 @@ const route = useRoute()
 const { showBanner } = useConsent()
 
 const layout = computed(() => {
+  if (route.meta.layout === 'agendar-publico') return AgendarPublicoLayout
   if (route.meta.layout === 'public') return PublicLayout
   return LandingLayout
 })

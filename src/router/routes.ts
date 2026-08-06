@@ -20,4 +20,10 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('@/views/public/PoliticaCookiesView.vue'),
     meta: { layout: 'public', title: 'Política de cookies' },
   },
+  {
+    path: ROUTE_PATHS.LOJA_AGENDAR,
+    name: ROUTE_NAMES.LOJA_AGENDAR,
+    component: () => import('@/views/public/AgendarWizardView.vue'),
+    meta: { layout: 'agendar-publico', title: 'Agendar' },
+  },
 ]
