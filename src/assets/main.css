@@ -144,11 +144,33 @@
   }
 
   .agendar-section-title--identidade {
-    @apply font-montserrat text-lg font-semibold text-white;
+    @apply font-montserrat text-xl font-semibold text-white sm:text-2xl;
   }
 
   .agendar-section-subtitle {
     @apply font-poppins text-base font-light text-white/60;
+  }
+
+  .agendar-identidade-panel {
+    @apply rounded-2xl border border-white/10 bg-[#1a1238]/90 p-5 shadow-glow-md backdrop-blur-md sm:p-8;
+  }
+
+  .agendar-identidade-panel__icon {
+    @apply mb-5 flex size-11 items-center justify-center rounded-xl border text-glow-gold;
+    border-color: color-mix(in srgb, var(--glow-gold) 25%, transparent);
+    background-color: color-mix(in srgb, var(--glow-gold) 10%, transparent);
+  }
+
+  .agendar-identidade-panel__footer {
+    @apply mt-6 flex items-start gap-2.5 border-t border-white/10 pt-5;
+  }
+
+  .agendar-identidade-panel__footer-icon {
+    @apply mt-0.5 flex size-5 shrink-0 items-center justify-center text-emerald-300/90;
+  }
+
+  .agendar-identidade-panel__footer-text {
+    @apply font-poppins text-xs font-light leading-relaxed text-white/45 sm:text-sm;
   }
 
   .agendar-section-date {

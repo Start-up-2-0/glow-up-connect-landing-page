@@ -10,7 +10,7 @@ export const GLOW_BUTTON_PRIMARY_CLASS =
 export const AGENDAR_WIZARD_CONTENT_CLASS = 'mx-auto w-full max-w-[695px]'
 
 export const AGENDAR_CARD_CLASS =
-  'rounded-xl border border-white/15 bg-white/[0.06]'
+  'rounded-xl border border-white/15 bg-white/[0.04]'
 
 export const AGENDAR_BTN_OUTLINE_CLASS =
   'inline-flex h-[34px] shrink-0 items-center justify-center gap-2 rounded-full border border-white/25 px-4 font-inter text-sm text-white transition hover:border-glow-gold/40 hover:bg-white/5'

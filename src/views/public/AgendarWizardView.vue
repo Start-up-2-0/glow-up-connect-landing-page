@@ -300,8 +300,25 @@ async function handleConfirmar() {
         />
 
         <!-- Identificação -->
-        <div v-if="step === 'identidade'" class="space-y-6">
-          <div>
+        <div v-if="step === 'identidade'" class="agendar-identidade-panel">
+          <div class="agendar-identidade-panel__icon" aria-hidden="true">
+            <svg class="size-5" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3.5 13.2 8.3 18 9.5 13.2 10.7 12 15.5 10.8 10.7 6 9.5l4.8-1.2L12 3.5Z"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M18.5 14.5 19.1 16.8 21.5 17.5 19.1 18.2 18.5 20.5 17.9 18.2 15.5 17.5l2.4-.7.6-2.3Z"
+                stroke="currentColor"
+                stroke-width="1.3"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+
+          <div class="mb-6">
             <h1 class="agendar-section-title--identidade">Como deseja continuar?</h1>
             <p class="agendar-section-subtitle mt-2">
               Escolha a opção que melhor se encaixa para você.
@@ -351,6 +368,30 @@ async function handleConfirmar() {
                 </svg>
               </template>
             </AgendarOpcaoCard>
+          </div>
+
+          <div class="agendar-identidade-panel__footer">
+            <span class="agendar-identidade-panel__footer-icon" aria-hidden="true">
+              <svg class="size-4" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 1.5 13 3.5v4.2c0 3.1-2.1 5.4-5 6.3-2.9-.9-5-3.2-5-6.3V3.5L8 1.5Z"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M5.8 8.1 7.3 9.6 10.4 6.4"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <p class="agendar-identidade-panel__footer-text">
+              Seus dados estão seguros conosco. Utilizamos criptografia para proteger suas
+              informações.
+            </p>
           </div>
         </div>
 
