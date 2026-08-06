@@ -9,6 +9,12 @@ export const routes: RouteRecordRaw[] = [
     meta: { layout: 'landing', title: 'Início' },
   },
   {
+    path: ROUTE_PATHS.EXPLORAR_LOJAS,
+    name: ROUTE_NAMES.EXPLORAR_LOJAS,
+    component: () => import('@/views/public/ExplorarLojasView.vue'),
+    meta: { layout: 'landing', title: 'Explorar Lojas' },
+  },
+  {
     path: ROUTE_PATHS.TERMOS_DE_USO,
     name: ROUTE_NAMES.TERMOS_DE_USO,
     component: () => import('@/views/public/TermosDeUsoView.vue'),

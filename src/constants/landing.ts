@@ -77,12 +77,20 @@ export interface FaqItem {
   resposta: string
 }
 
-export const NAV_LINKS = [
+export type NavLink = {
+  label: string
+  /** Identificador usado no estado ativo da navbar. */
+  id: string
+  /** Se definido, navega para a rota em vez de scroll na home. */
+  path?: string
+}
+
+export const NAV_LINKS: readonly NavLink[] = [
   { label: 'Plataforma', id: LANDING_SECTIONS.plataforma },
   { label: 'Como funciona', id: LANDING_SECTIONS.comoFunciona },
   { label: 'Funcionalidades', id: LANDING_SECTIONS.funcionalidades },
   { label: 'Benefícios', id: LANDING_SECTIONS.beneficios },
-  { label: 'Explorar Lojas', id: LANDING_SECTIONS.explorarLojas },
+  { label: 'Explorar Lojas', id: LANDING_SECTIONS.explorarLojas, path: '/explorar-lojas' },
   { label: 'Planos', id: LANDING_SECTIONS.planos },
   { label: 'FAQ', id: LANDING_SECTIONS.faq },
 ] as const

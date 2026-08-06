@@ -22,8 +22,17 @@ import type {
 } from '@/types/estabelecimento.types'
 import { formatDistanciaKm } from '@/utils/formatters'
 
+const props = withDefaults(
+  defineProps<{
+    /** `page` = tela dedicada; `section` = bloco embutido (legado). */
+    variant?: 'page' | 'section'
+  }>(),
+  { variant: 'page' },
+)
+
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.explorar
+const isPage = computed(() => props.variant === 'page')
 const { resolveError } = useApiError()
 const {
   coords,
@@ -211,10 +220,14 @@ onMounted(async () => {
   <LandingStorySection
     :id="LANDING_SECTIONS.explorarLojas"
     tone="dark"
-    :chapter-index="chapter.index"
-    :chapter-label="chapter.label"
+    :chapter-index="isPage ? undefined : chapter.index"
+    :chapter-label="isPage ? undefined : chapter.label"
+    :show-progress="!isPage"
   >
-    <div class="px-4 pb-20 pt-4 lg:px-8 lg:pb-28 lg:pt-6">
+    <div
+      class="px-4 lg:px-8"
+      :class="isPage ? 'pb-16 pt-2 lg:pb-20' : 'pb-20 pt-4 lg:pb-28 lg:pt-6'"
+    >
       <div class="mx-auto max-w-[1280px]">
         <div
           ref="revealRoot"
@@ -230,7 +243,10 @@ onMounted(async () => {
           />
         </div>
 
-        <div class="explorar-lojas-shell mt-10 lg:mt-14">
+        <div
+          class="explorar-lojas-shell"
+          :class="isPage ? 'mt-8 lg:mt-10' : 'mt-10 lg:mt-14'"
+        >
           <div class="explorar-lojas-shell__chrome">
             <div class="explorar-lojas-shell__meta">
               <p class="explorar-lojas-shell__local">
@@ -383,7 +399,10 @@ onMounted(async () => {
           </div>
 
           <div class="explorar-lojas-shell__stage">
-            <div class="explorar-lojas-shell__frame">
+            <div
+              class="explorar-lojas-shell__frame"
+              :class="{ 'explorar-lojas-shell__frame--page': isPage }"
+            >
               <ExplorarLojasMapa
                 ref="mapaRef"
                 v-model:selected-guid="selectedGuid"
@@ -781,6 +800,10 @@ onMounted(async () => {
 @media (min-width: 1024px) {
   .explorar-lojas-shell__frame {
     height: min(78vh, 720px);
+  }
+
+  .explorar-lojas-shell__frame--page {
+    height: min(calc(100vh - 14rem), 820px);
   }
 }
 

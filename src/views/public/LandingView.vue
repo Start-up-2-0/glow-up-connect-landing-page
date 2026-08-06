@@ -7,7 +7,6 @@ import LandingProductShowcase from '@/components/landing/LandingProductShowcase.
 import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue'
 import LandingFeatures from '@/components/landing/LandingFeatures.vue'
 import LandingBenefits from '@/components/landing/LandingBenefits.vue'
-import LandingExplorarLojas from '@/components/landing/LandingExplorarLojas.vue'
 import LandingVisualDemos from '@/components/landing/LandingVisualDemos.vue'
 import LandingSocialProof from '@/components/landing/LandingSocialProof.vue'
 import LandingPricing from '@/components/landing/LandingPricing.vue'
@@ -79,7 +78,6 @@ watch(() => route.hash, handleHashScroll)
       <LandingHowItWorks />
       <LandingFeatures />
       <LandingBenefits />
-      <LandingExplorarLojas />
       <LandingVisualDemos />
       <LandingSocialProof />
       <LandingPricing />

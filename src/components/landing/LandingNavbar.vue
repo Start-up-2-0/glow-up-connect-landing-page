@@ -1,28 +1,55 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 import { LANDING_SECTIONS, NAV_LINKS } from '@/constants/landing'
 import { ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
 
-const { goToSection } = useLandingScroll()
+const route = useRoute()
+const { goToSection, goToNavLink } = useLandingScroll()
 const menuOpen = ref(false)
 const activeSection = ref<string>(LANDING_SECTIONS.inicio)
 const scrolled = ref(false)
 
-function handleNavClick(id: string) {
+const isExplorarPage = computed(() => route.path === ROUTE_PATHS.EXPLORAR_LOJAS)
+
+async function handleNavClick(link: (typeof NAV_LINKS)[number]) {
   menuOpen.value = false
-  activeSection.value = id
-  goToSection(id)
+  activeSection.value = link.id
+  await goToNavLink(link)
+}
+
+async function handleLogoClick() {
+  menuOpen.value = false
+  activeSection.value = LANDING_SECTIONS.inicio
+  if (route.path !== ROUTE_PATHS.HOME) {
+    await goToSection(LANDING_SECTIONS.inicio)
+    return
+  }
+  await goToSection(LANDING_SECTIONS.inicio)
+}
+
+async function handleCtaClick() {
+  menuOpen.value = false
+  await goToSection(LANDING_SECTIONS.planos)
 }
 
 function updateActiveSection() {
+  if (typeof document === 'undefined') return
+
+  if (isExplorarPage.value) {
+    activeSection.value = LANDING_SECTIONS.explorarLojas
+    return
+  }
+
+  if (route.path !== ROUTE_PATHS.HOME) return
+
   const offset = 120
   const sections = [
     LANDING_SECTIONS.inicio,
-    ...NAV_LINKS.map((l) => l.id),
+    ...NAV_LINKS.filter((l) => !l.path).map((l) => l.id),
   ]
   for (let i = sections.length - 1; i >= 0; i--) {
     const el = document.getElementById(sections[i])
@@ -43,14 +70,23 @@ onMounted(() => {
   handleScroll()
   window.addEventListener('scroll', handleScroll, { passive: true })
 })
+
 onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+
+watch(
+  () => route.path,
+  () => {
+    updateActiveSection()
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
   <header
     class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
     :class="
-      scrolled || menuOpen
+      scrolled || menuOpen || isExplorarPage
         ? 'border-b border-white/10 bg-glow-inverse-surface py-3 shadow-glow-md'
         : 'bg-transparent py-5'
     "
@@ -59,7 +95,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
       <RouterLink
         :to="ROUTE_PATHS.HOME"
         class="group font-satoshi text-xl text-white sm:text-2xl"
-        @click="handleNavClick(LANDING_SECTIONS.inicio)"
+        @click.prevent="handleLogoClick"
       >
         <span class="font-light">GlowUp </span>
         <span class="font-black">Connect</span>
@@ -79,7 +115,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
               ? 'bg-white/10 font-semibold text-white'
               : 'font-normal text-white/70 hover:text-white'
           "
-          @click="handleNavClick(link.id)"
+          @click="handleNavClick(link)"
         >
           {{ link.label }}
         </button>
@@ -92,7 +128,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
         >
           Entrar
         </a>
-        <button type="button" @click="handleNavClick(LANDING_SECTIONS.planos)">
+        <button type="button" @click="handleCtaClick">
           <LandingCtaButton
             label="Começar agora"
             size="sm"
@@ -134,7 +170,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
             type="button"
             class="rounded-xl px-3 py-2.5 text-left font-satoshi text-base text-white"
             :class="activeSection === link.id ? 'bg-white/10 font-semibold' : 'font-normal'"
-            @click="handleNavClick(link.id)"
+            @click="handleNavClick(link)"
           >
             {{ link.label }}
           </button>
@@ -152,7 +188,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
           >
             Cadastrar
           </a>
-          <button type="button" class="pt-2" @click="handleNavClick(LANDING_SECTIONS.planos)">
+          <button type="button" class="pt-2" @click="handleCtaClick">
             <LandingCtaButton label="Começar agora" class="w-full justify-center" />
           </button>
         </nav>

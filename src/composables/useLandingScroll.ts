@@ -1,4 +1,5 @@
 import { useRouter } from 'vue-router'
+import type { NavLink } from '@/constants/landing'
 import { ROUTE_PATHS } from '@/constants/routes'
 
 const NAVBAR_OFFSET = 96
@@ -34,5 +35,15 @@ export function useLandingScroll() {
     scrollToSection(hash)
   }
 
-  return { scrollToSection, goToSection }
+  async function goToNavLink(link: NavLink) {
+    if (link.path) {
+      if (router.currentRoute.value.path !== link.path) {
+        await router.push(link.path)
+      }
+      return
+    }
+    await goToSection(link.id)
+  }
+
+  return { scrollToSection, goToSection, goToNavLink }
 }

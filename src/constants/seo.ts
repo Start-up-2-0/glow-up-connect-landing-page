@@ -18,6 +18,13 @@ export const SEO_BY_PATH: Record<string, SeoMeta> = {
     path: ROUTE_PATHS.HOME,
     ogType: 'website',
   },
+  [ROUTE_PATHS.EXPLORAR_LOJAS]: {
+    title: `Explorar Lojas | ${APP_NAME}`,
+    description:
+      'Encontre barbearias e salões de beleza próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.',
+    path: ROUTE_PATHS.EXPLORAR_LOJAS,
+    ogType: 'website',
+  },
   [ROUTE_PATHS.TERMOS_DE_USO]: {
     title: `Termos de Uso | ${APP_NAME}`,
     description:

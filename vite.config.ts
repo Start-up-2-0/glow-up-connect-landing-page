@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
       vue(),
       Sitemap({
         hostname: siteUrl.replace(/\/+$/, ''),
-        dynamicRoutes: ['/termos-de-uso', '/politica-de-cookies'],
+        dynamicRoutes: ['/termos-de-uso', '/politica-de-cookies', '/explorar-lojas'],
         changefreq: 'weekly',
         priority: 0.8,
       }),
@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
     ssgOptions: {
       script: 'async',
       formatting: 'minify',
-      includedRoutes: () => ['/', '/termos-de-uso', '/politica-de-cookies'],
+      includedRoutes: () => ['/', '/termos-de-uso', '/politica-de-cookies', '/explorar-lojas'],
     },
     server: {
       proxy: {

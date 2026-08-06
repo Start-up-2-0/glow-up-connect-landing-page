@@ -10,7 +10,7 @@ import { ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 
-const { goToSection } = useLandingScroll()
+const { goToSection, goToNavLink } = useLandingScroll()
 
 const socialLinks = [
   { label: 'Instagram', href: 'https://instagram.com', external: true },
@@ -52,7 +52,7 @@ const socialLinks = [
               :key="link.id"
               type="button"
               class="text-left font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
-              @click="goToSection(link.id)"
+              @click="goToNavLink(link)"
             >
               {{ link.label }}
             </button>
