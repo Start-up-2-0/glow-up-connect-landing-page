@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-dvh bg-glow-inverse-surface">
+  <div class="flex min-h-dvh flex-col bg-glow-inverse-surface">
     <slot />
   </div>
 </template>

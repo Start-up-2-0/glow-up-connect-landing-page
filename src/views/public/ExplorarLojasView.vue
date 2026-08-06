@@ -10,9 +10,9 @@ useSeo({ path: ROUTE_PATHS.EXPLORAR_LOJAS })
 </script>
 
 <template>
-  <div class="overflow-x-hidden bg-glow-inverse-surface text-white">
+  <div class="flex min-h-dvh flex-col overflow-x-hidden bg-glow-inverse-surface text-white">
     <LandingNavbar />
-    <main id="conteudo-principal" class="pt-20 md:pt-24">
+    <main id="conteudo-principal" class="flex-1 pt-20 md:pt-24">
       <LandingExplorarLojas variant="page" />
     </main>
     <LandingFooter />

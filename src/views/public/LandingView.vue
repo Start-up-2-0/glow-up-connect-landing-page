@@ -70,9 +70,9 @@ watch(() => route.hash, handleHashScroll)
 </script>
 
 <template>
-  <div class="overflow-x-hidden bg-glow-inverse-surface text-white">
+  <div class="flex min-h-dvh flex-col overflow-x-hidden bg-glow-inverse-surface text-white">
     <LandingNavbar />
-    <main id="conteudo-principal">
+    <main id="conteudo-principal" class="flex-1">
       <LandingHero />
       <LandingProductShowcase />
       <LandingHowItWorks />

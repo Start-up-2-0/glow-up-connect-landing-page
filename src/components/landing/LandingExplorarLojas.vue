@@ -226,7 +226,7 @@ onMounted(async () => {
   >
     <div
       class="px-4 lg:px-8"
-      :class="isPage ? 'pb-16 pt-2 lg:pb-20' : 'pb-20 pt-4 lg:pb-28 lg:pt-6'"
+      :class="isPage ? 'pb-10 pt-2 lg:pb-12' : 'pb-20 pt-4 lg:pb-28 lg:pt-6'"
     >
       <div class="mx-auto max-w-[1280px]">
         <div
