@@ -1,0 +1,296 @@
+/* —— Hero → showcase: costura suave —— */
+.landing-hero-arc {
+  isolation: isolate;
+}
+
+/* Wash removido: landing usa fundo escuro contínuo */
+
+.landing-showcase-arc {
+  margin-top: -1px;
+}
+
+.landing-shot-stage__frame {
+  transform-style: preserve-3d;
+  transition: none;
+}
+
+.landing-shot-stage__spotlight {
+  background: radial-gradient(
+    55% 45% at 50% 40%,
+    transparent 0%,
+    transparent 42%,
+    rgba(13, 8, 37, 0.18) 100%
+  );
+  mix-blend-mode: multiply;
+  transition: opacity 0.6s ease;
+}
+
+.landing-screenshot--cinematic {
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.7s ease;
+}
+
+.landing-screenshot--cinematic:hover {
+  transform: translate3d(0, -4px, 0) scale(1.01);
+}
+
+/* Callouts */
+.landing-callout {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  max-width: min(16rem, 42vw);
+  opacity: 0;
+  transform: translate3d(0, 8px, 0) scale(0.96);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landing-callout--active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.landing-callout--idle {
+  opacity: 0;
+}
+
+.landing-callout__dot {
+  position: relative;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--palette-lilac-medium, #92679b);
+  box-shadow: 0 0 0 3px rgba(146, 103, 155, 0.28);
+  flex-shrink: 0;
+}
+
+.landing-callout__pulse {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 999px;
+  background: rgba(146, 103, 155, 0.45);
+  animation: landing-callout-pulse 2.4s ease-out infinite;
+}
+
+.landing-callout__line {
+  height: 1px;
+  width: 2.25rem;
+  background: linear-gradient(90deg, rgba(146, 103, 155, 0.7), rgba(207, 176, 218, 0.15));
+  flex-shrink: 0;
+}
+
+.landing-callout__bubble {
+  margin-left: 0.35rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(20, 12, 48, 0.88);
+  padding: 0.55rem 0.7rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.landing-callout--left {
+  flex-direction: row-reverse;
+  transform: translate(calc(-100% + 10px), calc(-50% + 6px));
+}
+
+.landing-callout--left.landing-callout--active {
+  transform: translate(-100%, -50%);
+}
+
+.landing-callout--left .landing-callout__line {
+  background: linear-gradient(270deg, rgba(146, 103, 155, 0.7), rgba(207, 176, 218, 0.15));
+}
+
+.landing-callout--left .landing-callout__bubble {
+  margin-left: 0;
+  margin-right: 0.35rem;
+}
+
+.landing-callout--left .landing-callout__pulse {
+  left: auto;
+  right: 0;
+}
+
+.landing-callout--right {
+  transform: translate(-10px, calc(-50% + 6px));
+}
+
+.landing-callout--right.landing-callout--active {
+  transform: translate(0, -50%);
+}
+
+.landing-callout--top {
+  flex-direction: column-reverse;
+  transform: translate(-50%, calc(-100% + 10px));
+}
+
+.landing-callout--top.landing-callout--active {
+  transform: translate(-50%, -100%);
+}
+
+.landing-callout--top .landing-callout__line {
+  width: 1px;
+  height: 2rem;
+  background: linear-gradient(0deg, rgba(146, 103, 155, 0.7), rgba(207, 176, 218, 0.15));
+}
+
+.landing-callout--top .landing-callout__bubble {
+  margin-left: 0;
+  margin-bottom: 0.35rem;
+}
+
+.landing-callout--top .landing-callout__pulse {
+  left: 50%;
+  top: auto;
+  bottom: 0;
+  margin-left: -5px;
+  margin-top: 0;
+}
+
+.landing-callout--bottom {
+  flex-direction: column;
+  transform: translate(-50%, 6px);
+}
+
+.landing-callout--bottom.landing-callout--active {
+  transform: translate(-50%, 0);
+}
+
+.landing-callout--bottom .landing-callout__line {
+  width: 1px;
+  height: 2rem;
+  background: linear-gradient(180deg, rgba(146, 103, 155, 0.7), rgba(207, 176, 218, 0.15));
+}
+
+.landing-callout--bottom .landing-callout__bubble {
+  margin-left: 0;
+  margin-top: 0.35rem;
+}
+
+.landing-callout--bottom .landing-callout__pulse {
+  left: 50%;
+  margin-left: -5px;
+}
+
+@keyframes landing-callout-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+/* Story section seams */
+.landing-story + .landing-story {
+  border-top: 0;
+}
+
+.landing-section-seam {
+  pointer-events: none;
+  height: 4.5rem;
+  margin-top: -2.25rem;
+  margin-bottom: -2.25rem;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(235, 231, 247, 0.85) 45%,
+    transparent
+  );
+}
+
+.landing-section-seam--dark {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(13, 8, 37, 0.55) 45%,
+    transparent
+  );
+}
+
+/* Icon micro-motion */
+.landing-icon-pop {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .landing-icon-pop {
+  transform: translate3d(0, -2px, 0) scale(1.06);
+}
+
+/* Number emphasis */
+.landing-stat-pop {
+  display: inline-block;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landing-stagger.is-visible .landing-stat-pop {
+  animation: landing-stat-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes landing-stat-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@media (max-width: 767px) {
+  .landing-shot-stage__frame {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .landing-screenshot--cinematic:hover {
+    transform: none;
+  }
+
+  .landing-tab-scroller {
+    mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 2rem), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 2rem), transparent 100%);
+    padding-right: 1.5rem;
+  }
+
+  .landing-glass-card {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-callout,
+  .landing-callout--active,
+  .landing-callout--idle,
+  .landing-shot-stage__frame,
+  .landing-screenshot--cinematic,
+  .landing-stat-pop,
+  .landing-icon-pop {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .landing-callout__pulse {
+    animation: none !important;
+  }
+}
