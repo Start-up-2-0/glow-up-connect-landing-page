@@ -1,5 +1,16 @@
 export const APP_NAME = import.meta.env.VITE_APP_NAME || 'Glow Up Connect'
 
+export const STORAGE_KEYS = {
+  ACCESS_TOKEN: 'guc_access_token',
+  REFRESH_TOKEN: 'guc_refresh_token',
+  EXPIRES_AT: 'guc_expires_at',
+  REFRESH_EXPIRES_AT: 'guc_refresh_expires_at',
+  BOOKING_SESSION: 'guc_booking_session',
+} as const
+
+export const TOKEN_HEADER =
+  import.meta.env.VITE_TOKEN_HEADER?.trim() || 'x-glow-token'
+
 function normalizeApiBaseUrl(raw: string | undefined): string {
   const value = raw?.trim() || '/api'
   const withoutTrailingSlash = value.replace(/\/+$/, '')

@@ -1,5 +1,7 @@
 import { computed, ref, watch } from 'vue'
 import { publicoService } from '@/services/publicoService'
+import { agendamentoService } from '@/services/agendamentoService'
+import { useAuthStore } from '@/stores/auth.store'
 import type {
   AgendamentoContextoPublico,
   AgendamentoCriado,
@@ -38,9 +40,9 @@ export type WizardStep =
 export type ModoProfissionalAgendamento = 'especifico' | 'sem_preferencia'
 
 export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '') {
-  /** Landing: fluxo sempre público (visitante). */
-  const isVisitante = computed(() => true)
-  const isModoInterno = computed(() => false)
+  const authStore = useAuthStore()
+  const isVisitante = computed(() => !authStore.isAuthenticated)
+  const isModoInterno = computed(() => !isVisitante.value)
 
   const activeProfissionalGuid = ref(initialProfissionalGuid)
   const semPreferenciaProfissional = ref(false)
@@ -496,6 +498,26 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
     }
   }
 
+  async function continuarComoLogado() {
+    modoIdentidade.value = 'login'
+    error.value = null
+    step.value = initialProfissionalGuid ? 'servicos' : 'profissional'
+
+    if (initialProfissionalGuid) {
+      loading.value = true
+      try {
+        await loadContexto()
+        if (contextoInvalido.value) return
+        await loadServicos()
+      } finally {
+        loading.value = false
+      }
+      return
+    }
+
+    await loadProfissionais()
+  }
+
   function voltarParaIdentidade() {
     modoIdentidade.value = null
     error.value = null
@@ -507,8 +529,12 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
 
   function voltarDeProfissional() {
     error.value = null
-    if (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register') {
-      step.value = 'contato'
+    if (isVisitante.value) {
+      if (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register') {
+        step.value = 'contato'
+        return
+      }
+      voltarParaIdentidade()
       return
     }
     voltarParaIdentidade()
@@ -689,20 +715,34 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
         return criado
       }
 
-      if (!validarDadosContato()) {
-        throw new Error(error.value ?? 'Dados do cliente inválidos.')
+      if (isVisitante.value) {
+        if (!validarDadosContato()) {
+          throw new Error(error.value ?? 'Dados do cliente inválidos.')
+        }
+
+        const criado = await publicoService.criarAgendamentoLoja(publicGuid, {
+          ...payloadBase,
+          clienteNome: clienteNome.value.trim(),
+          clienteEmail: clienteEmail.value.trim(),
+          clienteTelefone: telefoneToApi(clienteTelefone.value),
+        })
+        agendamentoCriado.value = criado
+        step.value = 'sucesso'
+        limparDadosContato()
+        if (draftKey.value) clearAgendarWizardDraft(publicGuid, draftKey.value)
+        return criado
       }
 
-      const criado = await publicoService.criarAgendamentoLoja(publicGuid, {
+      const criado = await agendamentoService.criar({
+        estabelecimentoPublicGuid: publicGuid,
         ...payloadBase,
-        clienteNome: clienteNome.value.trim(),
-        clienteEmail: clienteEmail.value.trim(),
-        clienteTelefone: telefoneToApi(clienteTelefone.value),
       })
       agendamentoCriado.value = criado
       step.value = 'sucesso'
-      limparDadosContato()
       if (draftKey.value) clearAgendarWizardDraft(publicGuid, draftKey.value)
+      if (authStore.sessaoAgendamentoPublico) {
+        authStore.clearSession()
+      }
       return criado
     } finally {
       limparSenhaCadastro()
@@ -718,16 +758,24 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
       await loadContexto()
       if (contextoInvalido.value) return
 
-      if (!modoIdentidade.value) {
+      if (isVisitante.value && !modoIdentidade.value) {
         step.value = 'identidade'
         return
       }
 
       if (
-        (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register')
+        isVisitante.value
+        && (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register')
         && !contatoGuestPreenchido()
       ) {
         step.value = 'contato'
+        return
+      }
+
+      if (!isVisitante.value && (!modoIdentidade.value || modoIdentidade.value === 'login')) {
+        modoIdentidade.value = 'login'
+        step.value = 'servicos'
+        await loadServicos()
         return
       }
 
@@ -743,17 +791,22 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
 
     await Promise.all([loadEstabelecimentoResumo(), loadProfissionais()])
 
-    if (!modoIdentidade.value) {
+    if (isVisitante.value && !modoIdentidade.value) {
       step.value = 'identidade'
       return
     }
 
     if (
-      (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register')
+      isVisitante.value
+      && (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register')
       && !contatoGuestPreenchido()
     ) {
       step.value = 'contato'
       return
+    }
+
+    if (!isVisitante.value) {
+      modoIdentidade.value = 'login'
     }
 
     step.value = 'profissional'
@@ -799,6 +852,7 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
     semPreferenciaProfissional,
     toggleServico,
     escolherIdentidade,
+    continuarComoLogado,
     escolherModoProfissional,
     selecionarProfissional,
     continuarDeProfissional,

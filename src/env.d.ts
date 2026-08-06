@@ -28,6 +28,8 @@ interface ImportMetaEnv {
   readonly VITE_APP_URL: string
   readonly VITE_SITE_URL: string
   readonly VITE_WHATSAPP_NUMBER?: string
+  readonly VITE_TOKEN_HEADER?: string
+  readonly VITE_CAPTCHA_SITE_KEY?: string
 }
 
 interface ImportMeta {

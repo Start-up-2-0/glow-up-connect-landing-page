@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import LandingNavbar from '@/components/landing/LandingNavbar.vue'
-import LandingFooter from '@/components/landing/LandingFooter.vue'
 </script>
 
 <template>
@@ -20,9 +19,5 @@ import LandingFooter from '@/components/landing/LandingFooter.vue'
     <main id="conteudo-principal" class="agendar-publico-main relative z-10 pt-24 sm:pt-28">
       <slot />
     </main>
-
-    <div class="relative z-10">
-      <LandingFooter />
-    </div>
   </div>
 </template>

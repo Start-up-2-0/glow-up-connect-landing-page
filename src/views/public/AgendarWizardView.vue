@@ -10,6 +10,7 @@ import AgendarResumoFooter from '@/components/agendar/AgendarResumoFooter.vue'
 import AgendarCalendario from '@/components/agendar/AgendarCalendario.vue'
 import AgendarRevisaoStep from '@/components/agendar/AgendarRevisaoStep.vue'
 import AgendarSucessoConfirmacao from '@/components/agendar/AgendarSucessoConfirmacao.vue'
+import AgendarLoginModal from '@/components/agendar/AgendarLoginModal.vue'
 import UserAvatar from '@/components/layout/UserAvatar.vue'
 import TelefoneInput from '@/components/ui/TelefoneInput.vue'
 import { useAgendarWizard } from '@/composables/useAgendarWizard'
@@ -22,9 +23,10 @@ import {
   GLOW_INPUT_CLASS,
   GLOW_LABEL_CLASS,
 } from '@/constants/designTokens'
+import { useAuthStore } from '@/stores/auth.store'
 import {
+  appMeusAgendamentosUrl,
   authConfirmEmailUrl,
-  authLoginUrl,
   authRegisterUrl,
 } from '@/utils/authRedirect'
 import {
@@ -36,6 +38,7 @@ import {
 } from '@/utils/formatters'
 
 const route = useRoute()
+const authStore = useAuthStore()
 const { resolveError } = useApiError()
 
 const publicGuid = computed(() => String(route.params.publicGuid))
@@ -62,9 +65,11 @@ const {
   profissionalSelecionadoNome,
   profissionalSelecionadoFoto,
   estabelecimentoNome,
-  activeProfissionalGuid,
   servicos,
   slotsDoDia,
+  datasAtendimento,
+  minSelectableDate,
+  maxSelectableDate,
   selectedServicoIds,
   selectedDate,
   selectedSlot,
@@ -76,8 +81,10 @@ const {
   selectedServicos,
   valorEstimado,
   duracaoTotal,
+  activeProfissionalGuid,
   toggleServico,
   escolherIdentidade,
+  continuarComoLogado,
   escolherModoProfissional,
   selecionarProfissional,
   continuarDeProfissional,
@@ -88,9 +95,6 @@ const {
   voltarDeHorario,
   voltarDeConfirmar,
   continuarDeContato,
-  datasAtendimento,
-  minSelectableDate,
-  maxSelectableDate,
   selecionarData,
   goToData,
   goToHorario,
@@ -101,12 +105,13 @@ const {
 } = wizard
 
 const successMessage = ref<string | null>(null)
+const loginModalOpen = ref(false)
 
 const figmaStep = computed(() => resolveAgendarFigmaStep(step.value, isModoInterno.value))
 
-const loginUrl = computed(() => authLoginUrl(route.fullPath))
 const registerUrl = computed(() => authRegisterUrl(route.fullPath))
 const confirmEmailUrl = computed(() => authConfirmEmailUrl(route.fullPath))
+const meusAgendamentosUrl = computed(() => appMeusAgendamentosUrl())
 
 const showBack = computed(() => {
   if (step.value === 'identidade' || step.value === 'sucesso' || step.value === 'sucesso_cadastro') {
@@ -195,8 +200,21 @@ function handleBack() {
 }
 
 function handleEscolherLogin() {
+  if (authStore.isAuthenticated) {
+    void handleLoginSuccess()
+    return
+  }
   persistDraft()
-  window.location.assign(loginUrl.value)
+  loginModalOpen.value = true
+}
+
+async function handleLoginSuccess() {
+  loginModalOpen.value = false
+  try {
+    await continuarComoLogado()
+  } catch (err) {
+    error.value = resolveError(err)
+  }
 }
 
 function handleEscolherRegister() {
@@ -292,8 +310,8 @@ async function handleConfirmar() {
 
           <div class="space-y-3">
             <AgendarOpcaoCard
-              title="Entrar com a minha conta"
-              description="Já possuo uma conta e desejo utilizá-la para realizar o meu agendamento."
+              title="Entrar com meu código"
+              description="Já tenho conta Glow. Uso meu código pessoal para agendar (sessão de 15 min)."
               action-label="Entrar"
               @action="handleEscolherLogin"
             >
@@ -636,20 +654,28 @@ async function handleConfirmar() {
           :data-label="sucessoDataLabel"
           :horario-label="sucessoHorarioLabel"
         >
-          <template v-if="!sucessoCadastroPendente">
+          <template v-if="isVisitante && !sucessoCadastroPendente">
             <a :href="registerUrl" class="w-full">
               <button type="button" :class="AGENDAR_BTN_CONTINUE_CLASS">
                 Criar conta
               </button>
             </a>
-            <a :href="loginUrl" class="w-full">
-              <button type="button" class="agendar-success__btn-secondary">
-                Entrar
+          </template>
+          <template v-else-if="!isVisitante">
+            <a :href="meusAgendamentosUrl" class="w-full">
+              <button type="button" :class="AGENDAR_BTN_CONTINUE_CLASS">
+                Ver meus agendamentos
               </button>
             </a>
           </template>
         </AgendarSucessoConfirmacao>
       </template>
     </div>
+
+    <AgendarLoginModal
+      :open="loginModalOpen"
+      @close="loginModalOpen = false"
+      @success="handleLoginSuccess"
+    />
   </div>
 </template>

@@ -3,6 +3,14 @@ import { isApiErrorResponse, type ApiErrorResponse } from '@/types/api.types'
 import { DEFAULT_ERROR_MESSAGE, getApiErrorMessage } from '@/constants/apiErrors'
 
 export function useApiError() {
+  function resolveErrorCode(error: unknown): string | undefined {
+    if (!error || typeof error !== 'object') return undefined
+    const axiosError = error as AxiosError<ApiErrorResponse>
+    const data = axiosError.response?.data
+    if (isApiErrorResponse(data)) return data.code
+    return undefined
+  }
+
   function resolveError(error: unknown, fallback = DEFAULT_ERROR_MESSAGE): string {
     if (!error || typeof error !== 'object') return fallback
 
@@ -23,5 +31,5 @@ export function useApiError() {
     return fallback
   }
 
-  return { resolveError }
+  return { resolveError, resolveErrorCode }
 }

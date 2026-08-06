@@ -4,6 +4,11 @@ export interface ApiSuccessResponse<T> {
   data: T
 }
 
+export interface ApiSuccessResponseVoid {
+  success: true
+  message: string
+}
+
 export interface ApiErrorResponse {
   success: false
   message: string
