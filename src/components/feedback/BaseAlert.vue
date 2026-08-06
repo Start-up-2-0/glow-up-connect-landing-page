@@ -18,10 +18,10 @@ const props = withDefaults(
 const emit = defineEmits<{ dismiss: [] }>()
 
 const variantClasses: Record<AlertVariant, string> = {
-  info: 'border-blue-200/80 bg-blue-50 text-blue-900',
-  success: 'border-emerald-200/80 bg-emerald-50 text-emerald-900',
-  warning: 'border-amber-200/80 bg-amber-50 text-amber-900',
-  error: 'border-red-200/80 bg-red-50 text-red-800',
+  info: 'border-blue-400/30 bg-blue-500/10 text-blue-100',
+  success: 'border-emerald-400/30 bg-emerald-500/10 text-emerald-100',
+  warning: 'border-amber-400/30 bg-amber-500/10 text-amber-100',
+  error: 'border-red-400/30 bg-red-500/10 text-red-100',
 }
 
 const rootClass = computed(

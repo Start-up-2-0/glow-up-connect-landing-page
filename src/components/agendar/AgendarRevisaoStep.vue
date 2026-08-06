@@ -59,10 +59,10 @@ const emit = defineEmits<{
       <div class="agendar-review-profissional-body">
         <UserAvatar :src="profissionalFoto" :name="profissionalNome" size="md" class="!size-12" />
         <div class="min-w-0">
-          <p class="font-urbanist text-base font-semibold text-glow-text">{{ profissionalNome }}</p>
+          <p class="font-urbanist text-base font-semibold text-white">{{ profissionalNome }}</p>
           <p
             v-if="estabelecimentoNome"
-            class="mt-1 font-urbanist text-sm text-glow-text-subtle"
+            class="mt-1 font-urbanist text-sm text-white/55"
           >
             {{ estabelecimentoNome }}
           </p>
@@ -79,8 +79,8 @@ const emit = defineEmits<{
           class="agendar-review-service-item"
         >
           <div class="min-w-0">
-            <p class="font-urbanist text-sm text-glow-text">{{ servico.nome }}</p>
-            <p class="mt-1 font-urbanist text-xs text-glow-text-subtle">
+            <p class="font-urbanist text-sm text-white">{{ servico.nome }}</p>
+            <p class="mt-1 font-urbanist text-xs text-white/55">
               {{ servico.duracaoMinutosEstimada }} minutos
             </p>
           </div>
@@ -119,7 +119,7 @@ const emit = defineEmits<{
     </section>
 
     <section v-if="showRegisterPassword" class="agendar-review-card space-y-4">
-      <p class="font-urbanist text-sm text-glow-text-subtle">
+      <p class="font-urbanist text-sm text-white/55">
         Defina uma senha para criar sua conta e vincular este agendamento.
       </p>
       <div>

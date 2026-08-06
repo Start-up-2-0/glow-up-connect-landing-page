@@ -26,8 +26,8 @@ const initialTextClass = computed(() => {
 
 <template>
   <div
-    class="relative isolate shrink-0 overflow-hidden rounded-full ring-1 ring-inset ring-glow-border-soft/50"
-    :class="[sizeClass, normalizedSrc ? 'bg-glow-avatar-bg' : 'bg-glow-canvas']"
+    class="relative isolate shrink-0 overflow-hidden rounded-full ring-1 ring-inset ring-white/15"
+    :class="[sizeClass, normalizedSrc ? 'bg-glow-avatar-bg' : 'bg-white/10']"
   >
     <img
       v-if="normalizedSrc"
@@ -38,7 +38,7 @@ const initialTextClass = computed(() => {
     />
     <span
       v-else
-      class="flex size-full items-center justify-center font-urbanist font-semibold leading-none text-glow-text"
+      class="flex size-full items-center justify-center font-urbanist font-semibold leading-none text-white"
       :class="initialTextClass"
     >
       {{ initial }}

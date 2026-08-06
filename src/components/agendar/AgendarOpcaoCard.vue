@@ -14,12 +14,12 @@ const emit = defineEmits<{
 
 <template>
   <div :class="[AGENDAR_CARD_CLASS, 'agendar-opcao-card flex items-center gap-4 p-4 sm:px-5']">
-    <div class="flex size-9 shrink-0 items-center justify-center rounded-full bg-glow-text/10 text-glow-text">
+    <div class="flex size-9 shrink-0 items-center justify-center rounded-full bg-glow-gold/15 text-glow-gold">
       <slot name="icon" />
     </div>
     <div class="min-w-0 flex-1">
-      <p class="font-urbanist text-base font-semibold text-glow-text">{{ title }}</p>
-      <p class="mt-0.5 font-urbanist text-sm text-glow-text-subtle">{{ description }}</p>
+      <p class="font-montserrat text-base font-semibold text-white">{{ title }}</p>
+      <p class="mt-0.5 font-poppins text-sm font-light text-white/55">{{ description }}</p>
     </div>
     <button type="button" :class="AGENDAR_BTN_OUTLINE_CLASS" @click="emit('action')">
       {{ actionLabel }}

@@ -12,16 +12,16 @@ defineProps<{
 
 <template>
   <div :class="[AGENDAR_CARD_CLASS, 'agendar-profissional-card', compact ? 'p-4' : 'p-5']">
-    <p v-if="compact" class="mb-3 font-urbanist text-base font-semibold text-glow-text">
+    <p v-if="compact" class="mb-3 font-urbanist text-base font-semibold text-white">
       Profissional
     </p>
     <div class="flex items-center gap-4">
       <UserAvatar :src="foto" :name="nome" size="md" class="!size-12" />
       <div class="min-w-0 flex-1">
-        <p class="font-urbanist text-base font-semibold text-glow-text">{{ nome }}</p>
+        <p class="font-urbanist text-base font-semibold text-white">{{ nome }}</p>
         <p
           v-if="estabelecimentoNome"
-          class="mt-1 flex items-center gap-1 font-urbanist text-xs text-glow-text-subtle"
+          class="mt-1 flex items-center gap-1 font-urbanist text-xs text-white/55"
         >
           <svg class="size-4 shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path

@@ -387,7 +387,7 @@ async function handleConfirmar() {
 
         <!-- Profissional -->
         <div v-else-if="step === 'profissional'" class="space-y-6">
-          <p class="text-center font-urbanist text-base text-glow-text-subtle">
+          <p class="text-center font-urbanist text-base text-white/55">
             Escolha um profissional ou deixe com a loja.
           </p>
 
@@ -399,7 +399,7 @@ async function handleConfirmar() {
               @click="escolherModoProfissional('especifico')"
             >
               <div
-                class="flex size-10 shrink-0 items-center justify-center rounded bg-glow-hover-surface text-glow-text"
+                class="flex size-10 shrink-0 items-center justify-center rounded bg-white/10 text-white"
                 aria-hidden="true"
               >
                 <svg class="size-6" viewBox="0 0 24 24" fill="none">
@@ -408,8 +408,8 @@ async function handleConfirmar() {
                 </svg>
               </div>
               <div class="min-w-0 text-left">
-                <p class="font-urbanist text-sm font-semibold text-glow-text">Barbeiro específico</p>
-                <p class="mt-1 font-urbanist text-xs text-glow-text-subtle">
+                <p class="font-urbanist text-sm font-semibold text-white">Barbeiro específico</p>
+                <p class="mt-1 font-urbanist text-xs text-white/55">
                   Quero escolher quem vai me atender.
                 </p>
               </div>
@@ -422,7 +422,7 @@ async function handleConfirmar() {
               @click="escolherModoProfissional('sem_preferencia')"
             >
               <div
-                class="flex size-10 shrink-0 items-center justify-center rounded bg-glow-hover-surface text-glow-text"
+                class="flex size-10 shrink-0 items-center justify-center rounded bg-white/10 text-white"
                 aria-hidden="true"
               >
                 <svg class="size-6" viewBox="0 0 24 24" fill="none">
@@ -431,8 +431,8 @@ async function handleConfirmar() {
                 </svg>
               </div>
               <div class="min-w-0 text-left">
-                <p class="font-urbanist text-sm font-semibold text-glow-text">Sem preferência</p>
-                <p class="mt-1 font-urbanist text-xs text-glow-text-subtle">
+                <p class="font-urbanist text-sm font-semibold text-white">Sem preferência</p>
+                <p class="mt-1 font-urbanist text-xs text-white/55">
                   A loja quem escolhe o profissional disponível.
                 </p>
               </div>
@@ -456,13 +456,13 @@ async function handleConfirmar() {
                 :name="prof.nomePublico"
                 size="md"
               />
-              <span class="font-urbanist text-sm font-medium text-glow-text">{{ prof.nomePublico }}</span>
+              <span class="font-urbanist text-sm font-medium text-white">{{ prof.nomePublico }}</span>
             </button>
           </div>
 
           <p
             v-if="modoProfissional === 'especifico' && profissionais.length === 0"
-            class="font-urbanist text-sm text-glow-text-subtle"
+            class="font-urbanist text-sm text-white/55"
           >
             Nenhum profissional disponível para agendamento nesta loja.
           </p>
@@ -492,7 +492,7 @@ async function handleConfirmar() {
 
           <h2 class="agendar-section-title">Selecione os serviços</h2>
 
-          <p v-if="servicos.length === 0" class="font-urbanist text-sm text-glow-text-subtle">
+          <p v-if="servicos.length === 0" class="font-urbanist text-sm text-white/55">
             Nenhum serviço disponível no momento.
           </p>
 
@@ -529,7 +529,7 @@ async function handleConfirmar() {
 
           <p
             v-if="!loading && datasAtendimento.length === 0"
-            class="font-urbanist text-sm text-glow-text-subtle"
+            class="font-urbanist text-sm text-white/55"
           >
             {{ error ?? 'Não há dias de atendimento disponíveis com os serviços selecionados.' }}
           </p>
@@ -557,7 +557,7 @@ async function handleConfirmar() {
 
           <p
             v-if="!loading && slotsDoDia.length === 0"
-            class="font-urbanist text-sm text-glow-text-subtle"
+            class="font-urbanist text-sm text-white/55"
           >
             Nenhum horário livre nesta data. Escolha outro dia disponível.
           </p>

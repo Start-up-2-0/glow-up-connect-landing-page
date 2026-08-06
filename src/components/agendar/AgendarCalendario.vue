@@ -139,13 +139,13 @@ function handleSelect(iso: string) {
 
 <template>
   <div
-    class="w-full rounded-xl border-[0.5px] border-glow-border-soft p-5"
+    class="w-full rounded-xl border border-white/15 bg-white/[0.06] p-5"
     :class="embedded ? 'max-w-full' : 'mx-auto max-w-[463px]'"
   >
     <div class="mb-6 flex items-center justify-between">
       <button
         type="button"
-        class="flex size-8 items-center justify-center rounded-full text-glow-text transition hover:bg-zinc-100"
+        class="flex size-8 items-center justify-center rounded-full text-white transition hover:bg-white/10"
         aria-label="Mês anterior"
         @click="shiftMonth(-1)"
       >
@@ -153,10 +153,10 @@ function handleSelect(iso: string) {
           <path d="M12 2L2 12L12 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
       </button>
-      <p class="font-satoshi text-xl font-bold text-glow-text">{{ monthLabel(visibleMonth) }}</p>
+      <p class="font-satoshi text-xl font-bold text-white">{{ monthLabel(visibleMonth) }}</p>
       <button
         type="button"
-        class="flex size-8 items-center justify-center rounded-full text-glow-text transition hover:bg-zinc-100"
+        class="flex size-8 items-center justify-center rounded-full text-white transition hover:bg-white/10"
         aria-label="Próximo mês"
         @click="shiftMonth(1)"
       >
@@ -168,7 +168,7 @@ function handleSelect(iso: string) {
 
     <p
       v-if="diasDisponiveisNoMes > 0"
-      class="mb-4 font-urbanist text-xs text-glow-text-subtle"
+      class="mb-4 font-urbanist text-xs text-white/55"
     >
       {{ diasDisponiveisNoMes }}
       {{ diasDisponiveisNoMes === 1 ? 'dia disponível' : 'dias disponíveis' }}
@@ -179,7 +179,7 @@ function handleSelect(iso: string) {
       <span
         v-for="weekday in WEEKDAYS"
         :key="weekday"
-        class="font-satoshi text-sm text-glow-text"
+        class="font-satoshi text-sm text-white/70"
       >
         {{ weekday }}
       </span>
@@ -211,7 +211,7 @@ function handleSelect(iso: string) {
     </div>
 
     <template v-if="!embedded">
-      <hr class="my-6 border-glow-border-soft" />
+      <hr class="my-6 border-white/10" />
 
       <button
         type="button"
