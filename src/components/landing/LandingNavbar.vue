@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { LANDING_SECTIONS } from '@/constants/landing'
+import { LANDING_SECTIONS, NAV_LINKS } from '@/constants/landing'
 import { ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
@@ -10,15 +10,7 @@ import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
 const { goToSection } = useLandingScroll()
 const menuOpen = ref(false)
 const activeSection = ref<string>(LANDING_SECTIONS.inicio)
-const navbarVisible = ref(true)
-
-const navLinks = [
-  { label: 'Início', id: LANDING_SECTIONS.inicio },
-  { label: 'Sobre nós', id: LANDING_SECTIONS.sobre },
-  { label: 'Benefícios', id: LANDING_SECTIONS.beneficios },
-  { label: 'Usuários', id: LANDING_SECTIONS.usuarios },
-  { label: 'Planos', id: LANDING_SECTIONS.planos },
-] as const
+const scrolled = ref(false)
 
 function handleNavClick(id: string) {
   menuOpen.value = false
@@ -26,24 +18,12 @@ function handleNavClick(id: string) {
   goToSection(id)
 }
 
-function updateNavbarVisibility() {
-  const hero = document.getElementById(LANDING_SECTIONS.inicio)
-  if (!hero) {
-    navbarVisible.value = true
-    return
-  }
-
-  const heroBottom = hero.getBoundingClientRect().bottom
-  navbarVisible.value = heroBottom > 48
-
-  if (!navbarVisible.value) {
-    menuOpen.value = false
-  }
-}
-
 function updateActiveSection() {
   const offset = 120
-  const sections = Object.values(LANDING_SECTIONS)
+  const sections = [
+    LANDING_SECTIONS.inicio,
+    ...NAV_LINKS.map((l) => l.id),
+  ]
   for (let i = sections.length - 1; i >= 0; i--) {
     const el = document.getElementById(sections[i])
     if (el && el.getBoundingClientRect().top <= offset) {
@@ -55,7 +35,7 @@ function updateActiveSection() {
 }
 
 function handleScroll() {
-  updateNavbarVisibility()
+  scrolled.value = window.scrollY > 24
   updateActiveSection()
 }
 
@@ -68,17 +48,17 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 
 <template>
   <header
-    class="fixed inset-x-0 top-0 z-50 px-4 pt-6 transition-[transform,opacity] duration-300 ease-out lg:px-8"
+    class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
     :class="
-      navbarVisible
-        ? 'translate-y-0 opacity-100'
-        : 'pointer-events-none -translate-y-full opacity-0'
+      scrolled || menuOpen
+        ? 'border-b border-white/10 bg-glow-inverse-surface py-3 shadow-glow-md'
+        : 'bg-transparent py-5'
     "
   >
-    <div class="mx-auto flex max-w-[1280px] items-center justify-between">
+    <div class="mx-auto flex max-w-[1280px] items-center justify-between px-4 lg:px-8">
       <RouterLink
         :to="ROUTE_PATHS.HOME"
-        class="font-satoshi text-2xl text-white"
+        class="group font-satoshi text-xl text-white sm:text-2xl"
         @click="handleNavClick(LANDING_SECTIONS.inicio)"
       >
         <span class="font-light">GlowUp </span>
@@ -86,53 +66,46 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
       </RouterLink>
 
       <nav
-        class="relative hidden items-center gap-9 rounded-[80px] bg-glow-inverse-surface px-10 py-6 lg:flex"
+        class="hidden items-center gap-1 xl:flex"
         aria-label="Navegação principal"
       >
         <button
-          v-for="link in navLinks"
+          v-for="link in NAV_LINKS"
           :key="link.id"
           type="button"
-          class="relative font-satoshi text-base text-white transition hover:text-white/90"
-          :class="activeSection === link.id ? 'font-black' : 'font-normal'"
+          class="rounded-full px-3 py-2 font-satoshi text-sm transition"
+          :class="
+            activeSection === link.id
+              ? 'bg-white/10 font-semibold text-white'
+              : 'font-normal text-white/70 hover:text-white'
+          "
           @click="handleNavClick(link.id)"
         >
           {{ link.label }}
-          <span
-            v-if="activeSection === link.id"
-            class="absolute -bottom-3 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-glow-gold"
-          />
         </button>
+      </nav>
+
+      <div class="hidden items-center gap-3 lg:flex">
         <a
           :href="`${APP_URL}/auth/login`"
-          class="font-satoshi text-base font-normal text-white transition hover:text-white/90"
+          class="font-satoshi text-sm text-white/80 transition hover:text-white"
         >
           Entrar
         </a>
-        <a
-          :href="`${APP_URL}/auth/register`"
-          class="font-satoshi text-base font-normal text-white transition hover:text-white/90"
-        >
-          Cadastrar
-        </a>
-      </nav>
-
-      <div class="hidden lg:block">
-        <div class="relative">
-          <div
-            class="pointer-events-none absolute -left-4 top-1 h-[18px] w-[260px] rounded-3xl bg-glow-gold/80 blur-[50px]"
-            aria-hidden="true"
+        <button type="button" @click="handleNavClick(LANDING_SECTIONS.planos)">
+          <LandingCtaButton
+            label="Começar agora"
+            size="sm"
+            class="!h-10 !rounded-full !px-4 !text-sm"
           />
-          <button type="button" @click="handleNavClick(LANDING_SECTIONS.planos)">
-            <LandingCtaButton label="Começar agora!" size="sm" class="!h-11 !rounded-3xl !px-5 !text-base" />
-          </button>
-        </div>
+        </button>
       </div>
 
       <button
         type="button"
-        class="flex size-10 items-center justify-center rounded-lg text-white lg:hidden"
-        aria-label="Abrir menu"
+        class="flex size-10 items-center justify-center rounded-xl text-white lg:hidden"
+        :aria-label="menuOpen ? 'Fechar menu' : 'Abrir menu'"
+        :aria-expanded="menuOpen"
         @click="menuOpen = !menuOpen"
       >
         <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -142,39 +115,48 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
       </button>
     </div>
 
-    <div
-      v-if="menuOpen"
-      class="mx-auto mt-3 max-w-[1280px] rounded-2xl border border-white/10 bg-glow-inverse-surface px-4 py-4 lg:hidden"
+    <Transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="opacity-0 -translate-y-2"
+      enter-to-class="opacity-100 translate-y-0"
+      leave-active-class="transition duration-150 ease-in"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 -translate-y-2"
     >
-      <nav class="flex flex-col gap-2" aria-label="Menu mobile">
-        <button
-          v-for="link in navLinks"
-          :key="link.id"
-          type="button"
-          class="rounded-lg px-3 py-2.5 text-left font-satoshi text-base text-white"
-          :class="activeSection === link.id ? 'font-black' : 'font-normal'"
-          @click="handleNavClick(link.id)"
-        >
-          {{ link.label }}
-        </button>
-        <a
-          :href="`${APP_URL}/auth/login`"
-          class="rounded-lg px-3 py-2.5 font-satoshi text-base text-white hover:bg-white/5"
-          @click="menuOpen = false"
-        >
-          Entrar
-        </a>
-        <a
-          :href="`${APP_URL}/auth/register`"
-          class="rounded-lg px-3 py-2.5 font-satoshi text-base text-white hover:bg-white/5"
-          @click="menuOpen = false"
-        >
-          Cadastrar
-        </a>
-        <button type="button" class="pt-2" @click="handleNavClick(LANDING_SECTIONS.planos)">
-          <LandingCtaButton label="Começar agora!" class="w-full justify-center" />
-        </button>
-      </nav>
-    </div>
+      <div
+        v-if="menuOpen"
+        class="mx-4 mt-3 rounded-2xl border border-white/10 bg-glow-inverse-surface/95 p-4 shadow-glow-lg backdrop-blur-xl lg:hidden"
+      >
+        <nav class="flex flex-col gap-1" aria-label="Menu mobile">
+          <button
+            v-for="link in NAV_LINKS"
+            :key="link.id"
+            type="button"
+            class="rounded-xl px-3 py-2.5 text-left font-satoshi text-base text-white"
+            :class="activeSection === link.id ? 'bg-white/10 font-semibold' : 'font-normal'"
+            @click="handleNavClick(link.id)"
+          >
+            {{ link.label }}
+          </button>
+          <a
+            :href="`${APP_URL}/auth/login`"
+            class="rounded-xl px-3 py-2.5 font-satoshi text-base text-white/80"
+            @click="menuOpen = false"
+          >
+            Entrar
+          </a>
+          <a
+            :href="`${APP_URL}/auth/register`"
+            class="rounded-xl px-3 py-2.5 font-satoshi text-base text-white/80"
+            @click="menuOpen = false"
+          >
+            Cadastrar
+          </a>
+          <button type="button" class="pt-2" @click="handleNavClick(LANDING_SECTIONS.planos)">
+            <LandingCtaButton label="Começar agora" class="w-full justify-center" />
+          </button>
+        </nav>
+      </div>
+    </Transition>
   </header>
 </template>

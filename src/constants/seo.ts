@@ -12,9 +12,9 @@ export interface SeoMeta {
 
 export const SEO_BY_PATH: Record<string, SeoMeta> = {
   [ROUTE_PATHS.HOME]: {
-    title: `${APP_NAME} — Gestão para salões e clínicas de beleza`,
+    title: `${APP_NAME} — Gestão para barbearias e salões de beleza`,
     description:
-      'Plataforma SaaS para agenda, equipe, financeiro e clientes. Conecte seu salão aos melhores profissionais e simplifique a gestão do seu negócio.',
+      'Plataforma de gestão para barbearias e salões: agenda, clientes, financeiro, comissões, equipe e agendamento online em um só lugar.',
     path: ROUTE_PATHS.HOME,
     ogType: 'website',
   },

@@ -1,7 +1,7 @@
 import { useRouter } from 'vue-router'
 import { ROUTE_PATHS } from '@/constants/routes'
 
-const NAVBAR_OFFSET = 88
+const NAVBAR_OFFSET = 96
 
 export function useLandingScroll() {
   const router = useRouter()

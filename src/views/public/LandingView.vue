@@ -3,10 +3,15 @@ import { onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import LandingNavbar from '@/components/landing/LandingNavbar.vue'
 import LandingHero from '@/components/landing/LandingHero.vue'
-import LandingAbout from '@/components/landing/LandingAbout.vue'
+import LandingProductShowcase from '@/components/landing/LandingProductShowcase.vue'
+import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue'
+import LandingFeatures from '@/components/landing/LandingFeatures.vue'
 import LandingBenefits from '@/components/landing/LandingBenefits.vue'
-import LandingStats from '@/components/landing/LandingStats.vue'
+import LandingVisualDemos from '@/components/landing/LandingVisualDemos.vue'
+import LandingSocialProof from '@/components/landing/LandingSocialProof.vue'
 import LandingPricing from '@/components/landing/LandingPricing.vue'
+import LandingFaq from '@/components/landing/LandingFaq.vue'
+import LandingFinalCta from '@/components/landing/LandingFinalCta.vue'
 import LandingFooter from '@/components/landing/LandingFooter.vue'
 import LandingWhatsappFab from '@/components/landing/LandingWhatsappFab.vue'
 import { useLandingScroll } from '@/composables/useLandingScroll'
@@ -42,6 +47,8 @@ useJsonLd([
     name: APP_NAME,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
+    description:
+      'Plataforma de gestão para barbearias e salões de beleza: agenda, clientes, financeiro, comissões e equipe.',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'BRL',
@@ -63,14 +70,19 @@ watch(() => route.hash, handleHashScroll)
 </script>
 
 <template>
-  <div class="overflow-x-hidden bg-glow-surface">
+  <div class="overflow-x-hidden bg-glow-inverse-surface text-white">
     <LandingNavbar />
     <main id="conteudo-principal">
       <LandingHero />
-      <LandingAbout />
+      <LandingProductShowcase />
+      <LandingHowItWorks />
+      <LandingFeatures />
       <LandingBenefits />
-      <LandingStats />
+      <LandingVisualDemos />
+      <LandingSocialProof />
       <LandingPricing />
+      <LandingFaq />
+      <LandingFinalCta />
     </main>
     <LandingFooter />
     <LandingWhatsappFab />

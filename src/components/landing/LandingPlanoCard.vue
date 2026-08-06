@@ -42,12 +42,22 @@ const priceAccent = computed(() => (props.popular ? 'text-glow-purple' : 'text-g
 
 <template>
   <article
-    class="relative flex h-full flex-col rounded-[20px] border border-glow-text/40 p-8 sm:p-10"
-    :class="popular ? 'border-glow-purple bg-glow-purple/[0.08]' : 'bg-white/60'"
+    class="landing-plano-card relative flex h-full flex-col rounded-3xl border p-8 sm:p-10"
+    :class="
+      popular
+        ? 'landing-plano-card--popular border-glow-purple/60 bg-glow-purple/20 ring-2 ring-glow-purple/30'
+        : 'border-white/15 bg-white/[0.06] landing-glass-card hover:border-glow-gold/30 hover:bg-white/[0.08]'
+    "
   >
     <div class="mb-6 flex h-6 items-center justify-center">
       <div v-if="popular" class="flex items-center gap-2">
-        <svg class="size-4 text-glow-purple" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg
+          class="size-4 text-glow-purple"
+          style="animation: landing-float 3.5s ease-in-out infinite"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
           <path d="M12 2l2.9 6.9H22l-5.5 4.5 2.1 6.6L12 16.9 5.4 20l2.1-6.6L2 8.9h7.1L12 2z" />
         </svg>
         <span class="font-montserrat text-sm font-medium text-glow-purple">POPULAR</span>
@@ -71,7 +81,7 @@ const priceAccent = computed(() => (props.popular ? 'text-glow-purple' : 'text-g
 
     <p
       class="mt-5 min-h-[3.25rem] line-clamp-3 font-poppins text-base font-light leading-[1.2]"
-      :class="popular ? 'text-glow-purple-soft' : 'text-glow-text'"
+      :class="popular ? 'text-glow-purple-soft' : 'text-white/70'"
     >
       {{ plano.descricao }}
     </p>
@@ -129,7 +139,7 @@ const priceAccent = computed(() => (props.popular ? 'text-glow-purple' : 'text-g
         </svg>
         <span
           class="line-clamp-2 font-poppins text-sm font-light leading-snug"
-          :class="popular ? 'text-glow-purple-soft' : 'text-glow-text'"
+          :class="popular ? 'text-glow-purple-soft' : 'text-white/75'"
         >
           {{ feature }}
         </span>
@@ -149,6 +159,7 @@ const priceAccent = computed(() => (props.popular ? 'text-glow-purple' : 'text-g
 
     <LandingCtaButton
       class="mx-auto mt-6 w-full max-w-[259px] justify-center"
+      :class="popular && 'landing-cta--pulse'"
       :href="checkoutHref"
       label="Assinar agora"
       :variant="ctaVariant"

@@ -12,17 +12,17 @@ const descontoLabel = computed(() => `${props.promocao.percentualDescontoMensali
 </script>
 
 <template>
-  <!-- Landing: fundo sempre claro -->
+  <!-- Landing: fundo escuro contínuo -->
   <div
     v-if="isLanding"
-    class="rounded-2xl border border-glow-gold-cta bg-glow-promo-bg-soft px-5 py-4 text-center shadow-glow-md lg:px-6"
+    class="rounded-2xl border border-glow-gold/40 bg-glow-gold/10 px-5 py-4 text-center lg:px-6"
     role="status"
   >
-    <p class="font-montserrat text-lg font-semibold leading-snug text-glow-text">
-      <span class="text-glow-promo-accent">Promoção de lançamento</span>
+    <p class="font-montserrat text-lg font-semibold leading-snug text-white">
+      <span class="text-glow-gold">Promoção de lançamento</span>
       <span> — {{ promocao.diasTrial }} dias grátis + {{ descontoLabel }} off para sempre</span>
     </p>
-    <p class="mt-1.5 font-poppins text-sm font-normal leading-relaxed text-glow-text/85">
+    <p class="mt-1.5 font-poppins text-sm font-normal leading-relaxed text-white/70">
       Restam {{ promocao.vagasRestantes }} vagas. Cartão necessário; primeira cobrança com desconto após o período de teste.
     </p>
   </div>

@@ -1,33 +1,135 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import LandingLogo from '@/components/landing/LandingLogo.vue'
-import { FOOTER_TAGLINE } from '@/constants/landing'
+import {
+  FOOTER_CONTACT,
+  FOOTER_TAGLINE,
+  LANDING_SECTIONS,
+  NAV_LINKS,
+} from '@/constants/landing'
 import { ROUTE_PATHS } from '@/constants/routes'
+import { APP_URL } from '@/constants/urls'
+import { useLandingScroll } from '@/composables/useLandingScroll'
+
+const { goToSection } = useLandingScroll()
+
+const socialLinks = [
+  { label: 'Instagram', href: 'https://instagram.com', external: true },
+  { label: 'WhatsApp', href: `https://wa.me/5579999999999`, external: true },
+] as const
 </script>
 
 <template>
-  <footer class="relative bg-glow-inverse-surface px-4 py-12 text-white lg:px-8">
-    <div class="mx-auto grid max-w-[1280px] gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-start">
-      <div>
-        <LandingLogo variant="footer" />
-        <div class="mt-5 font-satoshi text-base text-white/60">
-          <p v-for="(line, index) in FOOTER_TAGLINE" :key="index">{{ line }}</p>
+  <footer class="relative overflow-hidden bg-glow-inverse-surface text-white">
+    <div
+      class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-glow-gold/40 to-transparent"
+      aria-hidden="true"
+    />
+
+    <div class="mx-auto max-w-[1280px] px-4 py-14 lg:px-8 lg:py-20">
+      <div class="grid grid-cols-3 gap-x-3 gap-y-10 sm:gap-x-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-12">
+        <div class="col-span-3 lg:col-span-1">
+          <RouterLink
+            :to="ROUTE_PATHS.HOME"
+            class="font-satoshi text-xl text-white sm:text-2xl"
+            @click="goToSection(LANDING_SECTIONS.inicio)"
+          >
+            <span class="font-light">GlowUp </span>
+            <span class="font-black">Connect</span>
+          </RouterLink>
+          <p class="mt-5 max-w-sm font-poppins text-sm font-light leading-relaxed text-white/55">
+            {{ FOOTER_TAGLINE }}
+          </p>
+          <p class="mt-6 font-satoshi text-sm font-black text-glow-gold">
+            {{ FOOTER_CONTACT.hashtag }}
+          </p>
         </div>
-        <p class="mt-10 font-satoshi text-xs text-white/60">
-          {{ new Date().getFullYear() }} Glow Up Connect. Todos os direitos reservados.
-        </p>
-        <nav class="mt-4 flex flex-wrap gap-x-4 gap-y-2 font-satoshi text-xs text-white/60">
-          <RouterLink :to="ROUTE_PATHS.TERMOS_DE_USO" class="hover:text-white">Termos de uso</RouterLink>
-          <RouterLink :to="ROUTE_PATHS.POLITICA_COOKIES" class="hover:text-white">Política de cookies</RouterLink>
-        </nav>
+
+        <div class="min-w-0">
+          <p class="font-montserrat text-xs font-semibold text-white sm:text-sm">Navegação</p>
+          <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé — navegação">
+            <button
+              v-for="link in NAV_LINKS"
+              :key="link.id"
+              type="button"
+              class="text-left font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              @click="goToSection(link.id)"
+            >
+              {{ link.label }}
+            </button>
+            <button
+              type="button"
+              class="text-left font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              @click="goToSection(LANDING_SECTIONS.inicio)"
+            >
+              Início
+            </button>
+          </nav>
+        </div>
+
+        <div class="min-w-0">
+          <p class="font-montserrat text-xs font-semibold text-white sm:text-sm">Conta</p>
+          <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé — conta">
+            <a
+              :href="`${APP_URL}/auth/login`"
+              class="font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+            >
+              Entrar
+            </a>
+            <a
+              :href="`${APP_URL}/auth/register`"
+              class="font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+            >
+              Criar conta
+            </a>
+            <button
+              type="button"
+              class="text-left font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              @click="goToSection(LANDING_SECTIONS.planos)"
+            >
+              Ver planos
+            </button>
+          </nav>
+        </div>
+
+        <div class="min-w-0">
+          <p class="font-montserrat text-xs font-semibold text-white sm:text-sm">Contato</p>
+          <div class="mt-3 flex flex-col gap-2 font-satoshi text-xs text-white/55 sm:mt-4 sm:gap-2.5 sm:text-sm">
+            <a :href="FOOTER_CONTACT.emailHref" class="break-all transition hover:text-white">
+              {{ FOOTER_CONTACT.email }}
+            </a>
+            <a :href="FOOTER_CONTACT.phoneHref" class="transition hover:text-white">
+              {{ FOOTER_CONTACT.phone }}
+            </a>
+          </div>
+          <div class="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">
+            <a
+              v-for="social in socialLinks"
+              :key="social.label"
+              :href="social.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rounded-full border border-white/15 px-2.5 py-1 text-center font-satoshi text-[10px] text-white/70 transition hover:border-glow-gold/40 hover:text-white sm:px-3 sm:py-1.5 sm:text-xs"
+            >
+              {{ social.label }}
+            </a>
+          </div>
+        </div>
       </div>
 
-      <div class="lg:text-right">
-        <p class="font-satoshi text-base text-white/60">Contato: contato@glowup.com.br</p>
-        <p class="mt-2 font-satoshi text-base text-white/60">(79) 9 9999-9999</p>
-        <p class="mt-10 font-satoshi text-base text-white/60">
-          <span>#</span><span class="font-black">VemPraGlow</span>
+      <div
+        class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p class="font-satoshi text-xs text-white/45">
+          {{ new Date().getFullYear() }} Glow Up Connect. Todos os direitos reservados.
         </p>
+        <nav class="flex flex-wrap gap-x-5 gap-y-2 font-satoshi text-xs text-white/45" aria-label="Políticas">
+          <RouterLink :to="ROUTE_PATHS.TERMOS_DE_USO" class="transition hover:text-white">
+            Termos de uso
+          </RouterLink>
+          <RouterLink :to="ROUTE_PATHS.POLITICA_COOKIES" class="transition hover:text-white">
+            Política de cookies
+          </RouterLink>
+        </nav>
       </div>
     </div>
   </footer>

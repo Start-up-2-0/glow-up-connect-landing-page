@@ -1,169 +1,382 @@
 export const LANDING_SECTIONS = {
   inicio: 'inicio',
-  sobre: 'sobre',
+  plataforma: 'plataforma',
+  comoFunciona: 'como-funciona',
+  funcionalidades: 'funcionalidades',
   beneficios: 'beneficios',
-  usuarios: 'usuarios',
+  provaSocial: 'prova-social',
   planos: 'planos',
+  faq: 'faq',
 } as const
 
-export type BeneficioTab = 'usuarios' | 'profissionais' | 'estabelecimentos'
+export type LandingSectionId = (typeof LANDING_SECTIONS)[keyof typeof LANDING_SECTIONS]
 
-export type BeneficioIconId =
-  | 'calendar-fast'
-  | 'location'
-  | 'history'
-  | 'bell'
-  | 'calendar-smart'
-  | 'visibility'
-  | 'clipboard'
-  | 'chat'
+export type FeatureIconId =
+  | 'agenda'
+  | 'clientes'
+  | 'financeiro'
+  | 'comissao'
+  | 'equipe'
+  | 'online'
+  | 'relatorios'
+  | 'explorar'
+  | 'automacao'
+  | 'notificacao'
   | 'dashboard'
-  | 'finance'
-  | 'modules'
-  | 'marketplace'
+  | 'servicos'
 
-export interface BeneficioItem {
+export type MockupVariant =
+  | 'dashboard'
+  | 'agenda'
+  | 'clientes'
+  | 'financeiro'
+  | 'comissao'
+  | 'online'
+  | 'equipe'
+  | 'explorar'
+  | 'relatorios'
+  | 'servicos'
+
+export interface ShowcaseItem {
+  id: string
+  titulo: string
+  beneficio: string
+  mockup: MockupVariant
+}
+
+export interface HowItWorksStep {
+  step: string
   titulo: string
   descricao: string
-  icon: BeneficioIconId
 }
 
-export const BENEFICIOS_INTRO: Record<BeneficioTab, { linha1: string; destaque1: string; linha2: string; destaque2: string }> = {
-  usuarios: {
-    linha1: 'Encontre e agende os ',
-    destaque1: 'melhores',
-    linha2: ' profissionais de beleza ',
-    destaque2: 'perto de você',
-  },
-  profissionais: {
-    linha1: 'Gerencie sua agenda e conquiste ',
-    destaque1: 'mais clientes',
-    linha2: ' com ferramentas feitas para o seu ',
-    destaque2: 'dia a dia',
-  },
-  estabelecimentos: {
-    linha1: 'Centralize equipe, serviços e ',
-    destaque1: 'financeiro',
-    linha2: ' para ',
-    destaque2: 'crescer com controle',
-  },
+export interface FeatureItem {
+  titulo: string
+  descricao: string
+  beneficio: string
+  icon: FeatureIconId
 }
 
-export const BENEFICIOS_POR_TAB: Record<BeneficioTab, BeneficioItem[]> = {
-  usuarios: [
-    {
-      titulo: 'Agendamento rápido',
-      icon: 'calendar-fast',
-      descricao:
-        'Marque horários em poucos toques, sem filas de mensagem ou ligações para confirmar disponibilidade.',
-    },
-    {
-      titulo: 'Profissionais perto de você',
-      icon: 'location',
-      descricao:
-        'Descubra salões e especialistas da sua região com informações claras sobre serviços e horários.',
-    },
-    {
-      titulo: 'Histórico organizado',
-      icon: 'history',
-      descricao:
-        'Acompanhe seus atendimentos, preferências e estabelecimentos favoritos em um só lugar.',
-    },
-    {
-      titulo: 'Lembretes automáticos',
-      icon: 'bell',
-      descricao:
-        'Receba avisos para não perder compromissos e reagendar com praticidade quando precisar.',
-    },
-  ],
-  profissionais: [
-    {
-      titulo: 'Agenda inteligente',
-      icon: 'calendar-smart',
-      descricao:
-        'Organize horários, bloqueios e atendimentos com uma visão simples da sua rotina.',
-    },
-    {
-      titulo: 'Mais visibilidade',
-      icon: 'visibility',
-      descricao:
-        'Apareça para novos clientes e fortaleça sua presença digital dentro da plataforma.',
-    },
-    {
-      titulo: 'Gestão sem planilhas',
-      icon: 'clipboard',
-      descricao:
-        'Controle serviços, desempenho e informações do negócio sem depender de controles manuais.',
-    },
-    {
-      titulo: 'Comunicação integrada',
-      icon: 'chat',
-      descricao:
-        'Mantenha o relacionamento com clientes por canais conectados ao fluxo de agendamento.',
-    },
-  ],
-  estabelecimentos: [
-    {
-      titulo: 'Operação centralizada',
-      icon: 'dashboard',
-      descricao:
-        'Unifique equipe, serviços e agenda em um painel pensado para o dia a dia do salão.',
-    },
-    {
-      titulo: 'Controle financeiro',
-      icon: 'finance',
-      descricao:
-        'Acompanhe faturamento, cobranças e indicadores para tomar decisões com mais clareza.',
-    },
-    {
-      titulo: 'Módulos sob medida',
-      icon: 'modules',
-      descricao:
-        'Ative apenas o que sua operação precisa, evoluindo conforme o negócio cresce.',
-    },
-    {
-      titulo: 'Destaque no marketplace',
-      icon: 'marketplace',
-      descricao:
-        'Ganhe prioridade na listagem pública e amplie o alcance da sua marca na região.',
-    },
-  ],
+export interface BenefitItem {
+  titulo: string
+  descricao: string
+  icon: FeatureIconId
 }
 
-export const LANDING_STATS = [
-  { valor: '4k+', rotulo: 'Usuários ativos' },
-  { valor: '12k+', rotulo: 'Agendamentos realizados' },
-  { valor: '2k+', rotulo: 'Profissionais cadastrados' },
-  { valor: '96%', rotulo: 'Aprovação dos clientes' },
+export interface TestimonialItem {
+  nome: string
+  cargo: string
+  estabelecimento: string
+  quote: string
+  rating: number
+}
+
+export interface FaqItem {
+  pergunta: string
+  resposta: string
+}
+
+export const NAV_LINKS = [
+  { label: 'Plataforma', id: LANDING_SECTIONS.plataforma },
+  { label: 'Como funciona', id: LANDING_SECTIONS.comoFunciona },
+  { label: 'Funcionalidades', id: LANDING_SECTIONS.funcionalidades },
+  { label: 'Benefícios', id: LANDING_SECTIONS.beneficios },
+  { label: 'Planos', id: LANDING_SECTIONS.planos },
+  { label: 'FAQ', id: LANDING_SECTIONS.faq },
 ] as const
 
-export const SOBRE_BODY = [
-  'O Glow Up Connect é a plataforma que conecta quem busca',
-  'beleza com quem a cria. Unimos clientes, profissionais autônomos',
-  'e estabelecimentos em um ecossistema digital pensado para',
-  'simplificar agendamentos e potencializar negócios.',
+export const HERO_COPY = {
+  eyebrow: 'Feito para o seu negócio',
+  tituloLinha1: 'Organize a operação',
+  tituloDestaque: 'do dia a dia',
+  tituloLinha2: 'em um só lugar',
+  subtitulo:
+    'Agenda, clientes, financeiro e equipe — do agendamento ao caixa, sem planilha e sem improviso.',
+  ctaPrimario: 'Começar agora',
+  ctaSecundario: 'Ver na prática',
+} as const
+
+export const SHOWCASE_INTRO = {
+  eyebrow: 'Na prática',
+  titulo: 'Veja a operação',
+  destaque: 'funcionando',
+  subtitulo:
+    'Do agendamento ao caixa: telas pensadas para o ritmo real de barbearias e salões.',
+} as const
+
+export const SHOWCASE_ITEMS: ShowcaseItem[] = [
+  {
+    id: 'dashboard',
+    titulo: 'Dashboard operacional',
+    beneficio:
+      'Tenha visão imediata de atendimentos, faturamento e ocupação — sem planilhas e sem surpresas no fim do dia.',
+    mockup: 'dashboard',
+  },
+  {
+    id: 'agenda',
+    titulo: 'Agenda inteligente',
+    beneficio:
+      'Organize horários por profissional, evite encaixes confusos e reduza ociosidade na cadeira.',
+    mockup: 'agenda',
+  },
+  {
+    id: 'clientes',
+    titulo: 'Gestão de clientes',
+    beneficio:
+      'Histórico, preferências e retorno em um só lugar — fidelize quem já confia no seu atendimento.',
+    mockup: 'clientes',
+  },
+  {
+    id: 'financeiro',
+    titulo: 'Financeiro do negócio',
+    beneficio:
+      'Acompanhe entradas, saídas e resultado com clareza para decidir com segurança.',
+    mockup: 'financeiro',
+  },
+  {
+    id: 'comissao',
+    titulo: 'Comissão dos profissionais',
+    beneficio:
+      'Calcule e acompanhe comissões sem conflito — transparência que fortalece a equipe.',
+    mockup: 'comissao',
+  },
+  {
+    id: 'online',
+    titulo: 'Agendamentos online',
+    beneficio:
+      'Seus clientes marcam horários 24h — menos WhatsApp perdido, mais agenda preenchida.',
+    mockup: 'online',
+  },
+  {
+    id: 'equipe',
+    titulo: 'Gestão da equipe',
+    beneficio:
+      'Controle acessos, papéis e performance dos profissionais em um painel simples.',
+    mockup: 'equipe',
+  },
+  {
+    id: 'explorar',
+    titulo: 'Explorar lojas',
+    beneficio:
+      'Apareça para novos clientes na região e atraia demanda qualificada para o seu salão ou barbearia.',
+    mockup: 'explorar',
+  },
+  {
+    id: 'servicos',
+    titulo: 'Catálogo de serviços',
+    beneficio:
+      'Cadastre preços, duração e status dos serviços — o menu do estabelecimento sempre atualizado.',
+    mockup: 'servicos',
+  },
+]
+
+export const HOW_IT_WORKS: HowItWorksStep[] = [
+  {
+    step: '01',
+    titulo: 'Crie sua conta',
+    descricao:
+      'Cadastre o estabelecimento em minutos. Sem instalação complexa — tudo na nuvem, pronto para usar.',
+  },
+  {
+    step: '02',
+    titulo: 'Configure o negócio',
+    descricao:
+      'Adicione serviços, profissionais, horários e preços. Em poucos passos sua operação já está no ar.',
+  },
+  {
+    step: '03',
+    titulo: 'Receba agendamentos',
+    descricao:
+      'Clientes marcam online ou pela recepção. A agenda se organiza sozinha, com lembretes e confirmações.',
+  },
+  {
+    step: '04',
+    titulo: 'Gerencie o dia a dia',
+    descricao:
+      'Acompanhe caixa, comissões, equipe e indicadores — foque no atendimento enquanto o sistema cuida da gestão.',
+  },
+]
+
+export const FEATURES: FeatureItem[] = [
+  {
+    icon: 'agenda',
+    titulo: 'Agenda unificada',
+    descricao: 'Visualize todos os horários da equipe em um calendário claro e responsivo.',
+    beneficio: 'Menos conflitos de horário e cadeiras sempre bem aproveitadas.',
+  },
+  {
+    icon: 'online',
+    titulo: 'Booking online',
+    descricao: 'Clientes agendam pelo celular, escolhendo serviço, profissional e horário.',
+    beneficio: 'Agenda preenchida mesmo fora do horário comercial.',
+  },
+  {
+    icon: 'clientes',
+    titulo: 'CRM de clientes',
+    descricao: 'Cadastro completo com histórico de serviços e preferências.',
+    beneficio: 'Retorno mais frequente e atendimento personalizado.',
+  },
+  {
+    icon: 'financeiro',
+    titulo: 'Controle financeiro',
+    descricao: 'Registre movimentações e acompanhe o resultado do estabelecimento.',
+    beneficio: 'Clareza de caixa para crescer com segurança.',
+  },
+  {
+    icon: 'comissao',
+    titulo: 'Comissões automáticas',
+    descricao: 'Regras de comissão por profissional e serviço, sem cálculo manual.',
+    beneficio: 'Equipe motivada e fechamento sem discussão.',
+  },
+  {
+    icon: 'equipe',
+    titulo: 'Gestão de equipe',
+    descricao: 'Permissões, desempenho e organização dos profissionais.',
+    beneficio: 'Operação escalável sem perder o controle.',
+  },
+  {
+    icon: 'relatorios',
+    titulo: 'Indicadores em tempo real',
+    descricao: 'Dashboards com ocupação, faturamento e performance.',
+    beneficio: 'Decisões baseadas em números, não em achismo.',
+  },
+  {
+    icon: 'notificacao',
+    titulo: 'Lembretes e confirmações',
+    descricao: 'Avisos automáticos que reduzem faltas e remarcações de última hora.',
+    beneficio: 'Menos furos na agenda e mais previsibilidade.',
+  },
+]
+
+export const BUSINESS_BENEFITS: BenefitItem[] = [
+  {
+    icon: 'agenda',
+    titulo: 'Agenda organizada',
+    descricao: 'Fim da confusão de papel, planilha e WhatsApp. Toda a operação em um fluxo único.',
+  },
+  {
+    icon: 'notificacao',
+    titulo: 'Menos faltas',
+    descricao: 'Lembretes e confirmações reduzem no-shows e protegem o faturamento do dia.',
+  },
+  {
+    icon: 'financeiro',
+    titulo: 'Financeiro sob controle',
+    descricao: 'Saiba quanto entra, quanto sai e quanto cada profissional gera — em tempo real.',
+  },
+  {
+    icon: 'equipe',
+    titulo: 'Equipe alinhada',
+    descricao: 'Comissões transparentes e papéis claros aumentam confiança e produtividade.',
+  },
+  {
+    icon: 'clientes',
+    titulo: 'Clientes mais fiéis',
+    descricao: 'Histórico e retorno facilitados transformam atendimento avulso em relacionamento.',
+  },
+  {
+    icon: 'relatorios',
+    titulo: 'Crescimento mensurável',
+    descricao: 'Indicadores mostram onde investir tempo, marketing e capacidade da equipe.',
+  },
+  {
+    icon: 'automacao',
+    titulo: 'Processos automatizados',
+    descricao: 'Menos tarefas manuais na recepção — mais tempo para o que importa: o cliente.',
+  },
+  {
+    icon: 'dashboard',
+    titulo: 'Produtividade diária',
+    descricao: 'Painel único acelera a rotina e elimina retrabalho entre agenda, caixa e equipe.',
+  },
+]
+
+export const SOCIAL_STATS = [
+  { valor: '4k+', rotulo: 'Usuários na plataforma', hint: 'Em crescimento contínuo' },
+  { valor: '12k+', rotulo: 'Agendamentos realizados', hint: 'Operação validada no dia a dia' },
+  { valor: '2k+', rotulo: 'Profissionais conectados', hint: 'Barbearias e salões' },
+  { valor: '96%', rotulo: 'Aprovação dos clientes', hint: 'Experiência que gera confiança' },
 ] as const
 
-export const SOBRE_FEATURES = [
+export const TESTIMONIALS: TestimonialItem[] = [
   {
-    titulo: 'Conexão real',
-    descricao:
-      'Aproximamos clientes e profissionais com uma experiência digital simples, humana e eficiente.',
+    nome: 'Marina Souza',
+    cargo: 'Proprietária',
+    estabelecimento: 'Studio Aura Beauty',
+    quote:
+      'Antes a agenda era um caos de mensagens. Com o Glow Up Connect, a equipe sabe exatamente o que fazer — e o caixa fechou com muito mais clareza.',
+    rating: 5,
   },
   {
-    titulo: 'Gestão integrada',
-    descricao:
-      'Agenda, serviços e relacionamento em um só ecossistema para quem atende e para quem administra.',
+    nome: 'Rafael Mendes',
+    cargo: 'Sócio',
+    estabelecimento: 'Barber House 97',
+    quote:
+      'As comissões deixaram de ser briga no fim do mês. Os profissionais confiam nos números e eu confio na operação.',
+    rating: 5,
   },
   {
-    titulo: 'Crescimento contínuo',
-    descricao:
-      'Ferramentas que evoluem com o seu negócio, do primeiro agendamento à operação completa.',
+    nome: 'Camila Duarte',
+    cargo: 'Gerente',
+    estabelecimento: 'Salão Bela Arte',
+    quote:
+      'O agendamento online preencheu horários que antes ficavam vazios. Parece que o salão trabalha mesmo quando estamos fechados.',
+    rating: 5,
   },
-] as const
+]
 
-export const FOOTER_TAGLINE = [
-  'A plataforma completa para profissionais que',
-  'buscam excelência em cada atendimento e',
-  'brilho em cada resultado.',
-] as const
+export const FAQ_ITEMS: FaqItem[] = [
+  {
+    pergunta: 'O Glow Up Connect é para barbearias ou salões de beleza?',
+    resposta:
+      'Para ambos. A plataforma foi desenhada para estabelecimentos de beleza — barbearias, salões e studios — com agenda, equipe, financeiro e presença digital no mesmo lugar.',
+  },
+  {
+    pergunta: 'Preciso instalar algum programa no computador?',
+    resposta:
+      'Não. O Glow Up Connect funciona no navegador, em computador ou celular. Basta acessar com sua conta e começar a configurar o estabelecimento.',
+  },
+  {
+    pergunta: 'Consigo receber agendamentos online dos meus clientes?',
+    resposta:
+      'Sim. Seus clientes podem marcar horário escolhendo serviço e profissional, enquanto você acompanha tudo na agenda do estabelecimento.',
+  },
+  {
+    pergunta: 'Como funcionam as comissões dos profissionais?',
+    resposta:
+      'Você define as regras de comissão e o sistema acompanha os valores com base nos atendimentos — com transparência para o dono e para a equipe.',
+  },
+  {
+    pergunta: 'Posso começar com um plano menor e mudar depois?',
+    resposta:
+      'Sim. Escolha o plano adequado ao momento do negócio e evolua conforme a operação cresce. Sem burocracia desnecessária.',
+  },
+  {
+    pergunta: 'Há suporte se eu tiver dúvidas na configuração?',
+    resposta:
+      'Sim. Nossa equipe está disponível para ajudar no onboarding e no uso diário. Você também encontra canais de contato no rodapé da página.',
+  },
+]
+
+export const FINAL_CTA = {
+  titulo: 'Pronto para colocar',
+  destaque: 'a operação sob controle?',
+  subtitulo:
+    'Cadastre-se, configure em poucos passos e comece a atender com agenda, caixa e equipe no mesmo lugar.',
+  cta: 'Criar minha conta',
+  secondary: 'Ver planos',
+} as const
+
+export const FOOTER_TAGLINE =
+  'Gestão para barbearias e salões — do agendamento ao caixa, com a operação sob controle.'
+
+export const FOOTER_CONTACT = {
+  email: 'contato@glowup.com.br',
+  phone: '(79) 9 9999-9999',
+  phoneHref: 'tel:+5579999999999',
+  emailHref: 'mailto:contato@glowup.com.br',
+  hashtag: '#VemPraGlow',
+} as const
+
+/** @deprecated Mantido para compatibilidade — preferir SOCIAL_STATS */
+export const LANDING_STATS = SOCIAL_STATS.map((s) => ({ valor: s.valor, rotulo: s.rotulo }))
