@@ -126,6 +126,11 @@ export function formatPrecoRange(min: number, max: number): string {
   return `${formatCurrency(min)} – ${formatCurrency(max)}`
 }
 
+export function formatDistanciaKm(km: number): string {
+  if (km < 1) return `${Math.round(km * 1000)} m`
+  return `${km.toFixed(1).replace('.', ',')} km`
+}
+
 /** Rótulo curto para datas ISO (yyyy-MM-dd) sem ambiguidade de fuso. */
 export function formatDateOnlyLabel(isoDate: string): string {
   const [year, month, day] = isoDate.split('-').map(Number)

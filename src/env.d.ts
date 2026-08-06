@@ -21,6 +21,13 @@ declare module '*.svg' {
   export default src
 }
 
+declare module '*.css' {
+  const css: string
+  export default css
+}
+
+declare module 'leaflet.markercluster'
+
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string
   readonly VITE_API_PROXY_TARGET?: string

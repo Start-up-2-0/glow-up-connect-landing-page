@@ -166,8 +166,9 @@ export const STORY_CHAPTERS = {
   funcionamento: { index: '01', label: 'Como funciona' },
   funcionalidades: { index: '02', label: 'Funcionalidades' },
   beneficios: { index: '03', label: 'Benefícios' },
-  demonstracao: { index: '04', label: 'Demonstração' },
-  resultados: { index: '05', label: 'Resultados' },
-  oferta: { index: '06', label: 'Planos' },
-  cta: { index: '07', label: 'Comece agora' },
+  explorar: { index: '04', label: 'Explorar lojas' },
+  demonstracao: { index: '05', label: 'Demonstração' },
+  resultados: { index: '06', label: 'Resultados' },
+  oferta: { index: '07', label: 'Planos' },
+  cta: { index: '08', label: 'Comece agora' },
 } as const

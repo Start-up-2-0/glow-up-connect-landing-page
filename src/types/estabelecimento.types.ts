@@ -5,6 +5,38 @@ export interface EnderecoResumo {
   estado: string
 }
 
+/** Catálogo de categorias de estabelecimento (extensível). */
+export interface EstabelecimentoCategoria {
+  id: number
+  nome: string
+  slug?: string
+}
+
+export interface EstabelecimentoProximo {
+  publicGuid: string
+  nome: string
+  logo: string
+  descricao: string
+  distanciaKm: number
+  endereco: EnderecoResumo
+  destaqueMarketplace?: boolean
+  notaMedia?: number
+  totalAvaliacoes?: number
+  categoriaId?: number
+  categoria?: string
+  /** Coordenadas do estabelecimento para o mapa (quando geocodificado). */
+  latitude?: number | null
+  longitude?: number | null
+}
+
+export interface EstabelecimentosProximosResponse {
+  cidade: string
+  estado: string
+  raioKm: number
+  total: number
+  itens: EstabelecimentoProximo[]
+}
+
 export interface EstabelecimentoPublico {
   publicGuid: string
   nome: string
@@ -19,6 +51,16 @@ export interface EstabelecimentoPublico {
   horarioFechamento?: string
   categoriaId?: number
   categoria?: string
+}
+
+export interface ListarProximosParams {
+  latitude: number
+  longitude: number
+  raioKm?: number
+  pagina?: number
+  tamanhoPagina?: number
+  /** Filtro por categoria de estabelecimento. */
+  categoriaId?: number
 }
 
 export interface ObterEstabelecimentoParams {

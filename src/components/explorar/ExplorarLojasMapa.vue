@@ -1,0 +1,620 @@
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import type { EstabelecimentoProximo } from '@/types/estabelecimento.types'
+import { estabelecimentoTemCoordenadas } from '@/utils/explorarMapa'
+import ExplorarLojasCard from './ExplorarLojasCard.vue'
+
+const props = defineProps<{
+  itens: EstabelecimentoProximo[]
+  userLat?: number | null
+  userLng?: number | null
+  userAccuracy?: number | null
+  selectedGuid?: string | null
+  focusGuid?: string | null
+  bootstrapLat: number
+  bootstrapLng: number
+}>()
+
+const emit = defineEmits<{
+  'update:selectedGuid': [value: string | null]
+  'bounds-change': [payload: { latitude: number; longitude: number }]
+  'user-interact': []
+}>()
+
+const mapEl = ref<HTMLElement | null>(null)
+const ready = ref(false)
+const selectedItem = computed(
+  () => props.itens.find((i) => i.publicGuid === props.selectedGuid) ?? null,
+)
+
+type LeafletNs = typeof import('leaflet')
+type LeafletMap = import('leaflet').Map
+type Marker = import('leaflet').Marker
+type CircleMarker = import('leaflet').CircleMarker
+type Circle = import('leaflet').Circle
+
+let L: LeafletNs | null = null
+let map: LeafletMap | null = null
+// MarkerClusterGroup vem de leaflet.markercluster (augmentação em runtime).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let cluster: any = null
+let userMarker: CircleMarker | null = null
+let userAccuracyCircle: Circle | null = null
+const markersByGuid = new Map<string, Marker>()
+let moveTimer: ReturnType<typeof setTimeout> | null = null
+let suppressTimer: ReturnType<typeof setTimeout> | null = null
+let suppressBoundsEmit = false
+let lastEmittedCenter: { lat: number; lng: number } | null = null
+let userDragging = false
+
+function withSuppressedBounds(action: () => void, ms = 800) {
+  suppressBoundsEmit = true
+  if (suppressTimer) clearTimeout(suppressTimer)
+  action()
+  suppressTimer = setTimeout(() => {
+    suppressBoundsEmit = false
+  }, ms)
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+}
+
+function markerHtml(
+  item: EstabelecimentoProximo,
+  state: 'default' | 'selected' | 'destaque',
+) {
+  const classes = [
+    'explorar-landing-marker',
+    state === 'selected' ? 'explorar-landing-marker--selected' : '',
+    state === 'destaque' || item.destaqueMarketplace
+      ? 'explorar-landing-marker--destaque'
+      : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const nome = item.nome || 'Estabelecimento'
+  const label = escapeHtml(nome)
+  const initial = escapeHtml(nome.charAt(0).toUpperCase())
+  const logoSrc = item.logo?.trim()
+  const avatar = logoSrc
+    ? `<img class="explorar-landing-marker__logo" src="${escapeHtml(logoSrc)}" alt="" width="28" height="28" loading="lazy" decoding="async" />`
+    : `<span class="explorar-landing-marker__initial">${initial}</span>`
+
+  return `<button type="button" class="${classes}" aria-label="${label}"><span class="explorar-landing-marker__avatar">${avatar}</span><span class="explorar-landing-marker__name">${label}</span></button>`
+}
+
+function markerIcon(item: EstabelecimentoProximo, selected: boolean) {
+  if (!L) return undefined
+  const state = selected ? 'selected' : item.destaqueMarketplace ? 'destaque' : 'default'
+  return L.divIcon({
+    className: 'explorar-landing-marker-wrap',
+    html: markerHtml(item, state),
+    iconSize: [0, 0],
+    iconAnchor: [0, 0],
+  })
+}
+
+function syncMarkers() {
+  if (!map || !cluster || !L) return
+
+  cluster.clearLayers()
+  markersByGuid.clear()
+
+  const comCoords = props.itens.filter(estabelecimentoTemCoordenadas)
+  for (const item of comCoords) {
+    const selected = item.publicGuid === props.selectedGuid
+    const marker = L.marker([item.latitude, item.longitude], {
+      icon: markerIcon(item, selected),
+      riseOnHover: true,
+      title: item.nome,
+    })
+    marker.on('click', () => {
+      emit('update:selectedGuid', item.publicGuid)
+    })
+    markersByGuid.set(item.publicGuid, marker)
+    cluster.addLayer(marker)
+  }
+}
+
+function clearUserLayers() {
+  if (!map) return
+  if (userMarker) {
+    map.removeLayer(userMarker)
+    userMarker = null
+  }
+  if (userAccuracyCircle) {
+    map.removeLayer(userAccuracyCircle)
+    userAccuracyCircle = null
+  }
+}
+
+function syncUserMarker() {
+  if (!map || !L) return
+  if (props.userLat == null || props.userLng == null) {
+    clearUserLayers()
+    return
+  }
+
+  const latlng: [number, number] = [props.userLat, props.userLng]
+
+  if (!userAccuracyCircle) {
+    userAccuracyCircle = L.circle(latlng, {
+      radius: Math.max(props.userAccuracy ?? 40, 20),
+      color: '#c9a227',
+      weight: 1,
+      opacity: 0.4,
+      fillColor: '#c9a227',
+      fillOpacity: 0.1,
+      interactive: false,
+    }).addTo(map)
+  } else {
+    userAccuracyCircle.setLatLng(latlng)
+    if (props.userAccuracy != null && props.userAccuracy > 0) {
+      userAccuracyCircle.setRadius(Math.max(props.userAccuracy, 20))
+    }
+  }
+
+  if (!userMarker) {
+    userMarker = L.circleMarker(latlng, {
+      radius: 8,
+      color: '#fff',
+      weight: 2,
+      fillColor: '#c9a227',
+      fillOpacity: 1,
+    }).addTo(map)
+    userMarker.bindTooltip('Você está aqui', { direction: 'top', offset: [0, -8] })
+  } else {
+    userMarker.setLatLng(latlng)
+  }
+}
+
+function fitToContent(force = false) {
+  if (!map || !cluster) return
+
+  if (props.userLat != null && props.userLng != null) {
+    if (force) {
+      withSuppressedBounds(() => {
+        map?.setView([props.userLat!, props.userLng!], 14)
+      })
+    }
+    return
+  }
+
+  const layers = cluster.getLayers()
+  if (layers.length === 0) {
+    if (force) {
+      withSuppressedBounds(() => {
+        map?.setView([props.bootstrapLat, props.bootstrapLng], 13)
+      })
+    }
+    return
+  }
+
+  const bounds = cluster.getBounds()
+  if (force || !map.getBounds().contains(bounds)) {
+    withSuppressedBounds(() => {
+      map?.fitBounds(bounds.pad(0.18), { maxZoom: 15, animate: true })
+    })
+  }
+}
+
+function focusEstabelecimento(guid: string) {
+  const item = props.itens.find((i) => i.publicGuid === guid)
+  if (!item || !estabelecimentoTemCoordenadas(item) || !map) return
+  withSuppressedBounds(() => {
+    map?.flyTo([item.latitude, item.longitude], Math.max(map.getZoom(), 15), {
+      duration: 0.55,
+    })
+  }, 900)
+  emit('update:selectedGuid', guid)
+}
+
+function onMoveEnd() {
+  if (!map || suppressBoundsEmit) return
+  if (userDragging) {
+    emit('user-interact')
+    userDragging = false
+  }
+  if (moveTimer) clearTimeout(moveTimer)
+  moveTimer = setTimeout(() => {
+    if (!map || suppressBoundsEmit) return
+    const center = map.getCenter()
+    if (
+      lastEmittedCenter
+      && Math.abs(lastEmittedCenter.lat - center.lat) < 0.002
+      && Math.abs(lastEmittedCenter.lng - center.lng) < 0.002
+    ) {
+      return
+    }
+    lastEmittedCenter = { lat: center.lat, lng: center.lng }
+    emit('bounds-change', { latitude: center.lat, longitude: center.lng })
+  }, 450)
+}
+
+function onDragStart() {
+  userDragging = true
+}
+
+onMounted(async () => {
+  if (!mapEl.value || import.meta.env.SSR) return
+
+  const leaflet = await import('leaflet')
+  await import('leaflet.markercluster')
+  await import('leaflet/dist/leaflet.css')
+  await import('leaflet.markercluster/dist/MarkerCluster.css')
+  await import('leaflet.markercluster/dist/MarkerCluster.Default.css')
+
+  L = leaflet.default ?? leaflet
+
+  const startLat = props.userLat ?? props.bootstrapLat
+  const startLng = props.userLng ?? props.bootstrapLng
+
+  map = L.map(mapEl.value, {
+    zoomControl: false,
+    attributionControl: true,
+  }).setView([startLat, startLng], 13)
+
+  L.control.zoom({ position: 'bottomright' }).addTo(map)
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
+  }).addTo(map)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cluster = (L as any).markerClusterGroup({
+    showCoverageOnHover: false,
+    maxClusterRadius: 52,
+    spiderfyOnMaxZoom: true,
+    disableClusteringAtZoom: 17,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    iconCreateFunction(c: any) {
+      const count = c.getChildCount()
+      const size = count > 20 ? 'lg' : count > 8 ? 'md' : 'sm'
+      return L!.divIcon({
+        html: `<div class="explorar-landing-cluster explorar-landing-cluster--${size}"><span>${count}</span></div>`,
+        className: 'explorar-landing-cluster-wrap',
+        iconSize: L!.point(44, 44),
+      })
+    },
+  })
+  map.addLayer(cluster)
+
+  map.on('dragstart', onDragStart)
+  map.on('moveend', onMoveEnd)
+
+  syncUserMarker()
+  syncMarkers()
+  fitToContent(true)
+  ready.value = true
+
+  requestAnimationFrame(() => {
+    map?.invalidateSize()
+  })
+})
+
+onUnmounted(() => {
+  if (moveTimer) clearTimeout(moveTimer)
+  if (suppressTimer) clearTimeout(suppressTimer)
+  map?.off('dragstart', onDragStart)
+  map?.off('moveend', onMoveEnd)
+  clearUserLayers()
+  map?.remove()
+  map = null
+  cluster = null
+  L = null
+  markersByGuid.clear()
+})
+
+watch(
+  () => props.itens,
+  () => {
+    syncMarkers()
+  },
+  { deep: true },
+)
+
+watch(
+  () => [props.userLat, props.userLng, props.userAccuracy] as const,
+  () => {
+    syncUserMarker()
+  },
+)
+
+watch(
+  () => props.selectedGuid,
+  (guid, prev) => {
+    syncMarkers()
+    if (guid && guid !== prev) {
+      const item = props.itens.find((i) => i.publicGuid === guid)
+      if (item && estabelecimentoTemCoordenadas(item) && map) {
+        withSuppressedBounds(() => {
+          map?.flyTo([item.latitude, item.longitude], Math.max(map.getZoom(), 15), {
+            duration: 0.55,
+          })
+        }, 900)
+      }
+    }
+  },
+)
+
+watch(
+  () => props.focusGuid,
+  (guid) => {
+    if (guid) focusEstabelecimento(guid)
+  },
+)
+
+defineExpose({
+  focusEstabelecimento,
+  fitToContent,
+  recenterUser() {
+    if (!map || props.userLat == null || props.userLng == null) return
+    withSuppressedBounds(() => {
+      map?.flyTo([props.userLat!, props.userLng!], 14, { duration: 0.5 })
+    }, 800)
+  },
+  invalidateSize() {
+    map?.invalidateSize()
+  },
+})
+</script>
+
+<template>
+  <div class="explorar-landing-mapa" :class="{ 'explorar-landing-mapa--ready': ready }">
+    <div
+      ref="mapEl"
+      class="explorar-landing-mapa__canvas"
+      role="application"
+      aria-label="Mapa de estabelecimentos Glow Up Connect"
+    />
+
+    <div v-if="selectedItem" class="explorar-landing-mapa__card-slot">
+      <ExplorarLojasCard
+        :item="selectedItem"
+        @close="emit('update:selectedGuid', null)"
+      />
+    </div>
+
+    <p
+      v-if="itens.length > 0 && itens.every((i) => !estabelecimentoTemCoordenadas(i))"
+      class="explorar-landing-mapa__hint"
+    >
+      As lojas encontradas ainda não têm coordenadas no mapa.
+    </p>
+  </div>
+</template>
+
+<style>
+.explorar-landing-mapa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.explorar-landing-mapa--ready {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.explorar-landing-mapa__canvas {
+  width: 100%;
+  height: 100%;
+  background: #120a2a;
+  border-radius: inherit;
+}
+
+.explorar-landing-mapa__card-slot {
+  position: absolute;
+  z-index: 600;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.85rem;
+  max-width: 23rem;
+  pointer-events: none;
+}
+
+.explorar-landing-mapa__card-slot > * {
+  pointer-events: auto;
+}
+
+.explorar-landing-mapa__hint {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  z-index: 500;
+  margin: 0;
+  border-radius: 0.75rem;
+  background: rgb(13 8 37 / 0.92);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  padding: 0.65rem 0.85rem;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: rgb(255 255 255 / 0.55);
+}
+
+.explorar-landing-marker-wrap {
+  background: transparent !important;
+  border: none !important;
+}
+
+.explorar-landing-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 11rem;
+  height: 2.3rem;
+  margin: 0;
+  padding: 0.2rem 0.7rem 0.2rem 0.2rem;
+  border: 1px solid rgb(201 162 39 / 0.35);
+  border-radius: 9999px;
+  background: linear-gradient(135deg, rgb(26 18 56 / 0.95), rgb(13 8 37 / 0.92));
+  box-shadow:
+    0 10px 22px -12px rgb(0 0 0 / 0.55),
+    0 0 0 1px rgb(255 255 255 / 0.06);
+  color: #fff;
+  cursor: pointer;
+  transform: translate(-1.05rem, calc(-100% - 0.35rem));
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+  animation: explorar-marker-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes explorar-marker-pop {
+  from {
+    opacity: 0;
+    transform: translate(-1.05rem, calc(-100% - 0.1rem)) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-1.05rem, calc(-100% - 0.35rem)) scale(1);
+  }
+}
+
+.explorar-landing-marker:hover {
+  transform: translate(-1.05rem, calc(-100% - 0.5rem)) scale(1.04);
+  border-color: var(--glow-gold, #c9a227);
+  box-shadow:
+    0 14px 28px -12px rgb(0 0 0 / 0.6),
+    0 0 0 3px rgb(201 162 39 / 0.22);
+}
+
+.explorar-landing-marker--selected {
+  transform: translate(-1.05rem, calc(-100% - 0.5rem)) scale(1.05);
+  border-color: var(--glow-gold, #c9a227);
+  background: linear-gradient(135deg, rgb(201 162 39 / 0.28), rgb(26 18 56 / 0.95));
+  box-shadow:
+    0 14px 28px -12px rgb(0 0 0 / 0.6),
+    0 0 0 3px rgb(201 162 39 / 0.28);
+}
+
+.explorar-landing-marker--destaque {
+  border-color: color-mix(in srgb, #c9a227 70%, #fff);
+}
+
+.explorar-landing-marker__avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 1.9rem;
+  height: 1.9rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 1.5px solid rgb(255 255 255 / 0.85);
+  background: var(--glow-gold, #c9a227);
+}
+
+.explorar-landing-marker__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.explorar-landing-marker__initial {
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0d0825;
+  line-height: 1;
+}
+
+.explorar-landing-marker__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  padding-right: 0.15rem;
+}
+
+.explorar-landing-cluster-wrap {
+  background: transparent !important;
+  border: none !important;
+}
+
+.explorar-landing-cluster {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 2px solid rgb(255 255 255 / 0.9);
+  background: linear-gradient(145deg, #c9a227, #8a6a1e);
+  color: #0d0825;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 10px 20px -10px rgb(0 0 0 / 0.55);
+}
+
+.explorar-landing-cluster--sm {
+  width: 40px;
+  height: 40px;
+  font-size: 0.8rem;
+}
+
+.explorar-landing-cluster--lg {
+  width: 52px;
+  height: 52px;
+  font-size: 0.95rem;
+}
+
+.explorar-landing-mapa .leaflet-container {
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  z-index: 0;
+  background: #120a2a;
+  border-radius: inherit;
+}
+
+.explorar-landing-mapa .leaflet-control-zoom a {
+  background: rgb(26 18 56 / 0.92) !important;
+  color: #fff !important;
+  border-color: rgb(255 255 255 / 0.12) !important;
+}
+
+.explorar-landing-mapa .leaflet-control-attribution {
+  background: rgb(13 8 37 / 0.75) !important;
+  color: rgb(255 255 255 / 0.45) !important;
+}
+
+.explorar-landing-mapa .leaflet-control-attribution a {
+  color: rgb(201 162 39 / 0.85) !important;
+}
+
+@media (min-width: 768px) {
+  .explorar-landing-mapa__card-slot {
+    left: 1.1rem;
+    right: auto;
+    bottom: 1.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explorar-landing-mapa,
+  .explorar-landing-marker {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>

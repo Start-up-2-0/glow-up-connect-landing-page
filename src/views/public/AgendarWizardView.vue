@@ -58,9 +58,9 @@ const {
   error,
   contextoInvalido,
   agendamentoCriado,
-  sucessoCadastroPendente,
   isVisitante,
   isModoInterno,
+  identidadeTravada,
   profissionais,
   profissionalSelecionadoNome,
   profissionalSelecionadoFoto,
@@ -116,6 +116,11 @@ const meusAgendamentosUrl = computed(() => appMeusAgendamentosUrl())
 const showBack = computed(() => {
   if (step.value === 'identidade' || step.value === 'sucesso' || step.value === 'sucesso_cadastro') {
     return false
+  }
+  // Após entrar com código/conta, a identificação fica travada.
+  if (identidadeTravada.value) {
+    if (step.value === 'profissional') return false
+    if (step.value === 'servicos' && profissionalPublicGuid.value) return false
   }
   return true
 })
@@ -300,8 +305,8 @@ async function handleConfirmar() {
         />
 
         <!-- Identificação -->
-        <div v-if="step === 'identidade'" class="agendar-identidade-panel">
-          <div class="agendar-identidade-panel__icon" aria-hidden="true">
+        <div v-if="step === 'identidade'" class="agendar-step-panel">
+          <div class="agendar-step-panel__icon" aria-hidden="true">
             <svg class="size-5" viewBox="0 0 24 24" fill="none">
               <path
                 d="M12 3.5 13.2 8.3 18 9.5 13.2 10.7 12 15.5 10.8 10.7 6 9.5l4.8-1.2L12 3.5Z"
@@ -370,8 +375,8 @@ async function handleConfirmar() {
             </AgendarOpcaoCard>
           </div>
 
-          <div class="agendar-identidade-panel__footer">
-            <span class="agendar-identidade-panel__footer-icon" aria-hidden="true">
+          <div class="agendar-step-panel__footer">
+            <span class="agendar-step-panel__footer-icon" aria-hidden="true">
               <svg class="size-4" viewBox="0 0 16 16" fill="none">
                 <path
                   d="M8 1.5 13 3.5v4.2c0 3.1-2.1 5.4-5 6.3-2.9-.9-5-3.2-5-6.3V3.5L8 1.5Z"
@@ -388,7 +393,7 @@ async function handleConfirmar() {
                 />
               </svg>
             </span>
-            <p class="agendar-identidade-panel__footer-text">
+            <p class="agendar-step-panel__footer-text">
               Seus dados estão seguros conosco. Utilizamos criptografia para proteger suas
               informações.
             </p>
@@ -396,7 +401,7 @@ async function handleConfirmar() {
         </div>
 
         <!-- Contato (guest) -->
-        <div v-else-if="step === 'contato'" class="space-y-6">
+        <div v-else-if="step === 'contato'" class="agendar-step-panel space-y-6">
           <h1 class="agendar-section-title">
             Preencha seus dados para continuar o agendamento
           </h1>
@@ -445,7 +450,7 @@ async function handleConfirmar() {
         </div>
 
         <!-- Profissional -->
-        <div v-else-if="step === 'profissional'" class="space-y-6">
+        <div v-else-if="step === 'profissional'" class="agendar-step-panel space-y-6">
           <p class="text-center font-urbanist text-base text-white/55">
             Escolha um profissional ou deixe com a loja.
           </p>
@@ -539,7 +544,7 @@ async function handleConfirmar() {
         <!-- Serviços -->
         <div
           v-else-if="step === 'servicos'"
-          class="space-y-5"
+          class="agendar-step-panel space-y-5"
           :class="{ 'pb-36': showResumoFooter }"
         >
           <AgendarProfissionalCard
@@ -581,7 +586,7 @@ async function handleConfirmar() {
         </div>
 
         <!-- Data -->
-        <div v-else-if="step === 'data'" class="space-y-6">
+        <div v-else-if="step === 'data'" class="agendar-step-panel space-y-6">
           <h2 class="agendar-section-title">
             Selecione um dia disponível para seu atendimento.
           </h2>
@@ -606,7 +611,7 @@ async function handleConfirmar() {
         </div>
 
         <!-- Horário -->
-        <div v-else-if="step === 'horario'" class="space-y-6">
+        <div v-else-if="step === 'horario'" class="agendar-step-panel space-y-6">
           <div>
             <h2 class="agendar-section-title">Selecione o horário desejado</h2>
             <p class="agendar-section-date mt-2">
@@ -645,26 +650,27 @@ async function handleConfirmar() {
         </div>
 
         <!-- Revisão -->
-        <AgendarRevisaoStep
-          v-else-if="step === 'confirmar'"
-          :show-cliente="showRevisaoCliente"
-          :cliente-nome="clienteNome"
-          :cliente-email="clienteEmail"
-          :cliente-telefone="clienteTelefone"
-          :profissional-nome="profissionalSelecionadoNome"
-          :profissional-foto="profissionalSelecionadoFoto"
-          :estabelecimento-nome="estabelecimentoNome"
-          :servicos="selectedServicos"
-          :data-label="revisaoDataLabel"
-          :horario-label="revisaoHorarioLabel"
-          :duracao-total="duracaoTotal"
-          :valor-total-label="revisaoValorTotalLabel"
-          :show-register-password="modoIdentidade === 'register'"
-          :submitting="submitting"
-          v-model:cadastro-senha="cadastroSenha"
-          v-model:observacao="observacao"
-          @confirm="handleConfirmar"
-        />
+        <div v-else-if="step === 'confirmar'" class="agendar-step-panel">
+          <AgendarRevisaoStep
+            :show-cliente="showRevisaoCliente"
+            :cliente-nome="clienteNome"
+            :cliente-email="clienteEmail"
+            :cliente-telefone="clienteTelefone"
+            :profissional-nome="profissionalSelecionadoNome"
+            :profissional-foto="profissionalSelecionadoFoto"
+            :estabelecimento-nome="estabelecimentoNome"
+            :servicos="selectedServicos"
+            :data-label="revisaoDataLabel"
+            :horario-label="revisaoHorarioLabel"
+            :duracao-total="duracaoTotal"
+            :valor-total-label="revisaoValorTotalLabel"
+            :show-register-password="modoIdentidade === 'register'"
+            :submitting="submitting"
+            v-model:cadastro-senha="cadastroSenha"
+            v-model:observacao="observacao"
+            @confirm="handleConfirmar"
+          />
+        </div>
 
         <!-- Sucesso cadastro -->
         <AgendarSucessoConfirmacao
@@ -695,14 +701,14 @@ async function handleConfirmar() {
           :data-label="sucessoDataLabel"
           :horario-label="sucessoHorarioLabel"
         >
-          <template v-if="isVisitante && !sucessoCadastroPendente">
+          <template v-if="modoIdentidade === 'guest'">
             <a :href="registerUrl" class="w-full">
               <button type="button" :class="AGENDAR_BTN_CONTINUE_CLASS">
                 Criar conta
               </button>
             </a>
           </template>
-          <template v-else-if="!isVisitante">
+          <template v-else-if="modoIdentidade === 'login' || !isVisitante">
             <a :href="meusAgendamentosUrl" class="w-full">
               <button type="button" :class="AGENDAR_BTN_CONTINUE_CLASS">
                 Ver meus agendamentos

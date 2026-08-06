@@ -518,7 +518,12 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
     await loadProfissionais()
   }
 
+  const identidadeTravada = computed(
+    () => modoIdentidade.value === 'login' || !isVisitante.value,
+  )
+
   function voltarParaIdentidade() {
+    if (identidadeTravada.value) return
     modoIdentidade.value = null
     error.value = null
     limparSenhaCadastro()
@@ -529,14 +534,12 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
 
   function voltarDeProfissional() {
     error.value = null
-    if (isVisitante.value) {
-      if (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register') {
-        step.value = 'contato'
-        return
-      }
-      voltarParaIdentidade()
+    if (modoIdentidade.value === 'guest' || modoIdentidade.value === 'register') {
+      step.value = 'contato'
       return
     }
+    // Login com código/conta: não volta para escolha de identificação.
+    if (identidadeTravada.value) return
     voltarParaIdentidade()
   }
 
@@ -547,6 +550,8 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
       return
     }
     if (initialProfissionalGuid) {
+      // Deep-link com profissional + login: sem volta para identificação.
+      if (identidadeTravada.value) return
       voltarParaIdentidade()
       return
     }
@@ -825,6 +830,7 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
     sucessoCadastroPendente,
     isVisitante,
     isModoInterno,
+    identidadeTravada,
     profissionalVinculado,
     profissionais,
     profissionalSelecionadoNome,

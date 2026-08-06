@@ -11,7 +11,10 @@ import type {
   ServicoPublico,
 } from '@/types/agendamento.types'
 import type {
+  EstabelecimentoCategoria,
   EstabelecimentoPublico,
+  EstabelecimentosProximosResponse,
+  ListarProximosParams,
   ObterEstabelecimentoParams,
 } from '@/types/estabelecimento.types'
 
@@ -37,6 +40,23 @@ function buildDisponibilidadeQueryParams(params: ConsultarDisponibilidadeParams)
 }
 
 export const publicoService = {
+  listarProximos(params: ListarProximosParams) {
+    return api
+      .get<ApiSuccessResponse<EstabelecimentosProximosResponse>>(
+        '/publico/estabelecimentos/proximos',
+        { params },
+      )
+      .then(unwrap)
+  },
+
+  listarCategorias() {
+    return api
+      .get<ApiSuccessResponse<EstabelecimentoCategoria[]>>(
+        '/publico/estabelecimentos/categorias',
+      )
+      .then(unwrap)
+  },
+
   obterEstabelecimento(publicGuid: string, params?: ObterEstabelecimentoParams) {
     return api
       .get<ApiSuccessResponse<EstabelecimentoPublico>>(

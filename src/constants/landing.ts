@@ -4,6 +4,7 @@ export const LANDING_SECTIONS = {
   comoFunciona: 'como-funciona',
   funcionalidades: 'funcionalidades',
   beneficios: 'beneficios',
+  explorarLojas: 'explorar-lojas',
   provaSocial: 'prova-social',
   planos: 'planos',
   faq: 'faq',
@@ -81,6 +82,7 @@ export const NAV_LINKS = [
   { label: 'Como funciona', id: LANDING_SECTIONS.comoFunciona },
   { label: 'Funcionalidades', id: LANDING_SECTIONS.funcionalidades },
   { label: 'Benefícios', id: LANDING_SECTIONS.beneficios },
+  { label: 'Explorar Lojas', id: LANDING_SECTIONS.explorarLojas },
   { label: 'Planos', id: LANDING_SECTIONS.planos },
   { label: 'FAQ', id: LANDING_SECTIONS.faq },
 ] as const
