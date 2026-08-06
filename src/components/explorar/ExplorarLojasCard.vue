@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { EstabelecimentoProximo, EstabelecimentoPublico } from '@/types/estabelecimento.types'
 import { lojaAgendarPath } from '@/constants/routes'
 import { publicoService } from '@/services/publicoService'
 import { formatDistanciaKm } from '@/utils/formatters'
-import { formatEnderecoMapa } from '@/utils/explorarMapa'
 
 const props = defineProps<{
   item: EstabelecimentoProximo
+  userLat?: number | null
+  userLng?: number | null
 }>()
 
 const emit = defineEmits<{
@@ -17,7 +18,33 @@ const emit = defineEmits<{
 
 const detalhe = ref<EstabelecimentoPublico | null>(null)
 const loadingDetalhe = ref(false)
-const showDescricao = ref(false)
+
+const tituloId = computed(() => `explorar-loja-${props.item.publicGuid}`)
+
+const notaLabel = computed(() => {
+  const nota = detalhe.value?.notaMedia ?? props.item.notaMedia
+  if (nota == null || nota <= 0) return 'Sem avaliações'
+  return nota.toFixed(1).replace('.', ',')
+})
+
+const totalAvaliacoes = computed(
+  () => detalhe.value?.totalAvaliacoes ?? props.item.totalAvaliacoes ?? 0,
+)
+
+const distanciaKm = computed(() => {
+  const d = detalhe.value?.distanciaKm
+  if (typeof d === 'number' && Number.isFinite(d)) return d
+  return props.item.distanciaKm
+})
+
+const categoria = computed(
+  () => detalhe.value?.categoria?.trim() || props.item.categoria?.trim() || null,
+)
+
+const descricao = computed(() => {
+  const d = detalhe.value?.descricao?.trim() || props.item.descricao?.trim()
+  return d || null
+})
 
 const horarioLabel = computed(() => {
   const d = detalhe.value
@@ -30,16 +57,26 @@ const horarioLabel = computed(() => {
   return null
 })
 
-const notaLabel = computed(() => {
-  const nota = props.item.notaMedia
-  if (nota == null || nota <= 0) return 'Sem avaliações'
-  return nota.toFixed(1).replace('.', ',')
+const abertoAgora = computed(() => detalhe.value?.abertoAgora === true)
+
+const enderecoLinhas = computed(() => {
+  const e = detalhe.value?.endereco ?? props.item.endereco
+  if (!e) return [] as string[]
+  const linhas: string[] = []
+  if (e.logradouro?.trim()) linhas.push(e.logradouro.trim())
+  const bairroCidade = [e.bairro, e.cidade, e.estado].filter(Boolean).join(' · ')
+  if (bairroCidade) linhas.push(bairroCidade)
+  return linhas
 })
 
 async function carregarDetalhe(guid: string) {
   loadingDetalhe.value = true
   try {
-    detalhe.value = await publicoService.obterEstabelecimento(guid)
+    const params =
+      props.userLat != null && props.userLng != null
+        ? { latitude: props.userLat, longitude: props.userLng }
+        : undefined
+    detalhe.value = await publicoService.obterEstabelecimento(guid, params)
   } catch {
     detalhe.value = null
   } finally {
@@ -47,8 +84,19 @@ async function carregarDetalhe(guid: string) {
   }
 }
 
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') emit('close')
+}
+
 onMounted(() => {
+  document.body.style.overflow = 'hidden'
+  window.addEventListener('keydown', handleKeydown)
   void carregarDetalhe(props.item.publicGuid)
+})
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+  window.removeEventListener('keydown', handleKeydown)
 })
 
 watch(
@@ -60,114 +108,197 @@ watch(
 </script>
 
 <template>
-  <article class="explorar-lojas-card" role="dialog" :aria-label="item.nome">
-    <button
-      type="button"
-      class="explorar-lojas-card__close"
-      aria-label="Fechar"
-      @click="emit('close')"
+  <Teleport to="body">
+    <div
+      class="explorar-loja-modal"
+      role="dialog"
+      aria-modal="true"
+      :aria-labelledby="tituloId"
     >
-      <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-      </svg>
-    </button>
-
-    <div class="explorar-lojas-card__media">
-      <img
-        v-if="item.logo"
-        :src="item.logo"
-        :alt="item.nome"
-        class="size-full object-cover"
-        loading="lazy"
-        decoding="async"
+      <button
+        type="button"
+        class="explorar-loja-modal__backdrop"
+        aria-label="Fechar detalhes da loja"
+        @click="emit('close')"
       />
-      <span v-else class="explorar-lojas-card__fallback">
-        {{ item.nome.charAt(0) }}
-      </span>
-      <span v-if="item.destaqueMarketplace" class="explorar-lojas-card__badge">Destaque</span>
-    </div>
 
-    <div class="explorar-lojas-card__body">
-      <h3 class="explorar-lojas-card__title">{{ item.nome }}</h3>
-
-      <span v-if="item.categoria" class="explorar-lojas-card__categoria">
-        {{ item.categoria }}
-      </span>
-
-      <div class="explorar-lojas-card__meta">
-        <span class="explorar-lojas-card__rating" aria-label="Avaliação">
-          <svg class="size-3.5 text-glow-gold" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path
-              d="M8 1.4 9.7 5.2l4.1.4-3.1 2.8.9 4-3.6-2.1L4.4 12.4l.9-4L2.2 5.6l4.1-.4L8 1.4Z"
-            />
-          </svg>
-          {{ notaLabel }}
-          <span v-if="(item.totalAvaliacoes ?? 0) > 0" class="text-white/40">
-            ({{ item.totalAvaliacoes }})
-          </span>
-        </span>
-        <span class="explorar-lojas-card__dist">{{ formatDistanciaKm(item.distanciaKm) }}</span>
-      </div>
-
-      <p class="explorar-lojas-card__endereco">{{ formatEnderecoMapa(item) }}</p>
-
-      <p v-if="horarioLabel" class="explorar-lojas-card__horario">
-        {{ horarioLabel }}
-      </p>
-      <p v-else-if="loadingDetalhe" class="explorar-lojas-card__horario text-white/30">
-        Carregando horário…
-      </p>
-
-      <div class="explorar-lojas-card__actions">
+      <div class="explorar-loja-modal__panel">
         <button
           type="button"
-          class="explorar-lojas-card__btn explorar-lojas-card__btn--ghost"
-          @click="showDescricao = !showDescricao"
+          class="explorar-loja-modal__close"
+          aria-label="Fechar"
+          @click="emit('close')"
         >
-          {{ showDescricao ? 'Ocultar' : 'Ver detalhes' }}
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
         </button>
-        <RouterLink
-          :to="lojaAgendarPath(item.publicGuid)"
-          class="explorar-lojas-card__btn explorar-lojas-card__btn--primary"
-        >
-          Agendar
-        </RouterLink>
-      </div>
 
-      <p v-if="showDescricao && detalhe?.descricao" class="explorar-lojas-card__desc">
-        {{ detalhe.descricao }}
-      </p>
-      <p
-        v-else-if="showDescricao && !loadingDetalhe"
-        class="explorar-lojas-card__desc"
-      >
-        Sem descrição disponível para este estabelecimento.
-      </p>
+        <div class="explorar-loja-modal__scroll">
+          <div class="explorar-loja-modal__hero">
+            <img
+              v-if="item.logo"
+              :src="item.logo"
+              :alt="item.nome"
+              class="explorar-loja-modal__logo"
+              loading="lazy"
+              decoding="async"
+            />
+            <span v-else class="explorar-loja-modal__fallback">
+              {{ item.nome.charAt(0) }}
+            </span>
+            <span
+              v-if="item.destaqueMarketplace"
+              class="explorar-loja-modal__badge"
+            >
+              Destaque
+            </span>
+          </div>
+
+          <div class="explorar-loja-modal__content">
+            <p v-if="categoria" class="explorar-loja-modal__categoria">{{ categoria }}</p>
+            <h2 :id="tituloId" class="explorar-loja-modal__title">{{ item.nome }}</h2>
+
+            <div class="explorar-loja-modal__chips">
+              <span class="explorar-loja-modal__chip" aria-label="Avaliação">
+                <svg class="size-3.5 text-glow-gold" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M8 1.4 9.7 5.2l4.1.4-3.1 2.8.9 4-3.6-2.1L4.4 12.4l.9-4L2.2 5.6l4.1-.4L8 1.4Z"
+                  />
+                </svg>
+                {{ notaLabel }}
+                <span v-if="totalAvaliacoes > 0" class="text-white/40">({{ totalAvaliacoes }})</span>
+              </span>
+              <span class="explorar-loja-modal__chip explorar-loja-modal__chip--muted">
+                {{ formatDistanciaKm(distanciaKm) }}
+              </span>
+            </div>
+
+            <section v-if="enderecoLinhas.length" class="explorar-loja-modal__section">
+              <h3 class="explorar-loja-modal__section-title">Endereço</h3>
+              <p
+                v-for="(linha, idx) in enderecoLinhas"
+                :key="idx"
+                class="explorar-loja-modal__text"
+              >
+                {{ linha }}
+              </p>
+            </section>
+
+            <section class="explorar-loja-modal__section">
+              <h3 class="explorar-loja-modal__section-title">Horário</h3>
+              <p
+                v-if="horarioLabel"
+                class="explorar-loja-modal__horario"
+                :class="{ 'explorar-loja-modal__horario--aberto': abertoAgora }"
+              >
+                {{ horarioLabel }}
+              </p>
+              <p v-else-if="loadingDetalhe" class="explorar-loja-modal__text explorar-loja-modal__text--muted">
+                Carregando horário…
+              </p>
+              <p v-else class="explorar-loja-modal__text explorar-loja-modal__text--muted">
+                Horário não informado.
+              </p>
+            </section>
+
+            <section class="explorar-loja-modal__section">
+              <h3 class="explorar-loja-modal__section-title">Sobre a loja</h3>
+              <p v-if="loadingDetalhe && !descricao" class="explorar-loja-modal__text explorar-loja-modal__text--muted">
+                Carregando detalhes…
+              </p>
+              <p v-else-if="descricao" class="explorar-loja-modal__desc">
+                {{ descricao }}
+              </p>
+              <p v-else class="explorar-loja-modal__text explorar-loja-modal__text--muted">
+                Sem descrição disponível para este estabelecimento.
+              </p>
+            </section>
+          </div>
+        </div>
+
+        <div class="explorar-loja-modal__footer">
+          <button
+            type="button"
+            class="explorar-loja-modal__btn explorar-loja-modal__btn--ghost"
+            @click="emit('close')"
+          >
+            Fechar
+          </button>
+          <RouterLink
+            :to="lojaAgendarPath(item.publicGuid)"
+            class="explorar-loja-modal__btn explorar-loja-modal__btn--primary"
+          >
+            Agendar
+          </RouterLink>
+        </div>
+      </div>
     </div>
-  </article>
+  </Teleport>
 </template>
 
 <style scoped>
-.explorar-lojas-card {
-  display: grid;
-  grid-template-columns: 5.75rem 1fr;
-  gap: 0.85rem;
-  position: relative;
-  border-radius: 1.15rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  background: linear-gradient(155deg, rgb(26 18 56 / 0.96), rgb(13 8 37 / 0.94));
-  box-shadow:
-    0 22px 50px -24px rgb(0 0 0 / 0.65),
-    0 0 0 1px rgb(201 162 39 / 0.06);
+.explorar-loja-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   padding: 0.75rem;
-  backdrop-filter: blur(16px);
-  animation: explorar-card-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes explorar-card-in {
+@media (min-width: 640px) {
+  .explorar-loja-modal {
+    align-items: center;
+    padding: 1.25rem;
+  }
+}
+
+.explorar-loja-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  background: rgb(8 5 20 / 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.explorar-loja-modal__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 28rem;
+  max-height: min(92vh, 40rem);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 1.25rem 1.25rem 0.85rem 0.85rem;
+  background: linear-gradient(165deg, #1a1238 0%, #0d0825 55%, #120a2e 100%);
+  box-shadow:
+    0 28px 60px -28px rgb(0 0 0 / 0.75),
+    0 0 0 1px rgb(201 162 39 / 0.08);
+  animation: explorar-loja-modal-in 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 640px) {
+  .explorar-loja-modal__panel {
+    border-radius: 1.25rem;
+  }
+}
+
+@keyframes explorar-loja-modal-in {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.98);
+    transform: translateY(1.25rem) scale(0.98);
   }
   to {
     opacity: 1;
@@ -175,186 +306,221 @@ watch(
   }
 }
 
-.explorar-lojas-card__close {
+.explorar-loja-modal__close {
   position: absolute;
-  top: 0.45rem;
-  right: 0.45rem;
+  top: 0.75rem;
+  right: 0.75rem;
   z-index: 2;
   display: inline-flex;
-  width: 1.85rem;
-  height: 1.85rem;
+  width: 2.25rem;
+  height: 2.25rem;
   align-items: center;
   justify-content: center;
-  border-radius: 0.55rem;
   border: none;
-  background: rgb(255 255 255 / 0.08);
-  color: rgb(255 255 255 / 0.65);
+  border-radius: 0.65rem;
+  background: rgb(0 0 0 / 0.45);
+  color: rgb(255 255 255 / 0.75);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.explorar-lojas-card__close:hover {
-  background: rgb(255 255 255 / 0.14);
+.explorar-loja-modal__close:hover {
+  background: rgb(0 0 0 / 0.65);
   color: #fff;
 }
 
-.explorar-lojas-card__media {
-  position: relative;
-  width: 5.75rem;
-  height: 5.75rem;
-  overflow: hidden;
-  border-radius: 0.85rem;
-  background: color-mix(in srgb, var(--glow-gold) 18%, transparent);
+.explorar-loja-modal__scroll {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-.explorar-lojas-card__fallback {
+.explorar-loja-modal__hero {
+  position: relative;
+  height: 10.5rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--glow-gold, #c9a227) 16%, #160e33);
+}
+
+.explorar-loja-modal__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.explorar-loja-modal__fallback {
   display: grid;
   place-items: center;
   width: 100%;
   height: 100%;
   font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.55rem;
+  font-size: 3rem;
   font-weight: 700;
-  color: var(--glow-gold);
+  color: var(--glow-gold, #c9a227);
 }
 
-.explorar-lojas-card__badge {
+.explorar-loja-modal__badge {
   position: absolute;
-  left: 0.35rem;
-  bottom: 0.35rem;
+  left: 0.85rem;
+  bottom: 0.85rem;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--glow-gold) 92%, #1a1020);
+  background: color-mix(in srgb, var(--glow-gold, #c9a227) 92%, #1a1020);
   color: #0d0825;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  padding: 0.15rem 0.4rem;
-}
-
-.explorar-lojas-card__body {
-  min-width: 0;
-  padding-right: 1.35rem;
-}
-
-.explorar-lojas-card__title {
-  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.98rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.25;
-}
-
-.explorar-lojas-card__categoria {
-  margin-top: 0.3rem;
-  display: inline-flex;
-  border-radius: 9999px;
-  padding: 0.15rem 0.55rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--glow-gold);
-  background: color-mix(in srgb, var(--glow-gold) 14%, transparent);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.65rem;
 }
 
-.explorar-lojas-card__meta {
-  margin-top: 0.45rem;
+.explorar-loja-modal__content {
+  padding: 1.15rem 1.25rem 0.5rem;
+}
+
+.explorar-loja-modal__categoria {
+  margin: 0;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--glow-gold, #c9a227);
+}
+
+.explorar-loja-modal__title {
+  margin: 0.35rem 0 0;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.explorar-loja-modal__chips {
+  margin-top: 0.75rem;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.55rem;
+  gap: 0.45rem;
 }
 
-.explorar-lojas-card__rating {
+.explorar-loja-modal__chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.3rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.05);
+  padding: 0.3rem 0.7rem;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: rgb(255 255 255 / 0.85);
+  color: rgb(255 255 255 / 0.9);
 }
 
-.explorar-lojas-card__dist {
+.explorar-loja-modal__chip--muted {
+  color: rgb(255 255 255 / 0.55);
+}
+
+.explorar-loja-modal__section {
+  margin-top: 1.05rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.explorar-loja-modal__section-title {
+  margin: 0 0 0.4rem;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.4);
+}
+
+.explorar-loja-modal__text {
+  margin: 0;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: rgb(255 255 255 / 0.78);
+}
+
+.explorar-loja-modal__text--muted {
+  color: rgb(255 255 255 / 0.4);
+}
+
+.explorar-loja-modal__horario {
+  margin: 0;
+  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: rgb(255 255 255 / 0.45);
+  color: rgb(255 255 255 / 0.7);
 }
 
-.explorar-lojas-card__endereco,
-.explorar-lojas-card__horario {
-  margin-top: 0.28rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.7rem;
-  color: rgb(255 255 255 / 0.45);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.explorar-loja-modal__horario--aberto {
+  color: rgb(110 231 183 / 0.95);
 }
 
-.explorar-lojas-card__horario {
-  color: rgb(110 231 183 / 0.85);
+.explorar-loja-modal__desc {
+  margin: 0;
+  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.68);
+  white-space: pre-line;
 }
 
-.explorar-lojas-card__actions {
-  margin-top: 0.7rem;
+.explorar-loja-modal__footer {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.55rem;
+  flex-shrink: 0;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(8 5 20 / 0.55);
+  padding: 0.85rem 1.15rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
 }
 
-.explorar-lojas-card__btn {
+.explorar-loja-modal__btn {
   display: inline-flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
-  height: 2.05rem;
-  border-radius: 0.7rem;
+  min-height: 2.75rem;
+  border-radius: 0.8rem;
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.88rem;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
   transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
-.explorar-lojas-card__btn:hover {
+.explorar-loja-modal__btn:hover {
   transform: translateY(-1px);
 }
 
-.explorar-lojas-card__btn--ghost {
-  border: 1px solid rgb(255 255 255 / 0.14);
+.explorar-loja-modal__btn--ghost {
+  flex: 0 0 auto;
+  min-width: 5.5rem;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  background: transparent;
   color: #fff;
-  background: rgb(255 255 255 / 0.05);
+  padding: 0 1rem;
 }
 
-.explorar-lojas-card__btn--primary {
-  background: var(--glow-gold-cta, var(--glow-gold));
+.explorar-loja-modal__btn--primary {
+  flex: 1;
+  border: none;
+  background: var(--glow-gold-cta, var(--glow-gold, #c9a227));
   color: #0d0825;
+  padding: 0 1.1rem;
 }
 
-.explorar-lojas-card__desc {
-  margin-top: 0.65rem;
-  grid-column: 1 / -1;
-  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 300;
-  line-height: 1.45;
-  color: rgb(255 255 255 / 0.5);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (max-width: 420px) {
-  .explorar-lojas-card {
-    grid-template-columns: 1fr;
-  }
-
-  .explorar-lojas-card__media {
-    width: 100%;
-    height: 7.5rem;
+@media (prefers-reduced-motion: reduce) {
+  .explorar-loja-modal__panel {
+    animation: none;
   }
 }
 </style>

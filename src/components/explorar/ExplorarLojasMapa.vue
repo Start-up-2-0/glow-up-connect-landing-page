@@ -453,12 +453,13 @@ defineExpose({
       aria-label="Mapa de estabelecimentos Glow Up Connect"
     />
 
-    <div v-if="selectedItem" class="explorar-landing-mapa__card-slot">
-      <ExplorarLojasCard
-        :item="selectedItem"
-        @close="emit('update:selectedGuid', null)"
-      />
-    </div>
+    <ExplorarLojasCard
+      v-if="selectedItem"
+      :item="selectedItem"
+      :user-lat="userLat"
+      :user-lng="userLng"
+      @close="emit('update:selectedGuid', null)"
+    />
 
     <p
       v-if="itens.length > 0 && itens.every((i) => !estabelecimentoTemCoordenadas(i))"
@@ -492,27 +493,6 @@ defineExpose({
   height: 100%;
   background: #120a2a;
   border-radius: inherit;
-}
-
-.explorar-landing-mapa__card-slot {
-  position: absolute;
-  z-index: 600;
-  left: 0.75rem;
-  right: 0.75rem;
-  bottom: 0.85rem;
-  max-width: 23rem;
-  pointer-events: none;
-}
-
-.explorar-landing-mapa__card-slot > * {
-  pointer-events: auto;
-}
-
-.explorar-landing-mapa--immersive .explorar-landing-mapa__card-slot {
-  left: auto;
-  right: 1rem;
-  bottom: 1.15rem;
-  width: min(22.5rem, calc(100% - 2rem));
 }
 
 .explorar-landing-mapa--immersive .explorar-landing-mapa__canvas {
@@ -889,14 +869,6 @@ defineExpose({
 
 .explorar-landing-mapa .leaflet-control-attribution a {
   color: rgb(201 162 39 / 0.85) !important;
-}
-
-@media (min-width: 768px) {
-  .explorar-landing-mapa__card-slot {
-    left: 1.1rem;
-    right: auto;
-    bottom: 1.1rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
