@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
+import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
+import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import type { EnderecoResumo } from '@/types/estabelecimento.types'
 
@@ -14,7 +17,13 @@ const { isVisible } = useRevealOnScroll()
 const embedUrl = computed(() => {
   if (!props.endereco) return null
   const q = encodeURIComponent(
-    [props.endereco.logradouro, props.endereco.bairro, props.endereco.cidade, props.endereco.estado, 'Brasil']
+    [
+      props.endereco.logradouro,
+      props.endereco.bairro,
+      props.endereco.cidade,
+      props.endereco.estado,
+      'Brasil',
+    ]
       .filter(Boolean)
       .join(', '),
   )
@@ -23,41 +32,57 @@ const embedUrl = computed(() => {
 </script>
 
 <template>
-  <section
-    ref="revealRoot"
-    class="loja-section loja-reveal"
-    :class="{ 'is-visible': isVisible }"
-    aria-labelledby="loja-local-title"
+  <LandingStorySection
+    chapter-index="06"
+    chapter-label="Local"
+    :show-progress="false"
   >
-    <div class="loja-section__inner">
-      <p class="loja-section__eyebrow">Localização</p>
-      <h2 id="loja-local-title" class="loja-section__title">
-        Como chegar
-      </h2>
+    <div class="px-4 pb-16 pt-4 lg:px-8 lg:pb-24 lg:pt-6">
+      <div
+        ref="revealRoot"
+        class="landing-reveal mx-auto grid max-w-[1280px] items-stretch gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14"
+        :class="isVisible && 'is-visible'"
+      >
+        <div class="flex flex-col justify-center">
+          <LandingSectionHeader
+            align="left"
+            eyebrow="Localização"
+            title="Como"
+            highlight="chegar"
+            subtitle="Endereço completo e atalho para abrir rotas no mapa — planeje a visita com tranquilidade."
+          />
 
-      <div class="loja-local__layout">
-        <div class="loja-local__info">
-          <p v-if="enderecoCompleto" class="loja-local__endereco">{{ enderecoCompleto }}</p>
-          <p v-else class="loja-empty">Endereço não informado.</p>
-
-          <a
-            v-if="mapsUrl"
-            :href="mapsUrl"
-            class="loja-local__route"
-            target="_blank"
-            rel="noopener noreferrer"
+          <p
+            v-if="enderecoCompleto"
+            class="mt-8 font-poppins text-base font-light leading-relaxed text-white/70 sm:text-lg"
           >
-            Abrir rotas no mapa
-            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </a>
+            {{ enderecoCompleto }}
+          </p>
+          <p
+            v-else
+            class="mt-8 font-poppins text-base font-light text-white/45"
+          >
+            Endereço não informado publicamente.
+          </p>
+
+          <div v-if="mapsUrl" class="mt-8">
+            <LandingCtaButton
+              label="Abrir rotas no mapa"
+              variant="outline"
+              size="sm"
+              :href="mapsUrl"
+            />
+          </div>
         </div>
 
-        <div v-if="embedUrl" class="loja-local__map">
+        <div
+          v-if="embedUrl"
+          class="min-h-[18rem] overflow-hidden rounded-[2rem] border border-white/15 bg-[#0d0820] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] landing-glass-card"
+        >
           <iframe
             :src="embedUrl"
             title="Mapa da localização da loja"
+            class="block size-full min-h-[18rem] border-0 grayscale-[0.2] contrast-[1.05] lg:min-h-[22rem]"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             allowfullscreen
@@ -65,64 +90,5 @@ const embedUrl = computed(() => {
         </div>
       </div>
     </div>
-  </section>
+  </LandingStorySection>
 </template>
-
-<style scoped>
-.loja-local__layout {
-  margin-top: 1.5rem;
-  display: grid;
-  gap: 1.25rem;
-}
-
-@media (min-width: 900px) {
-  .loja-local__layout {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
-    align-items: stretch;
-    gap: 1.5rem;
-  }
-}
-
-.loja-local__endereco {
-  margin: 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.05rem;
-  line-height: 1.55;
-  color: rgb(255 255 255 / 0.78);
-}
-
-.loja-local__route {
-  margin-top: 1.1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--glow-gold, #c9a227);
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-.loja-local__route:hover {
-  opacity: 0.85;
-}
-
-.loja-local__map {
-  overflow: hidden;
-  min-height: 16rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  border-radius: 1.25rem;
-  background: #0d0820;
-  box-shadow: 0 24px 48px -32px rgb(0 0 0 / 0.8);
-}
-
-.loja-local__map iframe {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 16rem;
-  border: 0;
-  filter: grayscale(0.25) contrast(1.05);
-}
-</style>

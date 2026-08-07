@@ -27,3 +27,10 @@ export function lojaPublicaPath(publicGuid: string): string {
 export function lojaAgendarPath(publicGuid: string): string {
   return `/loja/${publicGuid}/agendar`
 }
+
+export function lojaAgendarComProfissionalPath(
+  publicGuid: string,
+  profissionalPublicGuid: string,
+): string {
+  return `/loja/${publicGuid}/agendar?profissional=${encodeURIComponent(profissionalPublicGuid)}`
+}

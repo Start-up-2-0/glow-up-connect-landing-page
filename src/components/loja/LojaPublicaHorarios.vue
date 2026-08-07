@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
+import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 
 const props = defineProps<{
@@ -11,111 +13,80 @@ const props = defineProps<{
 const { isVisible } = useRevealOnScroll()
 
 const hojeLabel = computed(() => {
-  const open = props.horarioAbertura
-  const close = props.horarioFechamento
-  if (open && close) return `${open} – ${close}`
-  return null
-})
-
-const statusLabel = computed(() => {
-  if (props.abertoAgora === true) return 'Aberto agora'
-  if (props.abertoAgora === false) return 'Fechado agora'
+  if (props.horarioAbertura && props.horarioFechamento) {
+    return `${props.horarioAbertura} – ${props.horarioFechamento}`
+  }
   return null
 })
 </script>
 
 <template>
-  <section
-    ref="revealRoot"
-    class="loja-section loja-reveal"
-    :class="{ 'is-visible': isVisible }"
-    aria-labelledby="loja-horarios-title"
+  <LandingStorySection
+    chapter-index="04"
+    chapter-label="Horários"
+    :show-progress="false"
   >
-    <div class="loja-section__inner loja-horarios">
-      <div>
-        <p class="loja-section__eyebrow">Horário</p>
-        <h2 id="loja-horarios-title" class="loja-section__title">
-          Funcionamento
-        </h2>
-      </div>
+    <div class="px-4 pb-16 pt-4 lg:px-8 lg:pb-24 lg:pt-6">
+      <div class="mx-auto grid max-w-[1280px] items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <LandingSectionHeader
+          align="left"
+          eyebrow="Funcionamento"
+          title="Quando a loja"
+          highlight="está aberta"
+          subtitle="Confira o status de hoje. No agendamento você vê apenas os horários realmente disponíveis para reserva."
+        />
 
-      <div class="loja-horarios__card">
-        <div class="loja-horarios__today">
-          <p class="loja-horarios__day">Hoje</p>
-          <p
-            v-if="statusLabel"
-            class="loja-horarios__status"
-            :class="abertoAgora ? 'is-open' : 'is-closed'"
+        <div
+          ref="revealRoot"
+          class="landing-reveal"
+          :class="isVisible && 'is-visible'"
+        >
+          <article
+            class="relative overflow-hidden rounded-[2rem] border border-white/15 bg-white/[0.06] p-7 landing-glass-card sm:p-9"
           >
-            {{ statusLabel }}
-          </p>
-          <p v-if="hojeLabel" class="loja-horarios__range">{{ hojeLabel }}</p>
-          <p v-else class="loja-horarios__range loja-horarios__range--muted">
-            Horário de hoje não informado
-          </p>
+            <div
+              class="pointer-events-none absolute -right-8 top-0 h-32 w-32 rounded-full bg-glow-gold/20 blur-3xl"
+              aria-hidden="true"
+            />
+
+            <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
+              Hoje
+            </p>
+
+            <p
+              v-if="abertoAgora != null"
+              class="mt-4 font-montserrat text-3xl font-black sm:text-4xl"
+              :class="abertoAgora ? 'text-emerald-300' : 'text-white/55'"
+            >
+              {{ abertoAgora ? 'Aberto agora' : 'Fechado agora' }}
+            </p>
+            <p
+              v-else
+              class="mt-4 font-montserrat text-3xl font-black text-white/45 sm:text-4xl"
+            >
+              Horário sob consulta
+            </p>
+
+            <p
+              v-if="hojeLabel"
+              class="mt-3 font-poppins text-lg font-light text-white/75"
+            >
+              {{ hojeLabel }}
+            </p>
+            <p
+              v-else
+              class="mt-3 font-poppins text-base font-light text-white/40"
+            >
+              Intervalo de hoje ainda não informado.
+            </p>
+
+            <p class="mt-8 border-t border-white/10 pt-5 font-poppins text-sm font-light leading-relaxed text-white/45">
+              Dias e turnos podem variar. A disponibilidade real aparece ao escolher data e horário
+              no fluxo de agendamento.
+            </p>
+          </article>
         </div>
-        <p class="loja-horarios__hint">
-          Os horários podem variar por dia. No agendamento você vê apenas os slots realmente
-          disponíveis.
-        </p>
       </div>
     </div>
-  </section>
+  </LandingStorySection>
 </template>
-
-<style scoped>
-.loja-horarios__card {
-  margin-top: 1.5rem;
-  max-width: 28rem;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  border-radius: 1.35rem;
-  background:
-    linear-gradient(145deg, rgb(201 162 39 / 0.1), transparent 55%),
-    rgb(255 255 255 / 0.04);
-  padding: 1.35rem 1.4rem;
-}
-
-.loja-horarios__day {
-  margin: 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgb(255 255 255 / 0.45);
-}
-
-.loja-horarios__status {
-  margin: 0.55rem 0 0;
-  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-}
-
-.loja-horarios__status.is-open {
-  color: rgb(110 231 183 / 0.95);
-}
-
-.loja-horarios__status.is-closed {
-  color: rgb(255 255 255 / 0.55);
-}
-
-.loja-horarios__range {
-  margin: 0.35rem 0 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 1rem;
-  color: rgb(255 255 255 / 0.8);
-}
-
-.loja-horarios__range--muted {
-  color: rgb(255 255 255 / 0.4);
-}
-
-.loja-horarios__hint {
-  margin: 1rem 0 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.85rem;
-  line-height: 1.45;
-  color: rgb(255 255 255 / 0.45);
-}
-</style>

@@ -2,19 +2,19 @@
 import { computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import LandingNavbar from '@/components/landing/LandingNavbar.vue'
-import LandingFooter from '@/components/landing/LandingFooter.vue'
 import LandingWhatsappFab from '@/components/landing/LandingWhatsappFab.vue'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
+import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import LojaPublicaHero from '@/components/loja/LojaPublicaHero.vue'
 import LojaPublicaSobre from '@/components/loja/LojaPublicaSobre.vue'
 import LojaPublicaServicos from '@/components/loja/LojaPublicaServicos.vue'
 import LojaPublicaProfissionais from '@/components/loja/LojaPublicaProfissionais.vue'
 import LojaPublicaHorarios from '@/components/loja/LojaPublicaHorarios.vue'
-import LojaPublicaGaleria from '@/components/loja/LojaPublicaGaleria.vue'
 import LojaPublicaAvaliacoes from '@/components/loja/LojaPublicaAvaliacoes.vue'
 import LojaPublicaLocalizacao from '@/components/loja/LojaPublicaLocalizacao.vue'
 import LojaPublicaCtaBar from '@/components/loja/LojaPublicaCtaBar.vue'
 import { useLojaPublica } from '@/composables/useLojaPublica'
+import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import { useDynamicSeo } from '@/composables/useSeo'
 import { useHead } from '@unhead/vue'
 import { lojaAgendarPath, lojaPublicaPath, ROUTE_PATHS } from '@/constants/routes'
@@ -23,6 +23,7 @@ import { siteUrl } from '@/constants/urls'
 
 const route = useRoute()
 const publicGuid = computed(() => String(route.params.publicGuid ?? ''))
+const { isVisible: ctaVisible } = useRevealOnScroll('ctaRoot')
 
 const {
   loja,
@@ -109,7 +110,7 @@ useHead(() => {
   <div class="loja-page">
     <LandingNavbar />
 
-    <main id="conteudo-principal" class="loja-page__main">
+    <main id="conteudo-principal">
       <div v-if="loading" class="loja-page__state" role="status">
         <div class="loja-page__spinner" aria-hidden="true" />
         <p>Carregando vitrine da loja…</p>
@@ -136,59 +137,87 @@ useHead(() => {
           :endereco-resumo="enderecoCompleto"
         />
 
-        <div class="loja-page__body">
-          <LojaPublicaSobre
-            :descricao="loja.descricao?.trim() || null"
-            :categoria="loja.categoria?.trim() || null"
-          />
-          <LojaPublicaServicos
-            :servicos="servicos"
-            :public-guid="loja.publicGuid"
-          />
-          <LojaPublicaProfissionais :profissionais="profissionais" />
-          <LojaPublicaHorarios
-            :aberto-agora="loja.abertoAgora"
-            :horario-abertura="loja.horarioAbertura"
-            :horario-fechamento="loja.horarioFechamento"
-          />
-          <LojaPublicaGaleria
-            :nome="loja.nome"
-            :logo="loja.logo || null"
-          />
-          <LojaPublicaAvaliacoes
-            :avaliacoes="avaliacoes"
-            :nota-media-fallback="loja.notaMedia"
-            :total-fallback="loja.totalAvaliacoes"
-          />
-          <LojaPublicaLocalizacao
-            :endereco="loja.endereco"
-            :maps-url="mapsUrl"
-            :endereco-completo="enderecoCompleto"
-          />
+        <LojaPublicaSobre
+          :descricao="loja.descricao?.trim() || null"
+          :categoria="loja.categoria?.trim() || null"
+          :nome="loja.nome"
+          :logo="loja.logo || null"
+        />
+        <LojaPublicaServicos
+          :servicos="servicos"
+          :public-guid="loja.publicGuid"
+          :categoria="loja.categoria?.trim() || null"
+        />
+        <LojaPublicaProfissionais
+          :profissionais="profissionais"
+          :public-guid="loja.publicGuid"
+          :categoria="loja.categoria?.trim() || null"
+        />
+        <LojaPublicaHorarios
+          :aberto-agora="loja.abertoAgora"
+          :horario-abertura="loja.horarioAbertura"
+          :horario-fechamento="loja.horarioFechamento"
+        />
+        <LojaPublicaAvaliacoes
+          :avaliacoes="avaliacoes"
+          :nota-media-fallback="loja.notaMedia"
+          :total-fallback="loja.totalAvaliacoes"
+        />
+        <LojaPublicaLocalizacao
+          :endereco="loja.endereco"
+          :maps-url="mapsUrl"
+          :endereco-completo="enderecoCompleto"
+        />
 
-          <section class="loja-section loja-final-cta" aria-labelledby="loja-final-cta-title">
-            <div class="loja-section__inner loja-final-cta__inner">
-              <p class="loja-section__eyebrow">Agendamento</p>
-              <h2 id="loja-final-cta-title" class="loja-section__title">
-                Reserve seu horário em poucos passos
+        <LandingStorySection
+          chapter-index="07"
+          chapter-label="Agendar"
+          :show-progress="false"
+        >
+          <div class="relative overflow-hidden px-4 pb-24 pt-6 lg:px-8 lg:pb-28 lg:pt-10">
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-glow-inverse-surface via-[#1a0f35] to-glow-purple"
+              aria-hidden="true"
+            />
+            <div
+              class="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-glow-gold/25 blur-[100px]"
+              aria-hidden="true"
+            />
+            <div
+              class="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-glow-gold-cta/30 blur-[90px]"
+              aria-hidden="true"
+            />
+            <div class="absolute inset-0 landing-grain opacity-[0.06] mix-blend-overlay" aria-hidden="true" />
+
+            <div
+              ref="ctaRoot"
+              class="landing-reveal relative mx-auto max-w-3xl text-center"
+              :class="ctaVisible && 'is-visible'"
+            >
+              <h2 class="font-montserrat text-3xl font-light leading-[1.15] text-white sm:text-4xl lg:text-5xl">
+                Reserve seu horário
+                <span class="font-black text-glow-gold"> em poucos passos</span>
               </h2>
-              <p class="loja-final-cta__text">
+              <p class="mx-auto mt-5 max-w-xl font-poppins text-base font-light leading-relaxed text-white/70 sm:text-lg">
                 Escolha o serviço, o profissional e o melhor horário — tudo online, sem ligar.
               </p>
-              <LandingCtaButton
-                label="Agendar agora"
-                variant="gold"
-                :to="lojaAgendarPath(loja.publicGuid)"
-              />
-              <RouterLink
-                :to="ROUTE_PATHS.EXPLORAR_LOJAS"
-                class="loja-final-cta__back"
-              >
-                Explorar outras lojas
-              </RouterLink>
+              <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <LandingCtaButton
+                  label="Agendar agora"
+                  variant="gold"
+                  class="landing-cta--pulse shadow-[0_0_40px_rgba(146,103,155,0.45)]"
+                  :to="lojaAgendarPath(loja.publicGuid)"
+                />
+                <RouterLink
+                  :to="ROUTE_PATHS.EXPLORAR_LOJAS"
+                  class="font-satoshi text-sm font-semibold text-white/55 transition hover:text-white"
+                >
+                  Explorar outras lojas
+                </RouterLink>
+              </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </LandingStorySection>
 
         <LojaPublicaCtaBar
           :public-guid="loja.publicGuid"
@@ -197,114 +226,16 @@ useHead(() => {
       </template>
     </main>
 
-    <LandingFooter />
     <LandingWhatsappFab />
   </div>
 </template>
 
-<style>
-/* Shared section chrome for loja pública */
-.loja-section {
-  padding: 3.25rem 1.25rem;
-  border-top: 1px solid rgb(255 255 255 / 0.06);
-}
-
-@media (min-width: 768px) {
-  .loja-section {
-    padding: 4.25rem 2rem;
-  }
-}
-
-.loja-section__inner {
-  margin: 0 auto;
-  max-width: 72rem;
-}
-
-.loja-section__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.loja-section__eyebrow {
-  margin: 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--glow-gold, #c9a227);
-}
-
-.loja-section__title {
-  margin: 0.4rem 0 0;
-  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(1.45rem, 3vw, 2rem);
-  font-weight: 700;
-  line-height: 1.2;
-  color: #fff;
-}
-
-.loja-section__count {
-  display: inline-grid;
-  place-items: center;
-  min-width: 2rem;
-  height: 2rem;
-  border-radius: 9999px;
-  background: rgb(201 162 39 / 0.18);
-  padding: 0 0.55rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--glow-gold, #c9a227);
-}
-
-.loja-empty {
-  margin: 1.25rem 0 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.95rem;
-  color: rgb(255 255 255 / 0.45);
-}
-
-.loja-reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.loja-reveal.is-visible {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .loja-reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-</style>
-
 <style scoped>
 .loja-page {
   min-height: 100dvh;
-  background:
-    radial-gradient(ellipse 70% 40% at 10% 0%, rgb(82 46 95 / 0.35), transparent 50%),
-    #0b0818;
+  background: #0b0818;
   color: #fff;
   animation: loja-page-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.loja-page__main {
-  padding-bottom: 0;
-}
-
-.loja-page__body {
-  padding-bottom: 1rem;
 }
 
 .loja-page__state {
@@ -314,13 +245,13 @@ useHead(() => {
   min-height: 70dvh;
   padding: 6rem 1.5rem 3rem;
   text-align: center;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
   color: rgb(255 255 255 / 0.7);
 }
 
 .loja-page__state h1 {
   margin: 0;
-  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
+  font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
   font-size: 1.75rem;
   color: #fff;
 }
@@ -338,7 +269,7 @@ useHead(() => {
   border-radius: 9999px;
   background: transparent;
   padding: 0.65rem 1.25rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
+  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   color: #fff;
@@ -352,40 +283,6 @@ useHead(() => {
   border-top-color: var(--glow-gold, #c9a227);
   border-radius: 9999px;
   animation: loja-spin 0.8s linear infinite;
-}
-
-.loja-final-cta {
-  background:
-    radial-gradient(ellipse 60% 80% at 50% 100%, rgb(201 162 39 / 0.16), transparent 60%),
-    transparent;
-}
-
-.loja-final-cta__inner {
-  display: grid;
-  justify-items: start;
-  gap: 0.35rem;
-}
-
-.loja-final-cta__text {
-  margin: 0.35rem 0 1rem;
-  max-width: 32rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 1rem;
-  line-height: 1.55;
-  color: rgb(255 255 255 / 0.6);
-}
-
-.loja-final-cta__back {
-  margin-top: 1rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: rgb(255 255 255 / 0.5);
-  text-decoration: none;
-}
-
-.loja-final-cta__back:hover {
-  color: #fff;
 }
 
 @keyframes loja-page-in {

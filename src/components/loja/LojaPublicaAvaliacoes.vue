@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
+import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import type { AvaliacoesPaginadas } from '@/types/avaliacao.types'
 
@@ -9,23 +11,16 @@ const props = defineProps<{
   totalFallback?: number | null
 }>()
 
-const { isVisible } = useRevealOnScroll()
+const { isVisible: scoreVisible } = useRevealOnScroll('scoreRoot')
+const { isVisible: quotesVisible } = useRevealOnScroll('quotesRoot')
 
 const resumo = computed(() => props.avaliacoes?.resumo ?? null)
-const nota = computed(
-  () => resumo.value?.notaMedia ?? props.notaMediaFallback ?? 0,
-)
-const total = computed(
-  () => resumo.value?.totalAvaliacoes ?? props.totalFallback ?? 0,
-)
+const nota = computed(() => resumo.value?.notaMedia ?? props.notaMediaFallback ?? 0)
+const total = computed(() => resumo.value?.totalAvaliacoes ?? props.totalFallback ?? 0)
 
 const distribuicao = computed(() => {
-  const base = [5, 4, 3, 2, 1].map((n) => ({
-    nota: n,
-    quantidade: 0,
-  }))
-  const items = resumo.value?.distribuicao ?? []
-  for (const item of items) {
+  const base = [5, 4, 3, 2, 1].map((n) => ({ nota: n, quantidade: 0 }))
+  for (const item of resumo.value?.distribuicao ?? []) {
     const slot = base.find((b) => b.nota === item.nota)
     if (slot) slot.quantidade = item.quantidade
   }
@@ -37,6 +32,18 @@ const distribuicao = computed(() => {
 })
 
 const comentarios = computed(() => props.avaliacoes?.itens ?? [])
+const destaque = computed(() => {
+  if (comentarios.value.length === 0) return null
+  return [...comentarios.value].sort((a, b) => {
+    if (b.nota !== a.nota) return b.nota - a.nota
+    return (b.comentario?.length ?? 0) - (a.comentario?.length ?? 0)
+  })[0]
+})
+
+const demaisComentarios = computed(() => {
+  if (!destaque.value) return comentarios.value
+  return comentarios.value.filter((c) => c !== destaque.value)
+})
 
 function formatData(iso: string) {
   try {
@@ -52,216 +59,150 @@ function formatData(iso: string) {
 </script>
 
 <template>
-  <section
-    ref="revealRoot"
-    class="loja-section loja-reveal"
-    :class="{ 'is-visible': isVisible }"
-    aria-labelledby="loja-avaliacoes-title"
+  <LandingStorySection
+    chapter-index="05"
+    chapter-label="Reputação"
+    :show-progress="false"
   >
-    <div class="loja-section__inner">
-      <p class="loja-section__eyebrow">Avaliações</p>
-      <h2 id="loja-avaliacoes-title" class="loja-section__title">
-        O que os clientes dizem
-      </h2>
+    <div class="px-4 pb-16 pt-4 lg:px-8 lg:pb-24 lg:pt-6">
+      <div class="mx-auto max-w-[1280px]">
+        <LandingSectionHeader
+          eyebrow="Avaliações"
+          title="O que os clientes"
+          highlight="dizem"
+          subtitle="Notas reais de quem já foi atendido — transparência para você decidir com confiança."
+        />
 
-      <div class="loja-avaliacoes__summary">
-        <div class="loja-avaliacoes__score">
-          <p class="loja-avaliacoes__nota">
-            {{ total > 0 ? nota.toFixed(1).replace('.', ',') : '—' }}
-          </p>
-          <p class="loja-avaliacoes__total">
-            {{ total > 0 ? `${total} avaliação${total === 1 ? '' : 'ões'}` : 'Sem avaliações ainda' }}
-          </p>
+        <div
+          ref="scoreRoot"
+          class="landing-stagger mt-14 grid gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"
+          :class="scoreVisible && 'is-visible'"
+        >
+          <article
+            class="flex flex-col items-center justify-center rounded-[2rem] border border-glow-gold/25 bg-glow-gold/10 px-6 py-10 text-center landing-glass-card sm:py-12"
+          >
+            <p class="landing-stat-pop font-montserrat text-6xl font-black text-glow-gold sm:text-7xl">
+              {{ total > 0 ? nota.toFixed(1).replace('.', ',') : '—' }}
+            </p>
+            <div class="mt-3 flex gap-0.5 text-glow-gold" aria-hidden="true">
+              <svg
+                v-for="n in 5"
+                :key="n"
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 2l2.9 6.9H22l-5.5 4.5 2.1 6.6L12 16.9 5.4 20l2.1-6.6L2 8.9h7.1L12 2z" />
+              </svg>
+            </div>
+            <p class="mt-4 font-satoshi text-sm font-semibold text-white">
+              {{ total > 0 ? `${total} avaliação${total === 1 ? '' : 'ões'}` : 'Sem avaliações ainda' }}
+            </p>
+            <p class="mt-1 font-poppins text-xs font-light text-white/45">
+              Média pública do estabelecimento
+            </p>
+          </article>
+
+          <article
+            class="rounded-[2rem] border border-white/15 bg-white/[0.06] p-6 landing-glass-card sm:p-8"
+          >
+            <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+              Distribuição
+            </p>
+            <ul v-if="total > 0" class="mt-6 space-y-3" aria-label="Distribuição das notas">
+              <li
+                v-for="item in distribuicao"
+                :key="item.nota"
+                class="grid grid-cols-[2rem_1fr_2.5rem] items-center gap-3"
+              >
+                <span class="font-satoshi text-sm font-semibold text-white/70">{{ item.nota }}★</span>
+                <span class="h-2 overflow-hidden rounded-full bg-white/10">
+                  <span
+                    class="block h-full rounded-full bg-gradient-to-r from-glow-gold to-[#e8c65a] transition-[width] duration-700"
+                    :style="{ width: `${item.pct}%` }"
+                  />
+                </span>
+                <span class="text-right font-satoshi text-xs text-white/45">{{ item.quantidade }}</span>
+              </li>
+            </ul>
+            <p v-else class="mt-6 font-poppins text-sm font-light text-white/45">
+              Assim que os primeiros atendimentos forem avaliados, a distribuição aparece aqui.
+            </p>
+          </article>
         </div>
 
-        <ul v-if="total > 0" class="loja-avaliacoes__bars" aria-label="Distribuição das notas">
-          <li v-for="item in distribuicao" :key="item.nota">
-            <span class="loja-avaliacoes__bar-label">{{ item.nota }}</span>
-            <span class="loja-avaliacoes__bar-track">
-              <span
-                class="loja-avaliacoes__bar-fill"
-                :style="{ width: `${item.pct}%` }"
-              />
-            </span>
-            <span class="loja-avaliacoes__bar-qty">{{ item.quantidade }}</span>
-          </li>
-        </ul>
-      </div>
-
-      <ul v-if="comentarios.length > 0" class="loja-avaliacoes__list">
-        <li
-          v-for="(item, index) in comentarios"
-          :key="`${item.avaliadoEm}-${index}`"
-          class="loja-avaliacao"
-          :style="{ '--delay': `${Math.min(index, 6) * 40}ms` }"
+        <blockquote
+          v-if="destaque"
+          class="mt-8 rounded-[2rem] border border-white/15 bg-gradient-to-br from-white/[0.09] to-white/[0.03] p-6 landing-glass-card sm:p-8"
         >
-          <div class="loja-avaliacao__head">
-            <strong>{{ item.clienteNome }}</strong>
-            <span>★ {{ item.nota }}</span>
-          </div>
-          <p v-if="item.comentario?.trim()" class="loja-avaliacao__texto">
-            {{ item.comentario }}
+          <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.18em] text-glow-gold">
+            Destaque
           </p>
-          <time class="loja-avaliacao__data" :datetime="item.avaliadoEm">
-            {{ formatData(item.avaliadoEm) }}
-          </time>
-        </li>
-      </ul>
+          <div class="mt-3 flex gap-0.5 text-glow-gold" :aria-label="`${destaque.nota} estrelas`">
+            <svg
+              v-for="n in destaque.nota"
+              :key="n"
+              class="size-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M12 2l2.9 6.9H22l-5.5 4.5 2.1 6.6L12 16.9 5.4 20l2.1-6.6L2 8.9h7.1L12 2z" />
+            </svg>
+          </div>
+          <p class="mt-4 font-poppins text-base font-light leading-relaxed text-white/75 sm:text-lg">
+            “{{ destaque.comentario?.trim() || 'Atendimento avaliado positivamente.' }}”
+          </p>
+          <footer class="mt-6 border-t border-white/10 pt-4">
+            <p class="font-montserrat text-sm font-semibold text-white">{{ destaque.clienteNome }}</p>
+            <time class="font-satoshi text-xs text-white/45" :datetime="destaque.avaliadoEm">
+              {{ formatData(destaque.avaliadoEm) }}
+            </time>
+          </footer>
+        </blockquote>
 
-      <p v-else-if="total === 0" class="loja-empty">
-        Seja um dos primeiros a avaliar após o atendimento.
-      </p>
+        <div
+          v-if="demaisComentarios.length > 0"
+          ref="quotesRoot"
+          class="landing-stagger mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+          :class="quotesVisible && 'is-visible'"
+        >
+          <blockquote
+            v-for="(item, index) in demaisComentarios"
+            :key="`${item.avaliadoEm}-${index}`"
+            class="flex flex-col rounded-[1.75rem] border border-white/15 bg-white/[0.06] p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:bg-white/[0.08] sm:p-6"
+          >
+            <div class="flex gap-0.5 text-glow-gold" :aria-label="`${item.nota} estrelas`">
+              <svg
+                v-for="n in item.nota"
+                :key="n"
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M12 2l2.9 6.9H22l-5.5 4.5 2.1 6.6L12 16.9 5.4 20l2.1-6.6L2 8.9h7.1L12 2z" />
+              </svg>
+            </div>
+            <p class="mt-4 flex-1 font-poppins text-sm font-light leading-relaxed text-white/65">
+              “{{ item.comentario?.trim() || 'Cliente avaliou o atendimento.' }}”
+            </p>
+            <footer class="mt-5 border-t border-white/10 pt-4">
+              <p class="font-montserrat text-sm font-semibold text-white">{{ item.clienteNome }}</p>
+              <time class="font-satoshi text-xs text-white/40" :datetime="item.avaliadoEm">
+                {{ formatData(item.avaliadoEm) }}
+              </time>
+            </footer>
+          </blockquote>
+        </div>
+
+        <p
+          v-else-if="total === 0"
+          class="mx-auto mt-10 max-w-md text-center font-poppins text-sm font-light text-white/45"
+        >
+          Seja um dos primeiros a avaliar após o atendimento.
+        </p>
+      </div>
     </div>
-  </section>
+  </LandingStorySection>
 </template>
-
-<style scoped>
-.loja-avaliacoes__summary {
-  margin-top: 1.5rem;
-  display: grid;
-  gap: 1.25rem;
-}
-
-@media (min-width: 768px) {
-  .loja-avaliacoes__summary {
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 2rem;
-  }
-}
-
-.loja-avaliacoes__score {
-  border: 1px solid rgb(201 162 39 / 0.3);
-  border-radius: 1.25rem;
-  background: rgb(201 162 39 / 0.08);
-  padding: 1.25rem 1.5rem;
-  text-align: center;
-  min-width: 8.5rem;
-}
-
-.loja-avaliacoes__nota {
-  margin: 0;
-  font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--glow-gold, #c9a227);
-}
-
-.loja-avaliacoes__total {
-  margin: 0.45rem 0 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.82rem;
-  color: rgb(255 255 255 / 0.55);
-}
-
-.loja-avaliacoes__bars {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.4rem;
-  list-style: none;
-}
-
-.loja-avaliacoes__bars li {
-  display: grid;
-  grid-template-columns: 1.25rem 1fr 1.75rem;
-  gap: 0.55rem;
-  align-items: center;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.8rem;
-  color: rgb(255 255 255 / 0.55);
-}
-
-.loja-avaliacoes__bar-track {
-  display: block;
-  height: 0.45rem;
-  overflow: hidden;
-  border-radius: 9999px;
-  background: rgb(255 255 255 / 0.08);
-}
-
-.loja-avaliacoes__bar-fill {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #c9a227, #e8c65a);
-}
-
-.loja-avaliacoes__bar-qty {
-  text-align: right;
-}
-
-.loja-avaliacoes__list {
-  margin: 1.75rem 0 0;
-  padding: 0;
-  display: grid;
-  gap: 0.75rem;
-  list-style: none;
-}
-
-@media (min-width: 768px) {
-  .loja-avaliacoes__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.loja-avaliacao {
-  border: 1px solid rgb(255 255 255 / 0.1);
-  border-radius: 1.15rem;
-  background: rgb(255 255 255 / 0.04);
-  padding: 1rem 1.1rem;
-}
-
-.loja-reveal.is-visible .loja-avaliacao {
-  animation: loja-card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--delay, 0ms);
-}
-
-.loja-avaliacao__head {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.9rem;
-  color: #fff;
-}
-
-.loja-avaliacao__head span {
-  color: var(--glow-gold, #c9a227);
-  font-weight: 700;
-}
-
-.loja-avaliacao__texto {
-  margin: 0.55rem 0 0;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: rgb(255 255 255 / 0.65);
-}
-
-.loja-avaliacao__data {
-  display: block;
-  margin-top: 0.65rem;
-  font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.75rem;
-  color: rgb(255 255 255 / 0.35);
-}
-
-@keyframes loja-card-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .loja-reveal.is-visible .loja-avaliacao {
-    animation: none;
-  }
-}
-</style>
