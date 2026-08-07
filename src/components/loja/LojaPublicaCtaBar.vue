@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
-import { lojaAgendarPath } from '@/constants/routes'
+import { lojaAgendarPath, ROUTE_PATHS } from '@/constants/routes'
 
 defineProps<{
   publicGuid: string
@@ -18,6 +19,12 @@ defineProps<{
         <p class="mt-0.5 truncate font-montserrat text-sm font-semibold text-white sm:text-base">
           {{ nome }}
         </p>
+        <RouterLink
+          :to="ROUTE_PATHS.EXPLORAR_LOJAS"
+          class="mt-1 inline-block font-satoshi text-xs font-medium text-white/40 transition hover:text-white/70"
+        >
+          Explorar outras lojas
+        </RouterLink>
       </div>
       <LandingCtaButton
         label="Agendar agora"

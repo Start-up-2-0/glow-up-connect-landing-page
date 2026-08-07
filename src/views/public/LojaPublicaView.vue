@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute } from 'vue-router'
 import LandingNavbar from '@/components/landing/LandingNavbar.vue'
 import LandingWhatsappFab from '@/components/landing/LandingWhatsappFab.vue'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
-import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import LojaPublicaHero from '@/components/loja/LojaPublicaHero.vue'
 import LojaPublicaSobre from '@/components/loja/LojaPublicaSobre.vue'
 import LojaPublicaServicos from '@/components/loja/LojaPublicaServicos.vue'
@@ -14,16 +13,14 @@ import LojaPublicaAvaliacoes from '@/components/loja/LojaPublicaAvaliacoes.vue'
 import LojaPublicaLocalizacao from '@/components/loja/LojaPublicaLocalizacao.vue'
 import LojaPublicaCtaBar from '@/components/loja/LojaPublicaCtaBar.vue'
 import { useLojaPublica } from '@/composables/useLojaPublica'
-import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import { useDynamicSeo } from '@/composables/useSeo'
 import { useHead } from '@unhead/vue'
-import { lojaAgendarPath, lojaPublicaPath, ROUTE_PATHS } from '@/constants/routes'
+import { lojaPublicaPath, ROUTE_PATHS } from '@/constants/routes'
 import { APP_NAME } from '@/constants/storageKeys'
 import { siteUrl } from '@/constants/urls'
 
 const route = useRoute()
 const publicGuid = computed(() => String(route.params.publicGuid ?? ''))
-const { isVisible: ctaVisible } = useRevealOnScroll('ctaRoot')
 
 const {
   loja,
@@ -168,56 +165,6 @@ useHead(() => {
           :maps-url="mapsUrl"
           :endereco-completo="enderecoCompleto"
         />
-
-        <LandingStorySection
-          chapter-index="07"
-          chapter-label="Agendar"
-          :show-progress="false"
-        >
-          <div class="relative overflow-hidden px-4 pb-24 pt-6 lg:px-8 lg:pb-28 lg:pt-10">
-            <div
-              class="absolute inset-0 bg-gradient-to-br from-glow-inverse-surface via-[#1a0f35] to-glow-purple"
-              aria-hidden="true"
-            />
-            <div
-              class="pointer-events-none absolute -left-20 top-0 h-72 w-72 rounded-full bg-glow-gold/25 blur-[100px]"
-              aria-hidden="true"
-            />
-            <div
-              class="pointer-events-none absolute -right-16 bottom-0 h-64 w-64 rounded-full bg-glow-gold-cta/30 blur-[90px]"
-              aria-hidden="true"
-            />
-            <div class="absolute inset-0 landing-grain opacity-[0.06] mix-blend-overlay" aria-hidden="true" />
-
-            <div
-              ref="ctaRoot"
-              class="landing-reveal relative mx-auto max-w-3xl text-center"
-              :class="ctaVisible && 'is-visible'"
-            >
-              <h2 class="font-montserrat text-3xl font-light leading-[1.15] text-white sm:text-4xl lg:text-5xl">
-                Reserve seu horário
-                <span class="font-black text-glow-gold"> em poucos passos</span>
-              </h2>
-              <p class="mx-auto mt-5 max-w-xl font-poppins text-base font-light leading-relaxed text-white/70 sm:text-lg">
-                Escolha o serviço, o profissional e o melhor horário — tudo online, sem ligar.
-              </p>
-              <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <LandingCtaButton
-                  label="Agendar agora"
-                  variant="gold"
-                  class="landing-cta--pulse shadow-[0_0_40px_rgba(146,103,155,0.45)]"
-                  :to="lojaAgendarPath(loja.publicGuid)"
-                />
-                <RouterLink
-                  :to="ROUTE_PATHS.EXPLORAR_LOJAS"
-                  class="font-satoshi text-sm font-semibold text-white/55 transition hover:text-white"
-                >
-                  Explorar outras lojas
-                </RouterLink>
-              </div>
-            </div>
-          </div>
-        </LandingStorySection>
 
         <LojaPublicaCtaBar
           :public-guid="loja.publicGuid"
