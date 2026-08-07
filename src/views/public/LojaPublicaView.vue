@@ -137,8 +137,6 @@ useHead(() => {
         <LojaPublicaSobre
           :descricao="loja.descricao?.trim() || null"
           :categoria="loja.categoria?.trim() || null"
-          :nome="loja.nome"
-          :logo="loja.logo || null"
         />
         <LojaPublicaServicos
           :servicos="servicos"
