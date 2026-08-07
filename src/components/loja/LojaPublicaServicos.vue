@@ -128,11 +128,7 @@ function limparBusca() {
 </script>
 
 <template>
-  <LandingStorySection
-    chapter-index="02"
-    chapter-label="Serviços"
-    :show-progress="false"
-  >
+  <LandingStorySection :show-progress="false">
     <div class="px-4 pb-16 pt-4 lg:px-8 lg:pb-24 lg:pt-6">
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader

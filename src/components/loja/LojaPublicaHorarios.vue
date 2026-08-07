@@ -21,11 +21,7 @@ const hojeLabel = computed(() => {
 </script>
 
 <template>
-  <LandingStorySection
-    chapter-index="04"
-    chapter-label="Horários"
-    :show-progress="false"
-  >
+  <LandingStorySection :show-progress="false">
     <div class="px-4 pb-16 pt-4 lg:px-8 lg:pb-24 lg:pt-6">
       <div class="mx-auto grid max-w-[1280px] items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
         <LandingSectionHeader

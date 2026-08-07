@@ -32,11 +32,7 @@ const embedUrl = computed(() => {
 </script>
 
 <template>
-  <LandingStorySection
-    chapter-index="06"
-    chapter-label="Local"
-    :show-progress="false"
-  >
+  <LandingStorySection :show-progress="false">
     <div class="px-4 pb-16 pt-4 lg:px-8 lg:pb-24 lg:pt-6">
       <div
         ref="revealRoot"
