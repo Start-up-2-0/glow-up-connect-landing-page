@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
 import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import ExplorarLojasMapa from '@/components/explorar/ExplorarLojasMapa.vue'
@@ -16,6 +16,7 @@ import {
 } from '@/constants/explorarLojas'
 import { LANDING_SECTIONS } from '@/constants/landing'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
+import { lojaPublicaPath } from '@/constants/routes'
 import { publicoService } from '@/services/publicoService'
 import type {
   EstabelecimentoCategoria,
@@ -34,6 +35,7 @@ const props = withDefaults(
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.explorar
 const isPage = computed(() => props.variant === 'page')
+const router = useRouter()
 const { resolveError } = useApiError()
 const {
   coords,
@@ -208,11 +210,11 @@ function onBoundsChange(payload: { latitude: number; longitude: number }) {
 function selecionarSugestao(item: EstabelecimentoProximo) {
   busca.value = item.nome
   buscaAberta.value = false
-  focusGuid.value = item.publicGuid
-  selectedGuid.value = item.publicGuid
-  requestAnimationFrame(() => {
-    focusGuid.value = item.publicGuid
-  })
+  void router.push(lojaPublicaPath(item.publicGuid))
+}
+
+function abrirLoja(publicGuid: string) {
+  void router.push(lojaPublicaPath(publicGuid))
 }
 
 function limparFiltros() {
@@ -256,6 +258,7 @@ onMounted(async () => {
         :bootstrap-lat="bootstrapLat"
         :bootstrap-lng="bootstrapLng"
         @bounds-change="onBoundsChange"
+        @select-loja="abrirLoja"
       />
 
       <!-- Top chrome (estilo PDX) -->
@@ -509,6 +512,7 @@ onMounted(async () => {
                 :bootstrap-lat="bootstrapLat"
                 :bootstrap-lng="bootstrapLng"
                 @bounds-change="onBoundsChange"
+                @select-loja="abrirLoja"
               />
             </div>
           </div>

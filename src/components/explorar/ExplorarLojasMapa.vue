@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import type { EstabelecimentoProximo } from '@/types/estabelecimento.types'
 import { estabelecimentoTemCoordenadas } from '@/utils/explorarMapa'
 import { formatDistanciaKm } from '@/utils/formatters'
-import ExplorarLojasCard from './ExplorarLojasCard.vue'
-
 const props = defineProps<{
   itens: EstabelecimentoProximo[]
   userLat?: number | null
@@ -20,15 +18,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:selectedGuid': [value: string | null]
+  'select-loja': [publicGuid: string]
   'bounds-change': [payload: { latitude: number; longitude: number }]
   'user-interact': []
 }>()
 
 const mapEl = ref<HTMLElement | null>(null)
 const ready = ref(false)
-const selectedItem = computed(
-  () => props.itens.find((i) => i.publicGuid === props.selectedGuid) ?? null,
-)
 
 type LeafletNs = typeof import('leaflet')
 type LeafletMap = import('leaflet').Map
@@ -182,6 +178,7 @@ function syncMarkers() {
     })
     marker.on('click', () => {
       emit('update:selectedGuid', item.publicGuid)
+      emit('select-loja', item.publicGuid)
     })
     markersByGuid.set(item.publicGuid, marker)
     cluster.addLayer(marker)
@@ -451,14 +448,6 @@ defineExpose({
       class="explorar-landing-mapa__canvas"
       role="application"
       aria-label="Mapa de estabelecimentos Glow Up Connect"
-    />
-
-    <ExplorarLojasCard
-      v-if="selectedItem"
-      :item="selectedItem"
-      :user-lat="userLat"
-      :user-lng="userLng"
-      @close="emit('update:selectedGuid', null)"
     />
 
     <p

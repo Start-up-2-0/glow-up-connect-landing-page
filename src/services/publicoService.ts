@@ -11,6 +11,10 @@ import type {
   ServicoPublico,
 } from '@/types/agendamento.types'
 import type {
+  AvaliacoesPaginadas,
+  ProfissionalVitrinePublico,
+} from '@/types/avaliacao.types'
+import type {
   EstabelecimentoCategoria,
   EstabelecimentoPublico,
   EstabelecimentosProximosResponse,
@@ -87,6 +91,26 @@ export const publicoService = {
     return api
       .get<ApiSuccessResponse<ProfissionalPublico[]>>(
         `/publico/agendar/loja/${publicGuid}/profissionais`,
+      )
+      .then(unwrap)
+  },
+
+  listarProfissionaisVitrine(publicGuid: string) {
+    return api
+      .get<ApiSuccessResponse<ProfissionalVitrinePublico[]>>(
+        `/publico/estabelecimentos/${publicGuid}/profissionais-vitrine`,
+      )
+      .then(unwrap)
+  },
+
+  listarAvaliacoesEstabelecimento(
+    publicGuid: string,
+    params?: { pagina?: number; tamanhoPagina?: number },
+  ) {
+    return api
+      .get<ApiSuccessResponse<AvaliacoesPaginadas>>(
+        `/publico/avaliacoes/estabelecimentos/${publicGuid}`,
+        { params },
       )
       .then(unwrap)
   },

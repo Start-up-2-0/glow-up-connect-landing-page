@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { LANDING_SECTIONS, NAV_LINKS } from '@/constants/landing'
-import { ROUTE_PATHS } from '@/constants/routes'
+import { ROUTE_NAMES, ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
@@ -14,6 +14,8 @@ const activeSection = ref<string>(LANDING_SECTIONS.inicio)
 const scrolled = ref(false)
 
 const isExplorarPage = computed(() => route.path === ROUTE_PATHS.EXPLORAR_LOJAS)
+const isLojaPublicaPage = computed(() => route.name === ROUTE_NAMES.LOJA_PUBLICA)
+const forceSolidNav = computed(() => isExplorarPage.value || isLojaPublicaPage.value)
 
 async function handleNavClick(link: (typeof NAV_LINKS)[number]) {
   menuOpen.value = false
@@ -86,7 +88,7 @@ watch(
   <header
     class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
     :class="
-      scrolled || menuOpen || isExplorarPage
+      scrolled || menuOpen || forceSolidNav
         ? 'border-b border-white/10 bg-glow-inverse-surface py-3 shadow-glow-md'
         : 'bg-transparent py-5'
     "

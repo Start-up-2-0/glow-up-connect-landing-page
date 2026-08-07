@@ -15,6 +15,18 @@ export const routes: RouteRecordRaw[] = [
     meta: { layout: 'landing', title: 'Explorar Lojas' },
   },
   {
+    path: ROUTE_PATHS.LOJA_AGENDAR,
+    name: ROUTE_NAMES.LOJA_AGENDAR,
+    component: () => import('@/views/public/AgendarWizardView.vue'),
+    meta: { layout: 'agendar-publico', title: 'Agendar' },
+  },
+  {
+    path: ROUTE_PATHS.LOJA_PUBLICA,
+    name: ROUTE_NAMES.LOJA_PUBLICA,
+    component: () => import('@/views/public/LojaPublicaView.vue'),
+    meta: { layout: 'landing', title: 'Loja' },
+  },
+  {
     path: ROUTE_PATHS.TERMOS_DE_USO,
     name: ROUTE_NAMES.TERMOS_DE_USO,
     component: () => import('@/views/public/TermosDeUsoView.vue'),
@@ -25,11 +37,5 @@ export const routes: RouteRecordRaw[] = [
     name: ROUTE_NAMES.POLITICA_COOKIES,
     component: () => import('@/views/public/PoliticaCookiesView.vue'),
     meta: { layout: 'public', title: 'Política de cookies' },
-  },
-  {
-    path: ROUTE_PATHS.LOJA_AGENDAR,
-    name: ROUTE_NAMES.LOJA_AGENDAR,
-    component: () => import('@/views/public/AgendarWizardView.vue'),
-    meta: { layout: 'agendar-publico', title: 'Agendar' },
   },
 ]
