@@ -8,8 +8,15 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL?.trim() || 'https://glowu
   '',
 )
 
-export function appOnboardingUrl(planoId: number | string): string {
-  return `${APP_URL}/onboarding/assinatura?planoId=${encodeURIComponent(String(planoId))}`
+export function appOnboardingUrl(
+  planoId: number | string,
+  tipoAssinatura: 'Estabelecimento' | 'ProfissionalAutonomo' = 'Estabelecimento',
+): string {
+  const params = new URLSearchParams({
+    planoId: String(planoId),
+    tipoAssinatura,
+  })
+  return `${APP_URL}/onboarding/assinatura?${params.toString()}`
 }
 
 export function siteUrl(path = ''): string {

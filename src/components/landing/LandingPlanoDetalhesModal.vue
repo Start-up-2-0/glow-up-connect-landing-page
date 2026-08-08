@@ -5,14 +5,22 @@ import LandingPlanoLimites from '@/components/landing/LandingPlanoLimites.vue'
 import { appOnboardingUrl } from '@/constants/urls'
 import { aplicarDescontoPercentual, formatBRL } from '@/utils/formatters'
 import { getPlanoFeatures } from '@/utils/planoDisplay'
-import type { Plano } from '@/types/plano.types'
+import type { Plano, TipoAssinatura } from '@/types/plano.types'
 
-const props = defineProps<{
-  open: boolean
-  plano: Plano | null
-  popular?: boolean
-  percentualDesconto?: number | null
-}>()
+const props = withDefaults(
+  defineProps<{
+    open: boolean
+    plano: Plano | null
+    popular?: boolean
+    percentualDesconto?: number | null
+    tipoAssinatura?: TipoAssinatura
+  }>(),
+  {
+    popular: false,
+    percentualDesconto: null,
+    tipoAssinatura: 'Estabelecimento',
+  },
+)
 
 const emit = defineEmits<{
   close: []
@@ -21,7 +29,7 @@ const emit = defineEmits<{
 const features = computed(() => (props.plano ? getPlanoFeatures(props.plano) : []))
 
 const checkoutHref = computed(() =>
-  props.plano ? appOnboardingUrl(props.plano.id) : undefined,
+  props.plano ? appOnboardingUrl(props.plano.id, props.tipoAssinatura) : undefined,
 )
 
 const temDesconto = computed(() => (props.percentualDesconto ?? 0) > 0 && props.plano !== null)

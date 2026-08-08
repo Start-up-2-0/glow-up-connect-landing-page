@@ -15,6 +15,8 @@ export interface Plano {
   funcionalidades: string[]
 }
 
+export type TipoAssinatura = 'Estabelecimento' | 'ProfissionalAutonomo'
+
 export interface PromocaoLancamento {
   disponivel: boolean
   vagasRestantes: number

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import LoadingSpinner from '@/components/feedback/LoadingSpinner.vue'
 import EmptyState from '@/components/feedback/EmptyState.vue'
 import PromocaoLancamentoBanner from '@/components/assinatura/PromocaoLancamentoBanner.vue'
 import LandingPlanoCard from '@/components/landing/LandingPlanoCard.vue'
 import LandingPlanoDetalhesModal from '@/components/landing/LandingPlanoDetalhesModal.vue'
+import LandingTipoOperacaoPicker from '@/components/landing/LandingTipoOperacaoPicker.vue'
 import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
 import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import { LANDING_SECTIONS } from '@/constants/landing'
@@ -13,7 +14,7 @@ import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { usePlanosStore } from '@/stores/planos.store'
 import { useApiError } from '@/composables/useApiError'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
-import type { Plano } from '@/types/plano.types'
+import type { Plano, TipoAssinatura } from '@/types/plano.types'
 
 const { isVisible } = useRevealOnScroll()
 const { isVisible: promoVisible } = useRevealOnScroll('promoRoot')
@@ -24,6 +25,7 @@ const { planos, promocao, loading } = storeToRefs(planosStore)
 const { resolveError } = useApiError()
 const erro = ref<string | null>(null)
 const planoDetalhesAberto = ref<Plano | null>(null)
+const tipoAssinatura = ref<TipoAssinatura | null>(null)
 
 const percentualDescontoPromocao = computed(() =>
   promocao.value?.disponivel ? promocao.value.percentualDescontoMensalidade : null,
@@ -40,6 +42,22 @@ const planosOrdenados = computed(() => {
   return [others[0], popular, others[1]].filter(Boolean) as Plano[]
 })
 
+const copyTitulo = computed(() =>
+  tipoAssinatura.value === 'ProfissionalAutonomo'
+    ? 'Planos para quem trabalha sozinho'
+    : 'Escolha o plano',
+)
+
+const copyHighlight = computed(() =>
+  tipoAssinatura.value === 'ProfissionalAutonomo' ? 'sem equipe' : 'da sua operação',
+)
+
+const copySubtitle = computed(() =>
+  tipoAssinatura.value === 'ProfissionalAutonomo'
+    ? 'Essencial e Premium pensados para profissionais autônomos — sem surpresas e sem taxas escondidas.'
+    : 'Do começo ao crescimento — sem surpresas e sem taxas escondidas.',
+)
+
 function isPopular(plano: Plano): boolean {
   return plano.id === planoEssencial.value?.id
 }
@@ -52,12 +70,18 @@ function fecharDetalhesPlano() {
   planoDetalhesAberto.value = null
 }
 
-onMounted(async () => {
+async function carregarPlanos(tipo: TipoAssinatura) {
+  erro.value = null
+  planoDetalhesAberto.value = null
   try {
-    await planosStore.fetchPlanos()
+    await planosStore.fetchPlanos(true, tipo)
   } catch (err) {
     erro.value = resolveError(err)
   }
+}
+
+watch(tipoAssinatura, (tipo) => {
+  if (tipo) void carregarPlanos(tipo)
 })
 </script>
 
@@ -77,52 +101,60 @@ onMounted(async () => {
       <div class="relative mx-auto max-w-[1280px]">
         <LandingSectionHeader
           eyebrow="Planos"
-          title="Escolha o plano"
-          highlight="da sua operação"
-          subtitle="Do começo ao crescimento — sem surpresas e sem taxas escondidas."
+          :title="copyTitulo"
+          :highlight="copyHighlight"
+          :subtitle="copySubtitle"
         />
 
-        <div
-          v-if="promocao?.disponivel"
-          ref="promoRoot"
-          class="landing-reveal mx-auto mt-10 max-w-3xl"
-          :class="promoVisible && 'is-visible'"
-        >
-          <PromocaoLancamentoBanner variant="landing" :promocao="promocao" />
+        <div class="mt-10">
+          <LandingTipoOperacaoPicker v-model="tipoAssinatura" />
         </div>
 
-        <LoadingSpinner v-if="loading" class="mt-16 !text-white" />
-        <p v-else-if="erro" class="mt-16 text-center text-sm text-red-300">{{ erro }}</p>
-        <EmptyState
-          v-else-if="planos.length === 0"
-          class="mt-16 text-white [&_h3]:text-white [&_p]:text-white/60"
-          title="Nenhum plano disponível"
-          description="Tente novamente mais tarde."
-        />
+        <template v-if="tipoAssinatura">
+          <div
+            v-if="promocao?.disponivel"
+            ref="promoRoot"
+            class="landing-reveal mx-auto mt-10 max-w-3xl"
+            :class="promoVisible && 'is-visible'"
+          >
+            <PromocaoLancamentoBanner variant="landing" :promocao="promocao" />
+          </div>
 
-        <div
-          v-else
-          ref="revealRoot"
-          class="landing-stagger mt-14 grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3"
-          :class="[promocao?.disponivel ? 'mt-10' : '', isVisible && 'is-visible']"
-        >
-          <LandingPlanoCard
-            v-for="plano in planosOrdenados"
-            :key="plano.id"
-            :plano="plano"
-            :popular="isPopular(plano)"
-            :percentual-desconto="percentualDescontoPromocao"
-            @ver-detalhes="abrirDetalhesPlano"
+          <LoadingSpinner v-if="loading" class="mt-16 !text-white" />
+          <p v-else-if="erro" class="mt-16 text-center text-sm text-red-300">{{ erro }}</p>
+          <EmptyState
+            v-else-if="planos.length === 0"
+            class="mt-16 text-white [&_h3]:text-white [&_p]:text-white/60"
+            title="Nenhum plano disponível"
+            description="Tente novamente mais tarde."
           />
-        </div>
 
-        <LandingPlanoDetalhesModal
-          :open="planoDetalhesAberto !== null"
-          :plano="planoDetalhesAberto"
-          :popular="planoDetalhesAberto ? isPopular(planoDetalhesAberto) : false"
-          :percentual-desconto="percentualDescontoPromocao"
-          @close="fecharDetalhesPlano"
-        />
+          <div
+            v-else
+            ref="revealRoot"
+            class="landing-stagger mt-14 grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3"
+            :class="[promocao?.disponivel ? 'mt-10' : '', isVisible && 'is-visible']"
+          >
+            <LandingPlanoCard
+              v-for="plano in planosOrdenados"
+              :key="`${tipoAssinatura}-${plano.id}`"
+              :plano="plano"
+              :tipo-assinatura="tipoAssinatura"
+              :popular="isPopular(plano)"
+              :percentual-desconto="percentualDescontoPromocao"
+              @ver-detalhes="abrirDetalhesPlano"
+            />
+          </div>
+
+          <LandingPlanoDetalhesModal
+            :open="planoDetalhesAberto !== null"
+            :plano="planoDetalhesAberto"
+            :tipo-assinatura="tipoAssinatura"
+            :popular="planoDetalhesAberto ? isPopular(planoDetalhesAberto) : false"
+            :percentual-desconto="percentualDescontoPromocao"
+            @close="fecharDetalhesPlano"
+          />
+        </template>
       </div>
     </div>
   </LandingStorySection>
