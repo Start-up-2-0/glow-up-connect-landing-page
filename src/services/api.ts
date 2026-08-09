@@ -1,5 +1,5 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
-import { API_BASE_URL, TOKEN_HEADER } from '@/constants/storageKeys'
+import { API_BASE_URL } from '@/constants/storageKeys'
 import type { ApiErrorResponse } from '@/types/api.types'
 import {
   acquireRequestProof,
@@ -11,9 +11,7 @@ import {
 import { authService } from '@/services/authService'
 import {
   clearSessionStorage,
-  getAccessToken,
   persistSession,
-  setAccessToken,
 } from '@/utils/session'
 
 const PUBLIC_API_PATHS = ['/auth/login', '/auth/refresh', '/planos', '/publico/', '/security/']
@@ -35,36 +33,31 @@ function isPublicApiPath(url?: string): boolean {
 
 let isRefreshing = false
 let failedQueue: Array<{
-  resolve: (token: string) => void
+  resolve: () => void
   reject: (error: unknown) => void
 }> = []
 
-function processQueue(error: unknown, token: string | null) {
+function processQueue(error: unknown) {
   failedQueue.forEach((promise) => {
     if (error) promise.reject(error)
-    else if (token) promise.resolve(token)
+    else promise.resolve()
   })
   failedQueue = []
 }
 
-async function refreshAccessToken(): Promise<string> {
+async function refreshAccessToken(): Promise<void> {
   const { data } = await authService.refresh()
   const tokens = data.data
   persistSession({
-    token: tokens.token,
+    token: '',
     refreshToken: '',
     expiresAt: tokens.expiresAt,
     refreshExpiresAt: tokens.refreshExpiresAt,
   })
-  setAccessToken(tokens.token)
-  return tokens.token
 }
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
-  const token = getAccessToken()
-  if (token && config.headers) {
-    config.headers[TOKEN_HEADER] = token
-  }
+  // Auth via cookie HttpOnly (guc_access); não injeta token no header.
 
   if (!isExemptRequestProofPath(config.url)) {
     const proof = await acquireRequestProof(config.method, config.url)
@@ -118,24 +111,20 @@ api.interceptors.response.use(
     }
 
     if (isRefreshing) {
-      return new Promise<string>((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         failedQueue.push({ resolve, reject })
-      }).then((token) => {
-        originalRequest.headers[TOKEN_HEADER] = token
-        return api(originalRequest)
-      })
+      }).then(() => api(originalRequest))
     }
 
     originalRequest._retry = true
     isRefreshing = true
 
     try {
-      const newToken = await refreshAccessToken()
-      processQueue(null, newToken)
-      originalRequest.headers[TOKEN_HEADER] = newToken
+      await refreshAccessToken()
+      processQueue(null)
       return api(originalRequest)
     } catch (refreshError) {
-      processQueue(refreshError, null)
+      processQueue(refreshError)
       clearSessionStorage()
       return Promise.reject(refreshError)
     } finally {

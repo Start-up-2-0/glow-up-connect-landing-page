@@ -4,6 +4,7 @@ import { authService } from '@/services/authService'
 import type { CodigoAgendamentoPayload, LoginPayload, StoredSession, UserSummary } from '@/types/auth.types'
 import {
   clearSessionStorage,
+  hasActiveSessionHint,
   persistSession,
   readStoredSession,
 } from '@/utils/session'
@@ -13,7 +14,7 @@ import {
 } from '@/composables/useSessionRefresh'
 
 export const useAuthStore = defineStore('auth', () => {
-  const token = ref<string | null>(null)
+  const sessionActive = ref(false)
   const expiresAt = ref<string | null>(null)
   const refreshExpiresAt = ref<string | null>(null)
   const usuario = ref<UserSummary | null>(null)
@@ -21,10 +22,10 @@ export const useAuthStore = defineStore('auth', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  const isAuthenticated = computed(() => Boolean(token.value))
+  const isAuthenticated = computed(() => sessionActive.value)
 
   function applySession(session: StoredSession, options?: { persist?: boolean; booking?: boolean }) {
-    token.value = session.token
+    sessionActive.value = true
     expiresAt.value = session.expiresAt
     refreshExpiresAt.value = session.refreshExpiresAt
     sessaoAgendamentoPublico.value = Boolean(options?.booking ?? session.sessaoAgendamentoPublico)
@@ -32,6 +33,8 @@ export const useAuthStore = defineStore('auth', () => {
     if (options?.persist !== false) {
       persistSession({
         ...session,
+        token: '',
+        refreshToken: '',
         sessaoAgendamentoPublico: sessaoAgendamentoPublico.value,
       })
     }
@@ -69,18 +72,30 @@ export const useAuthStore = defineStore('auth', () => {
 
   function hydrateFromStorage() {
     const stored = readStoredSession()
-    if (stored.token) token.value = stored.token
-    if (stored.expiresAt) expiresAt.value = stored.expiresAt
-    if (stored.refreshExpiresAt) refreshExpiresAt.value = stored.refreshExpiresAt
-    sessaoAgendamentoPublico.value = Boolean(stored.sessaoAgendamentoPublico)
-
-    if (!stored.token || !stored.expiresAt) return
-
-    const expiresMs = new Date(stored.expiresAt).getTime()
-    if (Number.isNaN(expiresMs) || expiresMs <= Date.now()) {
+    if (!hasActiveSessionHint() || !stored.expiresAt) {
       clearSession()
       return
     }
+
+    const expiresMs = new Date(stored.expiresAt).getTime()
+    if (Number.isNaN(expiresMs) || expiresMs <= Date.now()) {
+      const refreshMs = stored.refreshExpiresAt
+        ? new Date(stored.refreshExpiresAt).getTime()
+        : NaN
+      if (
+        stored.sessaoAgendamentoPublico
+        || Number.isNaN(refreshMs)
+        || refreshMs <= Date.now()
+      ) {
+        clearSession()
+        return
+      }
+    }
+
+    sessionActive.value = true
+    expiresAt.value = stored.expiresAt ?? null
+    refreshExpiresAt.value = stored.refreshExpiresAt ?? null
+    sessaoAgendamentoPublico.value = Boolean(stored.sessaoAgendamentoPublico)
 
     if (sessaoAgendamentoPublico.value) {
       scheduleBookingExpiry()
@@ -91,7 +106,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function clearSession() {
     clearBookingExpiryTimer()
-    token.value = null
+    sessionActive.value = false
     expiresAt.value = null
     refreshExpiresAt.value = null
     usuario.value = null
@@ -107,7 +122,7 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await authService.login(payload)
       const loginData = data.data
       applySession({
-        token: loginData.token,
+        token: '',
         refreshToken: '',
         expiresAt: loginData.expiresAt,
         refreshExpiresAt: loginData.refreshExpiresAt,
@@ -129,7 +144,7 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await authService.autenticarPorCodigo(payload)
       const loginData = data.data
       applySession({
-        token: loginData.token,
+        token: '',
         refreshToken: '',
         expiresAt: loginData.expiresAt,
         refreshExpiresAt: loginData.refreshExpiresAt,
@@ -148,7 +163,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout() {
     loading.value = true
     try {
-      if (token.value) {
+      if (sessionActive.value) {
         await authService.logout()
       }
     } catch {
@@ -160,7 +175,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return {
-    token,
+    /** @deprecated Tokens não ficam mais no JS; mantido vazio por compatibilidade. */
+    token: computed(() => null as string | null),
     expiresAt,
     refreshExpiresAt,
     usuario,

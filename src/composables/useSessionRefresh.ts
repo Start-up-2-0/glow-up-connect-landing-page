@@ -15,7 +15,7 @@ function clearRefreshTimer(): void {
 async function performRefresh(): Promise<void> {
   const { data } = await authService.refresh()
   persistSession({
-    token: data.data.token,
+    token: '',
     refreshToken: '',
     expiresAt: data.data.expiresAt,
     refreshExpiresAt: data.data.refreshExpiresAt,

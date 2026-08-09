@@ -1,8 +1,6 @@
 import { STORAGE_KEYS } from '@/constants/storageKeys'
 import type { StoredSession } from '@/types/auth.types'
 
-const memoryAccessToken: { value: string | null } = { value: null }
-
 function sessionStorageSafe() {
   return {
     get(key: string): string | null {
@@ -31,20 +29,16 @@ function sessionStorageSafe() {
 
 const session = sessionStorageSafe()
 
-export function getAccessToken(): string | null {
-  return memoryAccessToken.value ?? session.get(STORAGE_KEYS.ACCESS_TOKEN)
-}
-
-export function setAccessToken(token: string | null): void {
-  memoryAccessToken.value = token
-  if (token) session.set(STORAGE_KEYS.ACCESS_TOKEN, token)
-  else session.remove(STORAGE_KEYS.ACCESS_TOKEN)
-}
-
+/** Metadados de sessão (sem segredos). Tokens ficam só em cookies HttpOnly. */
 export function readStoredSession(): Partial<StoredSession> {
-  const token = getAccessToken() ?? undefined
+  const active = session.get(STORAGE_KEYS.SESSION_ACTIVE) === '1'
+  if (!active) {
+    return {}
+  }
+
   return {
-    token,
+    token: '',
+    refreshToken: '',
     expiresAt: session.get(STORAGE_KEYS.EXPIRES_AT) ?? undefined,
     refreshExpiresAt: session.get(STORAGE_KEYS.REFRESH_EXPIRES_AT) ?? undefined,
     sessaoAgendamentoPublico: session.get(STORAGE_KEYS.BOOKING_SESSION) === '1',
@@ -52,7 +46,7 @@ export function readStoredSession(): Partial<StoredSession> {
 }
 
 export function persistSession(sessionData: StoredSession): void {
-  setAccessToken(sessionData.token)
+  session.set(STORAGE_KEYS.SESSION_ACTIVE, '1')
   session.set(STORAGE_KEYS.EXPIRES_AT, sessionData.expiresAt)
   session.set(STORAGE_KEYS.REFRESH_EXPIRES_AT, sessionData.refreshExpiresAt)
   if (sessionData.sessaoAgendamentoPublico) {
@@ -60,17 +54,29 @@ export function persistSession(sessionData: StoredSession): void {
   } else {
     session.remove(STORAGE_KEYS.BOOKING_SESSION)
   }
-}
-
-export function clearSessionStorage(): void {
-  memoryAccessToken.value = null
   session.remove(STORAGE_KEYS.ACCESS_TOKEN)
-  session.remove(STORAGE_KEYS.EXPIRES_AT)
-  session.remove(STORAGE_KEYS.REFRESH_EXPIRES_AT)
-  session.remove(STORAGE_KEYS.BOOKING_SESSION)
   try {
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
     localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
   } catch {
     // noop
   }
+}
+
+export function clearSessionStorage(): void {
+  session.remove(STORAGE_KEYS.SESSION_ACTIVE)
+  session.remove(STORAGE_KEYS.EXPIRES_AT)
+  session.remove(STORAGE_KEYS.REFRESH_EXPIRES_AT)
+  session.remove(STORAGE_KEYS.BOOKING_SESSION)
+  session.remove(STORAGE_KEYS.ACCESS_TOKEN)
+  try {
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
+    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
+  } catch {
+    // noop
+  }
+}
+
+export function hasActiveSessionHint(): boolean {
+  return session.get(STORAGE_KEYS.SESSION_ACTIVE) === '1'
 }
