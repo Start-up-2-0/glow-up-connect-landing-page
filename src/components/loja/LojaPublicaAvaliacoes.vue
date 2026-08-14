@@ -91,18 +91,18 @@ function formatData(iso: string) {
                 <path d="M12 2l2.9 6.9H22l-5.5 4.5 2.1 6.6L12 16.9 5.4 20l2.1-6.6L2 8.9h7.1L12 2z" />
               </svg>
             </div>
-            <p class="mt-4 font-satoshi text-sm font-semibold text-white">
+            <p class="mt-4 font-satoshi text-sm font-semibold text-glow-text">
               {{ total > 0 ? `${total} avaliação${total === 1 ? '' : 'ões'}` : 'Sem avaliações ainda' }}
             </p>
-            <p class="mt-1 font-poppins text-xs font-light text-white/45">
+            <p class="mt-1 font-poppins text-xs font-light text-glow-text-muted">
               Média pública do estabelecimento
             </p>
           </article>
 
           <article
-            class="rounded-[2rem] border border-white/15 bg-white/[0.06] p-6 landing-glass-card sm:p-8"
+            class="rounded-[2rem] border border-glow-border-soft bg-glow-surface p-6 landing-glass-card sm:p-8"
           >
-            <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+            <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.18em] text-glow-text-muted">
               Distribuição
             </p>
             <ul v-if="total > 0" class="mt-6 space-y-3" aria-label="Distribuição das notas">
@@ -111,17 +111,17 @@ function formatData(iso: string) {
                 :key="item.nota"
                 class="grid grid-cols-[2rem_1fr_2.5rem] items-center gap-3"
               >
-                <span class="font-satoshi text-sm font-semibold text-white/70">{{ item.nota }}★</span>
-                <span class="h-2 overflow-hidden rounded-full bg-white/10">
+                <span class="font-satoshi text-sm font-semibold text-glow-text-subtle">{{ item.nota }}★</span>
+                <span class="h-2 overflow-hidden rounded-full bg-glow-hover-surface">
                   <span
-                    class="block h-full rounded-full bg-gradient-to-r from-glow-gold to-[#e8c65a] transition-[width] duration-700"
+                    class="block h-full rounded-full bg-gradient-to-r from-glow-gold to-glow-gold-cta transition-[width] duration-700"
                     :style="{ width: `${item.pct}%` }"
                   />
                 </span>
-                <span class="text-right font-satoshi text-xs text-white/45">{{ item.quantidade }}</span>
+                <span class="text-right font-satoshi text-xs text-glow-text-muted">{{ item.quantidade }}</span>
               </li>
             </ul>
-            <p v-else class="mt-6 font-poppins text-sm font-light text-white/45">
+            <p v-else class="mt-6 font-poppins text-sm font-light text-glow-text-muted">
               Assim que os primeiros atendimentos forem avaliados, a distribuição aparece aqui.
             </p>
           </article>
@@ -129,7 +129,7 @@ function formatData(iso: string) {
 
         <blockquote
           v-if="destaque"
-          class="mt-8 rounded-[2rem] border border-white/15 bg-gradient-to-br from-white/[0.09] to-white/[0.03] p-6 landing-glass-card sm:p-8"
+          class="mt-8 rounded-[2rem] border border-glow-border-soft bg-gradient-to-br from-glow-surface to-glow-canvas p-6 landing-glass-card sm:p-8"
         >
           <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.18em] text-glow-gold">
             Destaque
@@ -146,12 +146,12 @@ function formatData(iso: string) {
               <path d="M12 2l2.9 6.9H22l-5.5 4.5 2.1 6.6L12 16.9 5.4 20l2.1-6.6L2 8.9h7.1L12 2z" />
             </svg>
           </div>
-          <p class="mt-4 font-poppins text-base font-light leading-relaxed text-white/75 sm:text-lg">
+          <p class="mt-4 font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg">
             “{{ destaque.comentario?.trim() || 'Atendimento avaliado positivamente.' }}”
           </p>
-          <footer class="mt-6 border-t border-white/10 pt-4">
-            <p class="font-montserrat text-sm font-semibold text-white">{{ destaque.clienteNome }}</p>
-            <time class="font-satoshi text-xs text-white/45" :datetime="destaque.avaliadoEm">
+          <footer class="mt-6 border-t border-glow-border-soft pt-4">
+            <p class="font-montserrat text-sm font-semibold text-glow-text">{{ destaque.clienteNome }}</p>
+            <time class="font-satoshi text-xs text-glow-text-muted" :datetime="destaque.avaliadoEm">
               {{ formatData(destaque.avaliadoEm) }}
             </time>
           </footer>
@@ -166,7 +166,7 @@ function formatData(iso: string) {
           <blockquote
             v-for="(item, index) in demaisComentarios"
             :key="`${item.avaliadoEm}-${index}`"
-            class="flex flex-col rounded-[1.75rem] border border-white/15 bg-white/[0.06] p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:bg-white/[0.08] sm:p-6"
+            class="flex flex-col rounded-[1.75rem] border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:bg-glow-hover-surface sm:p-6"
           >
             <div class="flex gap-0.5 text-glow-gold" :aria-label="`${item.nota} estrelas`">
               <svg
@@ -180,12 +180,12 @@ function formatData(iso: string) {
                 <path d="M12 2l2.9 6.9H22l-5.5 4.5 2.1 6.6L12 16.9 5.4 20l2.1-6.6L2 8.9h7.1L12 2z" />
               </svg>
             </div>
-            <p class="mt-4 flex-1 font-poppins text-sm font-light leading-relaxed text-white/65">
+            <p class="mt-4 flex-1 font-poppins text-sm font-light leading-relaxed text-glow-text-subtle">
               “{{ item.comentario?.trim() || 'Cliente avaliou o atendimento.' }}”
             </p>
-            <footer class="mt-5 border-t border-white/10 pt-4">
-              <p class="font-montserrat text-sm font-semibold text-white">{{ item.clienteNome }}</p>
-              <time class="font-satoshi text-xs text-white/40" :datetime="item.avaliadoEm">
+            <footer class="mt-5 border-t border-glow-border-soft pt-4">
+              <p class="font-montserrat text-sm font-semibold text-glow-text">{{ item.clienteNome }}</p>
+              <time class="font-satoshi text-xs text-glow-placeholder" :datetime="item.avaliadoEm">
                 {{ formatData(item.avaliadoEm) }}
               </time>
             </footer>
@@ -194,7 +194,7 @@ function formatData(iso: string) {
 
         <p
           v-else-if="total === 0"
-          class="mx-auto mt-10 max-w-md text-center font-poppins text-sm font-light text-white/45"
+          class="mx-auto mt-10 max-w-md text-center font-poppins text-sm font-light text-glow-text-muted"
         >
           Seja um dos primeiros a avaliar após o atendimento.
         </p>

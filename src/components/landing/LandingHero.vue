@@ -39,7 +39,7 @@ onMounted(() => bind(heroSection.value))
         class="absolute -left-24 top-20 h-[420px] w-[420px] rounded-full bg-glow-gold-cta/25 blur-[120px] landing-float"
       />
       <div
-        class="absolute -right-16 bottom-0 h-[380px] w-[380px] rounded-full bg-glow-purple/40 blur-[110px] landing-float"
+        class="absolute -right-16 bottom-0 h-[380px] w-[380px] rounded-full bg-glow-gold/15 blur-[110px] landing-float"
         style="animation-duration: 8s; animation-delay: -2s"
       />
       <div
@@ -49,8 +49,8 @@ onMounted(() => bind(heroSection.value))
       <div
         class="absolute inset-0 opacity-[0.35]"
         style="
-          background-image: linear-gradient(rgba(207, 176, 218, 0.06) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(207, 176, 218, 0.06) 1px, transparent 1px);
+          background-image: linear-gradient(color-mix(in srgb, var(--glow-gold) 12%, transparent) 1px, transparent 1px),
+            linear-gradient(90deg, color-mix(in srgb, var(--glow-gold) 12%, transparent) 1px, transparent 1px);
           background-size: 64px 64px;
         "
       />
@@ -67,7 +67,7 @@ onMounted(() => bind(heroSection.value))
           </p>
 
           <h1
-            class="hero-enter hero-enter-d2 mt-6 font-montserrat text-[2rem] font-light leading-snug text-white sm:text-5xl sm:leading-[1.08] xl:text-[3.75rem]"
+            class="hero-enter hero-enter-d2 mt-6 font-montserrat text-[2rem] font-light leading-snug text-glow-text sm:text-5xl sm:leading-[1.08] xl:text-[3.75rem]"
           >
             <span class="block">{{ HERO_COPY.tituloLinha1 }}</span>
             <span class="block font-black text-glow-gold">{{ HERO_COPY.tituloDestaque }}</span>
@@ -75,7 +75,7 @@ onMounted(() => bind(heroSection.value))
           </h1>
 
           <p
-            class="hero-enter hero-enter-d3 mt-6 max-w-lg font-poppins text-base font-light leading-relaxed text-white/70 sm:text-lg"
+            class="hero-enter hero-enter-d3 mt-6 max-w-lg font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg"
           >
             {{ HERO_COPY.subtitulo }}
           </p>
@@ -94,19 +94,19 @@ onMounted(() => bind(heroSection.value))
           </div>
 
           <dl
-            class="hero-enter hero-enter-d5 mt-10 grid grid-cols-3 gap-2 border-t border-white/10 pt-8 sm:max-w-md sm:gap-4"
+            class="hero-enter hero-enter-d5 mt-10 grid grid-cols-3 gap-2 border-t border-glow-border-soft pt-8 sm:max-w-md sm:gap-4"
           >
             <div>
-              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-white/45">Foco</dt>
-              <dd class="mt-1 font-montserrat text-sm font-semibold text-white">Beleza</dd>
+              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">Foco</dt>
+              <dd class="mt-1 font-montserrat text-sm font-semibold text-glow-text">Beleza</dd>
             </div>
             <div>
-              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-white/45">Operação</dt>
-              <dd class="mt-1 font-montserrat text-sm font-semibold text-white">Completa</dd>
+              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">Operação</dt>
+              <dd class="mt-1 font-montserrat text-sm font-semibold text-glow-text">Completa</dd>
             </div>
             <div>
-              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-white/45">Setup</dt>
-              <dd class="mt-1 font-montserrat text-sm font-semibold text-white">Minutos</dd>
+              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">Setup</dt>
+              <dd class="mt-1 font-montserrat text-sm font-semibold text-glow-text">Minutos</dd>
             </div>
           </dl>
         </div>
@@ -138,10 +138,10 @@ onMounted(() => bind(heroSection.value))
                 </svg>
               </span>
               <div class="min-w-0">
-                <p class="font-satoshi text-[10px] font-medium uppercase tracking-[0.14em] text-white/50">
+                <p class="font-satoshi text-[10px] font-medium uppercase tracking-[0.14em] text-glow-text-muted">
                   Agenda de hoje
                 </p>
-                <p class="mt-0.5 font-montserrat text-base font-bold leading-none text-white">
+                <p class="mt-0.5 font-montserrat text-base font-bold leading-none text-glow-text">
                   5 atendimentos
                 </p>
               </div>
@@ -157,7 +157,7 @@ onMounted(() => bind(heroSection.value))
               aria-label="Receita no mês: R$ 13,2 mil"
             >
               <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-400/15 text-emerald-300"
+                class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-glow-success-bg text-glow-success"
                 aria-hidden="true"
               >
                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
@@ -165,12 +165,12 @@ onMounted(() => bind(heroSection.value))
                 </svg>
               </span>
               <div class="min-w-0">
-                <p class="font-satoshi text-[10px] font-medium uppercase tracking-[0.14em] text-white/50">
+                <p class="font-satoshi text-[10px] font-medium uppercase tracking-[0.14em] text-glow-text-muted">
                   Receita no mês
                 </p>
                 <p class="mt-0.5 flex items-baseline gap-1.5 font-montserrat text-base font-bold leading-none text-glow-gold">
                   R$ 13,2k
-                  <span class="font-satoshi text-[10px] font-semibold text-emerald-300">+18%</span>
+                  <span class="font-satoshi text-[10px] font-semibold text-glow-success">+18%</span>
                 </p>
               </div>
             </aside>

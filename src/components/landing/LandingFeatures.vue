@@ -35,20 +35,20 @@ const chapter = STORY_CHAPTERS.funcionalidades
           <article
             v-for="feature in FEATURES"
             :key="feature.titulo"
-            class="group rounded-3xl border border-white/15 bg-white/[0.06] p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-white/[0.08] sm:p-6"
+            class="group rounded-3xl border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-6"
           >
             <div
-              class="landing-icon-pop flex size-12 items-center justify-center rounded-2xl bg-glow-gold/15 text-glow-gold transition group-hover:bg-glow-gold-cta group-hover:text-white"
+              class="landing-icon-pop flex size-12 items-center justify-center rounded-2xl bg-glow-gold/15 text-glow-gold transition group-hover:bg-glow-gold-cta group-hover:text-glow-canvas"
             >
               <LandingFeatureIcon :name="feature.icon" />
             </div>
-            <h3 class="mt-5 font-montserrat text-lg font-semibold text-white">
+            <h3 class="mt-5 font-montserrat text-lg font-semibold text-glow-text">
               {{ feature.titulo }}
             </h3>
-            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-white/60">
+            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
               {{ feature.descricao }}
             </p>
-            <p class="mt-4 border-t border-white/10 pt-4 font-satoshi text-xs font-semibold text-glow-gold">
+            <p class="mt-4 border-t border-glow-border-soft pt-4 font-satoshi text-xs font-semibold text-glow-gold">
               {{ feature.beneficio }}
             </p>
           </article>

@@ -6,6 +6,7 @@ import { ROUTE_NAMES, ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import LandingCtaButton from '@/components/landing/LandingCtaButton.vue'
+import LandingThemeToggle from '@/components/landing/LandingThemeToggle.vue'
 
 const route = useRoute()
 const { goToSection, goToNavLink } = useLandingScroll()
@@ -89,14 +90,14 @@ watch(
     class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
     :class="
       scrolled || menuOpen || forceSolidNav
-        ? 'border-b border-white/10 bg-glow-inverse-surface py-3 shadow-glow-md'
+        ? 'border-b border-glow-border-soft bg-glow-canvas py-3 shadow-glow-md backdrop-blur-md'
         : 'bg-transparent py-5'
     "
   >
     <div class="mx-auto flex max-w-[1280px] items-center justify-between px-4 lg:px-8">
       <RouterLink
         :to="ROUTE_PATHS.HOME"
-        class="group font-satoshi text-xl text-white sm:text-2xl"
+        class="group font-satoshi text-xl text-glow-text sm:text-2xl"
         @click.prevent="handleLogoClick"
       >
         <span class="font-light">GlowUp </span>
@@ -114,8 +115,8 @@ watch(
           class="rounded-full px-3 py-2 font-satoshi text-sm transition"
           :class="
             activeSection === link.id
-              ? 'bg-white/10 font-semibold text-white'
-              : 'font-normal text-white/70 hover:text-white'
+              ? 'bg-glow-hover-surface font-semibold text-glow-text'
+              : 'font-normal text-glow-text-subtle hover:text-glow-text'
           "
           @click="handleNavClick(link)"
         >
@@ -124,9 +125,10 @@ watch(
       </nav>
 
       <div class="hidden items-center gap-3 lg:flex">
+        <LandingThemeToggle />
         <a
           :href="`${APP_URL}/auth/login`"
-          class="font-satoshi text-sm text-white/80 transition hover:text-white"
+          class="font-satoshi text-sm text-glow-text-soft transition hover:text-glow-text"
         >
           Entrar
         </a>
@@ -139,18 +141,21 @@ watch(
         </button>
       </div>
 
-      <button
-        type="button"
-        class="flex size-10 items-center justify-center rounded-xl text-white lg:hidden"
-        :aria-label="menuOpen ? 'Fechar menu' : 'Abrir menu'"
-        :aria-expanded="menuOpen"
-        @click="menuOpen = !menuOpen"
-      >
-        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path v-if="!menuOpen" d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
-          <path v-else d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
-        </svg>
-      </button>
+      <div class="flex items-center gap-2 lg:hidden">
+        <LandingThemeToggle />
+        <button
+          type="button"
+          class="flex size-10 items-center justify-center rounded-xl text-glow-text"
+          :aria-label="menuOpen ? 'Fechar menu' : 'Abrir menu'"
+          :aria-expanded="menuOpen"
+          @click="menuOpen = !menuOpen"
+        >
+          <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path v-if="!menuOpen" d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+            <path v-else d="M6 6l12 12M18 6L6 18" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <Transition
@@ -163,29 +168,29 @@ watch(
     >
       <div
         v-if="menuOpen"
-        class="mx-4 mt-3 rounded-2xl border border-white/10 bg-glow-inverse-surface/95 p-4 shadow-glow-lg backdrop-blur-xl lg:hidden"
+        class="mx-4 mt-3 rounded-2xl border border-glow-border-soft bg-glow-surface p-4 shadow-glow-lg backdrop-blur-xl lg:hidden"
       >
         <nav class="flex flex-col gap-1" aria-label="Menu mobile">
           <button
             v-for="link in NAV_LINKS"
             :key="link.id"
             type="button"
-            class="rounded-xl px-3 py-2.5 text-left font-satoshi text-base text-white"
-            :class="activeSection === link.id ? 'bg-white/10 font-semibold' : 'font-normal'"
+            class="rounded-xl px-3 py-2.5 text-left font-satoshi text-base text-glow-text"
+            :class="activeSection === link.id ? 'bg-glow-hover-surface font-semibold' : 'font-normal'"
             @click="handleNavClick(link)"
           >
             {{ link.label }}
           </button>
           <a
             :href="`${APP_URL}/auth/login`"
-            class="rounded-xl px-3 py-2.5 font-satoshi text-base text-white/80"
+            class="rounded-xl px-3 py-2.5 font-satoshi text-base text-glow-text-soft"
             @click="menuOpen = false"
           >
             Entrar
           </a>
           <a
             :href="`${APP_URL}/auth/register`"
-            class="rounded-xl px-3 py-2.5 font-satoshi text-base text-white/80"
+            class="rounded-xl px-3 py-2.5 font-satoshi text-base text-glow-text-soft"
             @click="menuOpen = false"
           >
             Cadastrar

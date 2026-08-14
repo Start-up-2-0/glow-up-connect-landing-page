@@ -21,7 +21,7 @@ const chapter = STORY_CHAPTERS.cta
   >
     <div class="relative overflow-hidden px-4 pb-20 pt-6 lg:px-8 lg:pb-28 lg:pt-10">
       <div
-        class="absolute inset-0 bg-gradient-to-br from-glow-inverse-surface via-[#1a0f35] to-glow-purple"
+        class="absolute inset-0 bg-gradient-to-br from-glow-canvas via-glow-surface to-glow-bg-elevated"
         aria-hidden="true"
       />
       <div
@@ -39,11 +39,11 @@ const chapter = STORY_CHAPTERS.cta
         class="landing-reveal relative mx-auto max-w-3xl text-center"
         :class="isVisible && 'is-visible'"
       >
-        <h2 class="font-montserrat text-3xl font-light leading-[1.15] text-white sm:text-4xl lg:text-5xl">
+        <h2 class="font-montserrat text-3xl font-light leading-[1.15] text-glow-text sm:text-4xl lg:text-5xl">
           {{ FINAL_CTA.titulo }}
           <span class="font-black text-glow-gold"> {{ FINAL_CTA.destaque }}</span>
         </h2>
-        <p class="mx-auto mt-5 max-w-xl font-poppins text-base font-light leading-relaxed text-white/70 sm:text-lg">
+        <p class="mx-auto mt-5 max-w-xl font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg">
           {{ FINAL_CTA.subtitulo }}
         </p>
         <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">

@@ -178,8 +178,8 @@ useHead(() => {
 <style scoped>
 .loja-page {
   min-height: 100dvh;
-  background: #0b0818;
-  color: #fff;
+  background: var(--glow-canvas);
+  color: var(--glow-text);
   animation: loja-page-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -191,14 +191,14 @@ useHead(() => {
   padding: 6rem 1.5rem 3rem;
   text-align: center;
   font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
-  color: rgb(255 255 255 / 0.7);
+  color: var(--glow-text-subtle);
 }
 
 .loja-page__state h1 {
   margin: 0;
   font-family: Montserrat, ui-sans-serif, system-ui, sans-serif;
   font-size: 1.75rem;
-  color: #fff;
+  color: var(--glow-text);
 }
 
 .loja-page__state-actions {
@@ -210,22 +210,22 @@ useHead(() => {
 }
 
 .loja-page__retry {
-  border: 1px solid rgb(255 255 255 / 0.2);
+  border: 1px solid var(--glow-border-soft);
   border-radius: 9999px;
   background: transparent;
   padding: 0.65rem 1.25rem;
   font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--glow-text);
   cursor: pointer;
 }
 
 .loja-page__spinner {
   width: 2.25rem;
   height: 2.25rem;
-  border: 2px solid rgb(255 255 255 / 0.15);
-  border-top-color: var(--glow-gold, #c9a227);
+  border: 2px solid var(--glow-border-soft);
+  border-top-color: var(--glow-gold-cta);
   border-radius: 9999px;
   animation: loja-spin 0.8s linear infinite;
 }

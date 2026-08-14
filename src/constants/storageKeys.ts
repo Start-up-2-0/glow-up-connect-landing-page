@@ -7,6 +7,8 @@ export const STORAGE_KEYS = {
   EXPIRES_AT: 'guc_expires_at',
   REFRESH_EXPIRES_AT: 'guc_refresh_expires_at',
   BOOKING_SESSION: 'guc_booking_session',
+  THEME: 'guc_theme',
+  THEME_VERSION: 'guc_theme_version',
 } as const
 
 export const TOKEN_HEADER =

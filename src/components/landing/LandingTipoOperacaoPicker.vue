@@ -17,7 +17,8 @@ const opcoes: Array<{
   {
     value: 'Estabelecimento',
     titulo: 'Tenho um estabelecimento com equipe',
-    descricao: 'Barbearia, salão ou negócio com vários profissionais e gestão de equipe.',
+    descricao:
+      'Barbearia ou salão — com vários profissionais e gestão de equipe.',
   },
   {
     value: 'ProfissionalAutonomo',
@@ -29,10 +30,10 @@ const opcoes: Array<{
 
 <template>
   <fieldset class="mx-auto max-w-3xl space-y-4">
-    <legend class="w-full text-center font-satoshi text-lg font-bold text-white sm:text-xl">
+    <legend class="w-full text-center font-satoshi text-lg font-bold text-glow-text sm:text-xl">
       Como você trabalha?
     </legend>
-    <p class="text-center font-urbanist text-sm text-white/65">
+    <p class="text-center font-urbanist text-sm text-glow-text-subtle">
       Escolha o modelo certo para a sua realidade. Os planos e a experiência se adaptam a essa escolha.
     </p>
 
@@ -45,12 +46,12 @@ const opcoes: Array<{
         :class="
           modelValue === opcao.value
             ? 'border-glow-gold-cta bg-glow-gold-cta/15 ring-2 ring-glow-gold-cta'
-            : 'border-white/15 bg-white/5 hover:border-glow-gold-cta/50 hover:bg-white/10'
+            : 'border-glow-border-soft bg-glow-hover-surface hover:border-glow-gold-cta/50 hover:bg-glow-hover-surface'
         "
         @click="emit('update:modelValue', opcao.value)"
       >
-        <span class="block font-satoshi text-sm font-bold text-white">{{ opcao.titulo }}</span>
-        <span class="mt-1.5 block font-urbanist text-xs leading-relaxed text-white/60">
+        <span class="block font-satoshi text-sm font-bold text-glow-text">{{ opcao.titulo }}</span>
+        <span class="mt-1.5 block font-urbanist text-xs leading-relaxed text-glow-text-muted">
           {{ opcao.descricao }}
         </span>
       </button>

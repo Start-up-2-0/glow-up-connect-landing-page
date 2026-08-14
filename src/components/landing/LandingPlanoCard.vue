@@ -46,7 +46,7 @@ const precoComDesconto = computed(() =>
 
 <template>
   <article
-    class="landing-plano-card landing-glass-card relative flex h-full flex-col rounded-3xl border border-white/15 bg-white/[0.06] p-8 transition duration-300 hover:border-glow-gold/30 hover:bg-white/[0.08] sm:p-10"
+    class="landing-plano-card landing-glass-card relative flex h-full flex-col rounded-3xl border border-glow-border-soft bg-glow-surface p-8 transition duration-300 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-10"
     :class="popular && 'landing-plano-card--popular ring-2 ring-glow-gold/25'"
   >
     <div class="mb-6 flex h-6 items-center justify-center">
@@ -65,7 +65,7 @@ const precoComDesconto = computed(() =>
     </div>
 
     <div class="flex min-h-[3.5rem] items-start justify-between gap-3">
-      <h3 class="font-montserrat text-2xl font-semibold leading-[1.09] text-white">
+      <h3 class="font-montserrat text-2xl font-semibold leading-[1.09] text-glow-text">
         {{ plano.nome }}
       </h3>
       <span
@@ -76,7 +76,7 @@ const precoComDesconto = computed(() =>
       </span>
     </div>
 
-    <p class="mt-5 min-h-[3.25rem] line-clamp-3 font-poppins text-base font-light leading-[1.2] text-white/70">
+    <p class="mt-5 min-h-[3.25rem] line-clamp-3 font-poppins text-base font-light leading-[1.2] text-glow-text-subtle">
       {{ plano.descricao }}
     </p>
 
@@ -117,7 +117,7 @@ const precoComDesconto = computed(() =>
         >
           <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
         </svg>
-        <span class="line-clamp-2 font-poppins text-sm font-light leading-snug text-white/75">
+        <span class="line-clamp-2 font-poppins text-sm font-light leading-snug text-glow-text-subtle">
           {{ feature }}
         </span>
       </li>

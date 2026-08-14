@@ -11,7 +11,7 @@
 
 @layer base {
   :root {
-    /* Paleta oficial — identidade premium roxa/lilás */
+    /* Paleta oficial — identidade premium roxa/lilás (tema claro do app) */
     --palette-purple-black: #0d0825;
     --palette-lilac-white: #ebe7f7;
     --palette-purple-dark: #2c154b;
@@ -25,78 +25,172 @@
     --palette-burnt-rose: #995d5f;
     --palette-wine-brown: #4e2c30;
 
-    /* Marca */
-    --brand-gold: var(--palette-lilac-light);
-    --brand-gold-dark: var(--palette-lilac-medium);
     --brand-blue: #5b7fd4;
     --brand-purple: var(--palette-purple-medium);
     --brand-purple-soft: var(--palette-lavender);
     --brand-secondary: var(--palette-burnt-rose);
 
-    /* Semânticos — landing (light lavanda) */
+    /*
+     * Tema claro (default da plataforma) — mesmos tokens do :root
+     * de glow-up-connect-app: lavanda + CTA lilás.
+     */
     --glow-bg-base: var(--palette-lilac-white);
     --glow-bg-surface: #f3f0f8;
     --glow-bg-elevated: #faf9fd;
+    --glow-bg-highlight: #e3ddee;
 
     --glow-canvas: var(--glow-bg-base);
     --glow-surface: var(--glow-bg-surface);
+    --glow-hover-surface: var(--glow-bg-highlight);
+    --glow-surface-tint: rgba(146, 103, 155, 0.06);
 
     --glow-text: var(--palette-purple-black);
     --glow-text-muted: var(--palette-gray-purple);
     --glow-text-soft: #3d2a5c;
     --glow-text-subtle: var(--palette-purple-light);
-    --glow-border-soft: rgba(44, 21, 75, 0.1);
+    --glow-text-hover: var(--palette-purple-medium);
+    --glow-placeholder: var(--palette-gray-lilac);
 
+    --glow-border-soft: rgba(44, 21, 75, 0.1);
+    --glow-border-sidebar: rgba(44, 21, 75, 0.14);
+    --glow-border-accent: rgba(146, 103, 155, 0.45);
+
+    --glow-accent: var(--palette-lilac-medium);
+    --glow-accent-glow: rgba(207, 176, 218, 0.45);
     --glow-gold: var(--palette-lilac-light);
     --glow-gold-dark: var(--palette-lilac-medium);
-    --glow-gold-soft: rgba(207, 176, 218, 0.35);
     --glow-gold-cta: var(--palette-lilac-medium);
+    --glow-gold-soft: var(--glow-accent-glow);
+    --glow-gold-selected: rgba(146, 103, 155, 0.14);
+
+    --brand-gold: var(--palette-lilac-light);
+    --brand-gold-dark: var(--palette-lilac-medium);
+
     --glow-primary: var(--brand-blue);
     --glow-purple: var(--palette-purple-medium);
     --glow-purple-soft: var(--palette-lavender);
     --glow-secondary: var(--palette-burnt-rose);
-
-    --glow-inverse-surface: var(--palette-purple-black);
-    --glow-error: var(--palette-burnt-rose);
-    --glow-error-bg: rgba(153, 93, 95, 0.14);
-
-    --glow-hover-surface: #faf9fd;
-    --glow-placeholder: var(--palette-gray-lilac);
-    --glow-gold-selected: rgba(146, 103, 155, 0.14);
     --glow-avatar-bg: var(--palette-purple-dark);
+
+    --glow-neutral-warm: var(--palette-gray-purple);
+    --glow-neutral-soft: var(--palette-gray-lilac);
+    --glow-accent-muted: var(--palette-lavender);
+
     --glow-success: #4a9e6e;
     --glow-success-bg: rgba(74, 158, 110, 0.14);
     --glow-success-action: #4bc281;
     --glow-success-dark: #2f6b48;
+    --glow-error: var(--palette-burnt-rose);
+    --glow-error-bg: rgba(153, 93, 95, 0.14);
+    --glow-neutral: var(--palette-gray-purple);
     --glow-neutral-bg: rgba(97, 82, 107, 0.1);
+    --glow-warning: var(--palette-burnt-rose);
+    --glow-warning-bg: rgba(153, 93, 95, 0.12);
+    --glow-info: var(--brand-blue);
+    --glow-info-bg: rgba(91, 127, 212, 0.12);
     --glow-disabled: var(--palette-gray-lilac);
-    --glow-shadow-card: 0 1px 3px rgba(13, 8, 37, 0.06), 0 0 0 1px rgba(44, 21, 75, 0.05);
-
+    --glow-placeholder-surface: #d5cfe0;
     --glow-promo-border: var(--palette-lilac-medium);
-    --glow-promo-bg-soft: rgba(207, 176, 218, 0.35);
+    --glow-promo-bg: rgba(207, 176, 218, 0.35);
+    --glow-promo-bg-soft: rgba(207, 176, 218, 0.25);
     --glow-promo-bg-dashboard: rgba(146, 103, 155, 0.1);
+    --glow-promo-bg-dark: var(--palette-purple-dark);
     --glow-promo-text: var(--palette-purple-black);
     --glow-promo-accent: var(--palette-lilac-medium);
+    --glow-inverse-surface: var(--palette-purple-black);
 
     --glow-shadow-sm: 0 1px 2px rgba(13, 8, 37, 0.06), 0 0 0 1px rgba(44, 21, 75, 0.06);
-    --glow-shadow-md: 0 8px 24px rgba(13, 8, 37, 0.1);
+    --glow-shadow-md: 0 8px 24px rgba(13, 8, 37, 0.1), 0 0 0 1px rgba(44, 21, 75, 0.05);
     --glow-shadow-lg: 0 16px 40px rgba(13, 8, 37, 0.14);
+    --glow-shadow-card: 0 2px 12px rgba(13, 8, 37, 0.08), 0 0 0 1px rgba(44, 21, 75, 0.07);
+  }
+
+  .dark {
+    /*
+     * Tema escuro — mesmos tokens do .dark de glow-up-connect-app:
+     * charcoal quente + CTA dourado.
+     */
+    --glow-bg-base: #0a0806;
+    --glow-bg-surface: #1a1612;
+    --glow-bg-elevated: #2c2620;
+    --glow-bg-highlight: #3f382e;
+
+    --glow-canvas: var(--glow-bg-base);
+    --glow-surface: var(--glow-bg-surface);
+    --glow-hover-surface: var(--glow-bg-highlight);
+    --glow-surface-tint: rgba(245, 240, 232, 0.04);
+
+    --glow-text: #f5f0e8;
+    --glow-text-muted: rgba(245, 240, 232, 0.45);
+    --glow-text-soft: rgba(245, 240, 232, 0.82);
+    --glow-text-subtle: rgba(245, 240, 232, 0.58);
+    --glow-text-hover: rgba(245, 240, 232, 0.72);
+    --glow-placeholder: rgba(245, 240, 232, 0.38);
+
+    --glow-border-soft: rgba(245, 240, 232, 0.07);
+    --glow-border-sidebar: rgba(245, 240, 232, 0.09);
+    --glow-border-accent: rgba(230, 173, 1, 0.38);
+
+    --glow-gold: #ffbf00;
+    --glow-gold-dark: #c59400;
+    --glow-gold-cta: #e6ad01;
+    --glow-accent: #c59400;
+    --glow-accent-glow: rgba(255, 191, 0, 0.2);
+    --glow-gold-soft: var(--glow-accent-glow);
+    --glow-gold-selected: rgba(230, 173, 1, 0.1);
+
+    --brand-gold: var(--glow-gold);
+    --brand-gold-dark: var(--glow-gold-dark);
+
+    --glow-avatar-bg: #141210;
+    --glow-neutral-warm: #6b6560;
+    --glow-neutral-soft: #9e9490;
+    --glow-accent-muted: #b8a078;
+
+    --glow-success: #6ee7b7;
+    --glow-success-bg: rgba(16, 185, 129, 0.14);
+    --glow-success-action: #4bc281;
+    --glow-success-dark: #6ee7b7;
+    --glow-error: #f87171;
+    --glow-error-bg: rgba(207, 63, 63, 0.16);
+    --glow-neutral-bg: rgba(158, 148, 144, 0.12);
+    --glow-info: #93b4ff;
+    --glow-info-bg: rgba(60, 92, 207, 0.2);
+    --glow-warning: #d4a574;
+    --glow-warning-bg: rgba(170, 104, 45, 0.18);
+    --glow-disabled: #9e9490;
+    --glow-placeholder-surface: #3f382e;
+    --glow-promo-border: #b8940a;
+    --glow-promo-bg: rgba(230, 173, 1, 0.16);
+    --glow-promo-bg-soft: rgba(230, 173, 1, 0.1);
+    --glow-promo-bg-dashboard: rgba(230, 173, 1, 0.08);
+    --glow-promo-bg-dark: #3d3520;
+    --glow-promo-text: #f5f0e8;
+    --glow-promo-accent: #e6ad01;
+    --glow-inverse-surface: #1a1612;
+
+    --glow-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.04);
+    --glow-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    --glow-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.52);
+    --glow-shadow-card: 0 2px 12px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+    color-scheme: dark;
   }
 
   html {
     scroll-behavior: smooth;
+    color-scheme: light;
   }
 
   body {
-    @apply bg-glow-surface font-satoshi text-glow-text antialiased;
+    @apply bg-glow-canvas font-satoshi text-glow-text antialiased;
   }
 }
 
 @layer components {
-  /* Agendamento público — alinhado ao tema escuro da landing */
+  /* Agendamento público — canvas segue o tema da plataforma */
   .agendar-publico-shell {
-    color-scheme: dark;
-    @apply relative min-h-dvh pb-24 text-white;
+    @apply relative min-h-dvh bg-glow-canvas pb-24 text-glow-text;
   }
 
   .agendar-publico-main {
@@ -112,7 +206,7 @@
   }
 
   .agendar-wizard-stepper__back {
-    @apply flex size-8 shrink-0 items-center justify-center rounded-full border border-white/15 text-white transition hover:bg-white/10;
+    @apply flex size-8 shrink-0 items-center justify-center rounded-full border border-glow-border-soft text-glow-text transition hover:bg-glow-hover-surface;
   }
 
   .agendar-wizard-stepper__meta {
@@ -120,11 +214,11 @@
   }
 
   .agendar-wizard-stepper__counter {
-    @apply font-satoshi text-xs uppercase tracking-[0.14em] text-white/45;
+    @apply font-satoshi text-xs uppercase tracking-[0.14em] text-glow-text-muted;
   }
 
   .agendar-wizard-stepper__title {
-    @apply font-montserrat text-base font-medium text-white;
+    @apply font-montserrat text-base font-medium text-glow-text;
   }
 
   .agendar-wizard-stepper__bars {
@@ -132,7 +226,7 @@
   }
 
   .agendar-wizard-stepper__bar {
-    @apply h-1 flex-1 rounded-full bg-white/15;
+    @apply h-1 flex-1 rounded-full bg-glow-hover-surface;
   }
 
   .agendar-wizard-stepper__bar--active {
@@ -140,19 +234,20 @@
   }
 
   .agendar-section-title {
-    @apply font-montserrat text-xl font-semibold text-white;
+    @apply font-montserrat text-xl font-semibold text-glow-text;
   }
 
   .agendar-section-title--identidade {
-    @apply font-montserrat text-xl font-semibold text-white sm:text-2xl;
+    @apply font-montserrat text-xl font-semibold text-glow-text sm:text-2xl;
   }
 
   .agendar-section-subtitle {
-    @apply font-poppins text-base font-light text-white/60;
+    @apply font-poppins text-base font-light text-glow-text-muted;
   }
 
   .agendar-step-panel {
-    @apply rounded-2xl border border-white/10 bg-[#1a1238]/90 p-5 shadow-glow-md backdrop-blur-md sm:p-8;
+    @apply rounded-2xl border border-glow-border-soft p-5 shadow-glow-md backdrop-blur-md sm:p-8;
+    background-color: color-mix(in srgb, var(--glow-surface) 90%, transparent);
   }
 
   .agendar-step-panel__icon {
@@ -162,19 +257,19 @@
   }
 
   .agendar-step-panel__footer {
-    @apply mt-6 flex items-start gap-2.5 border-t border-white/10 pt-5;
+    @apply mt-6 flex items-start gap-2.5 border-t border-glow-border-soft pt-5;
   }
 
   .agendar-step-panel__footer-icon {
-    @apply mt-0.5 flex size-5 shrink-0 items-center justify-center text-emerald-300/90;
+    @apply mt-0.5 flex size-5 shrink-0 items-center justify-center text-glow-success;
   }
 
   .agendar-step-panel__footer-text {
-    @apply font-poppins text-xs font-light leading-relaxed text-white/45 sm:text-sm;
+    @apply font-poppins text-xs font-light leading-relaxed text-glow-text-muted sm:text-sm;
   }
 
   .agendar-section-date {
-    @apply font-satoshi text-base font-normal text-white/55;
+    @apply font-satoshi text-base font-normal text-glow-text-muted;
   }
 
   .agendar-review-step {
@@ -182,19 +277,19 @@
   }
 
   .agendar-review-card {
-    @apply rounded-xl border border-white/15 bg-white/[0.06] px-[22px] py-5;
+    @apply rounded-xl border border-glow-border-soft bg-glow-surface px-[22px] py-5;
   }
 
   .agendar-review-card__title {
-    @apply mb-[18px] font-montserrat text-base font-semibold text-white;
+    @apply mb-[18px] font-montserrat text-base font-semibold text-glow-text;
   }
 
   .agendar-review-field__label {
-    @apply font-satoshi text-xs text-white/45;
+    @apply font-satoshi text-xs text-glow-text-muted;
   }
 
   .agendar-review-field__value {
-    @apply mt-1 font-poppins text-sm text-white/85;
+    @apply mt-1 font-poppins text-sm text-glow-text-soft;
   }
 
   .agendar-review-fields-grid {
@@ -210,7 +305,7 @@
   }
 
   .agendar-review-avatar {
-    @apply flex size-12 shrink-0 items-center justify-center rounded-full bg-white/10 font-urbanist text-sm font-semibold text-white;
+    @apply flex size-12 shrink-0 items-center justify-center rounded-full bg-glow-hover-surface font-urbanist text-sm font-semibold text-glow-text;
   }
 
   .agendar-review-service-list {
@@ -222,15 +317,15 @@
   }
 
   .agendar-review-service-item + .agendar-review-service-item {
-    @apply border-t border-white/10;
+    @apply border-t border-glow-border-soft;
   }
 
   .agendar-review-summary-value {
-    @apply font-urbanist text-sm font-bold text-emerald-300;
+    @apply font-urbanist text-sm font-bold text-glow-success;
   }
 
   .agendar-review-textarea {
-    @apply mt-2 w-full rounded-lg border border-white/15 bg-white/[0.06] px-4 py-3 font-satoshi text-sm text-white outline-none placeholder:text-white/35;
+    @apply mt-2 w-full rounded-lg border border-glow-border-soft bg-glow-surface px-4 py-3 font-satoshi text-sm text-glow-text outline-none placeholder:text-glow-placeholder;
   }
 
   .agendar-review-textarea:focus {
@@ -239,7 +334,7 @@
   }
 
   .agendar-slot-btn {
-    @apply flex h-[50px] min-w-0 items-center justify-center rounded-xl border border-white/20 font-satoshi text-base text-white transition hover:bg-white/5;
+    @apply flex h-[50px] min-w-0 items-center justify-center rounded-xl border border-glow-border-soft font-satoshi text-base text-glow-text transition hover:bg-glow-hover-surface;
   }
 
   .agendar-slot-btn:hover {
@@ -257,7 +352,7 @@
   }
 
   .agendar-servico-card:hover {
-    @apply bg-white/[0.08];
+    @apply bg-glow-hover-surface;
   }
 
   .agendar-servico-card--selected {
@@ -266,7 +361,7 @@
   }
 
   .agendar-servico-card__radio {
-    @apply mt-1 flex size-3.5 shrink-0 items-center justify-center rounded-full border border-white/35 bg-transparent transition-colors;
+    @apply mt-1 flex size-3.5 shrink-0 items-center justify-center rounded-full border border-glow-border-accent bg-transparent transition-colors;
   }
 
   .agendar-servico-card__radio--selected {
@@ -294,7 +389,8 @@
   }
 
   .agendar-resumo-footer__panel {
-    @apply mx-auto w-full max-w-[695px] rounded-2xl border border-white/15 bg-[#160e33]/95 px-5 pb-4 pt-5 shadow-glow-md backdrop-blur-md;
+    @apply mx-auto w-full max-w-[695px] rounded-2xl border border-glow-border-soft px-5 pb-4 pt-5 shadow-glow-md backdrop-blur-md;
+    background-color: color-mix(in srgb, var(--glow-surface) 95%, transparent);
   }
 
   .agendar-resumo-footer--wide .agendar-resumo-footer__panel {
@@ -302,7 +398,7 @@
   }
 
   .agendar-resumo-footer__summary {
-    @apply mb-3 flex flex-wrap items-center justify-between gap-3 font-urbanist text-sm text-white;
+    @apply mb-3 flex flex-wrap items-center justify-between gap-3 font-urbanist text-sm text-glow-text;
   }
 
   .agendar-resumo-footer__meta {
@@ -310,7 +406,7 @@
   }
 
   .agendar-resumo-footer__dot {
-    @apply size-1.5 shrink-0 rounded-full bg-white/70;
+    @apply size-1.5 shrink-0 rounded-full bg-glow-text-soft;
   }
 
   .agendar-resumo-footer__total {
@@ -322,15 +418,15 @@
   }
 
   .agendar-calendar-day--muted {
-    @apply cursor-default text-white/20;
+    @apply cursor-default text-glow-placeholder;
   }
 
   .agendar-calendar-day--available {
-    @apply cursor-pointer text-white transition;
+    @apply cursor-pointer text-glow-text transition;
   }
 
   .agendar-calendar-day--available:hover {
-    background-color: rgba(146, 103, 155, 0.22);
+    background-color: var(--glow-gold-selected);
   }
 
   .agendar-calendar-day--available:focus-visible {
@@ -339,14 +435,14 @@
   }
 
   .agendar-calendar-day--selected {
-    color: #fff;
-    background-color: rgba(146, 103, 155, 0.28);
-    box-shadow: inset 0 0 0 1px rgba(207, 176, 218, 0.45);
+    color: var(--glow-canvas);
+    background-color: var(--glow-gold-cta);
+    box-shadow: inset 0 0 0 1px var(--glow-border-accent);
     border-radius: 0.375rem;
   }
 
   .agendar-calendar-day--selected:hover {
-    background-color: rgba(146, 103, 155, 0.38);
+    filter: brightness(0.95);
   }
 
   .agendar-success {
@@ -370,23 +466,23 @@
   }
 
   .agendar-success__title {
-    @apply mt-6 font-montserrat text-2xl font-bold text-white;
+    @apply mt-6 font-montserrat text-2xl font-bold text-glow-text;
   }
 
   .agendar-success__subtitle {
-    @apply mt-2 font-poppins text-lg font-light text-white/60;
+    @apply mt-2 font-poppins text-lg font-light text-glow-text-muted;
   }
 
   .agendar-success__card {
-    @apply mt-8 w-full rounded-xl border border-white/15 bg-white/[0.06] p-5 text-left;
+    @apply mt-8 w-full rounded-xl border border-glow-border-soft bg-glow-surface p-5 text-left;
   }
 
   .agendar-success__card-header {
-    @apply flex items-center justify-between gap-4 font-urbanist text-base text-white;
+    @apply flex items-center justify-between gap-4 font-urbanist text-base text-glow-text;
   }
 
   .agendar-success__card-divider {
-    @apply my-4 border-0 border-t border-white/10;
+    @apply my-4 border-0 border-t border-glow-border-soft;
   }
 
   .agendar-success__details {
@@ -398,11 +494,11 @@
   }
 
   .agendar-success__label {
-    @apply shrink-0 text-white/45;
+    @apply shrink-0 text-glow-text-muted;
   }
 
   .agendar-success__value {
-    @apply text-right text-white/85;
+    @apply text-right text-glow-text-soft;
   }
 
   .agendar-success__actions {
@@ -410,11 +506,11 @@
   }
 
   .agendar-success__btn-secondary {
-    @apply flex h-11 w-full items-center justify-center rounded-full border border-white/25 bg-transparent px-2.5 font-satoshi text-base font-bold text-white transition hover:bg-white/5;
+    @apply flex h-11 w-full items-center justify-center rounded-full border border-glow-border-soft bg-transparent px-2.5 font-satoshi text-base font-bold text-glow-text transition hover:bg-glow-hover-surface;
   }
 
   .agendar-prof-modo-card {
-    @apply flex w-full items-start gap-4 rounded-xl border border-white/15 bg-white/[0.06] p-5 text-left transition;
+    @apply flex w-full items-start gap-4 rounded-xl border border-glow-border-soft bg-glow-surface p-5 text-left transition;
   }
 
   .agendar-prof-modo-card:hover {
@@ -428,7 +524,7 @@
   }
 
   .agendar-prof-pick-card {
-    @apply relative flex h-[89px] w-full items-center gap-4 rounded-xl border border-white/15 bg-white/[0.06] px-5 text-left transition;
+    @apply relative flex h-[89px] w-full items-center gap-4 rounded-xl border border-glow-border-soft bg-glow-surface px-5 text-left transition;
   }
 
   .agendar-prof-pick-card:hover {
@@ -452,7 +548,7 @@
 
 @layer utilities {
   .skip-link {
-    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-glow-gold focus:px-4 focus:py-2 focus:text-white;
+    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-glow-gold-cta focus:px-4 focus:py-2 focus:text-glow-canvas;
   }
 
   .landing-grain {
@@ -639,16 +735,16 @@
     align-items: center;
     gap: 0.75rem;
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid var(--glow-border-soft);
     background: linear-gradient(
       145deg,
-      rgba(26, 15, 53, 0.92) 0%,
-      rgba(13, 8, 37, 0.88) 100%
+      color-mix(in srgb, var(--glow-surface) 92%, transparent) 0%,
+      color-mix(in srgb, var(--glow-canvas) 88%, transparent) 100%
     );
     padding: 0.75rem 1rem;
     box-shadow:
-      0 12px 40px rgba(13, 8, 37, 0.45),
-      0 0 0 1px rgba(207, 176, 218, 0.08),
+      0 12px 40px rgba(0, 0, 0, 0.45),
+      0 0 0 1px var(--glow-accent-glow),
       inset 0 1px 0 rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -690,13 +786,13 @@
     0%,
     100% {
       box-shadow:
-        0 8px 28px rgba(82, 46, 95, 0.45),
-        0 0 0 0 rgba(146, 103, 155, 0.35);
+        0 8px 28px rgba(37, 211, 102, 0.32),
+        0 0 0 0 rgba(37, 211, 102, 0.32);
     }
     70% {
       box-shadow:
-        0 8px 28px rgba(82, 46, 95, 0.45),
-        0 0 0 14px rgba(146, 103, 155, 0);
+        0 8px 28px rgba(37, 211, 102, 0.32),
+        0 0 0 14px rgba(37, 211, 102, 0);
     }
   }
 

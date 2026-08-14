@@ -129,7 +129,7 @@ function onAcceptAll() {
           </button>
           <button
             type="button"
-            class="rounded-lg bg-glow-gold px-4 py-2 text-sm font-medium text-white hover:brightness-95"
+            class="rounded-lg bg-glow-gold-cta px-4 py-2 text-sm font-medium text-glow-canvas hover:brightness-95"
             @click="onAcceptAll"
           >
             Aceitar todos

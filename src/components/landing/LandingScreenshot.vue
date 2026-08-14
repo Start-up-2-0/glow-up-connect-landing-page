@@ -34,17 +34,17 @@ const asset = computed(() => SCREENSHOTS[props.id])
     />
 
     <div
-      class="relative w-full max-w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0d0825] shadow-glow-lg ring-1 ring-white/10 sm:rounded-3xl"
+      class="relative w-full max-w-full overflow-hidden rounded-2xl border border-glow-border-soft bg-glow-canvas shadow-glow-lg ring-1 ring-glow-border-soft sm:rounded-3xl"
     >
-      <div class="flex items-center gap-2 border-b border-white/10 bg-[#160e33] px-3 py-2.5 sm:px-4">
+      <div class="flex items-center gap-2 border-b border-glow-border-soft bg-glow-surface px-3 py-2.5 sm:px-4">
         <div class="flex gap-1.5">
           <span class="size-2.5 rounded-full bg-[#995d5f]/80" />
           <span class="size-2.5 rounded-full bg-glow-gold/70" />
           <span class="size-2.5 rounded-full bg-glow-purple-soft/70" />
         </div>
-        <div class="ml-2 flex min-w-0 flex-1 items-center gap-2 rounded-full bg-white/5 px-3 py-1">
+        <div class="ml-2 flex min-w-0 flex-1 items-center gap-2 rounded-full bg-glow-hover-surface px-3 py-1">
           <span class="size-1.5 shrink-0 rounded-full bg-emerald-400/80" />
-          <span class="truncate font-satoshi text-[10px] text-white/50 sm:text-xs">
+          <span class="truncate font-satoshi text-[10px] text-glow-text-muted sm:text-xs">
             app.glowupconnect.com.br
           </span>
         </div>

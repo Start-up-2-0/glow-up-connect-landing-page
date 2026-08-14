@@ -18,8 +18,8 @@ const emit = defineEmits<{
       <slot name="icon" />
     </div>
     <div class="min-w-0 flex-1">
-      <p class="font-montserrat text-base font-semibold text-white">{{ title }}</p>
-      <p class="mt-0.5 font-poppins text-sm font-light text-white/55">{{ description }}</p>
+      <p class="font-montserrat text-base font-semibold text-glow-text">{{ title }}</p>
+      <p class="mt-0.5 font-poppins text-sm font-light text-glow-text-muted">{{ description }}</p>
     </div>
     <button type="button" :class="AGENDAR_BTN_OUTLINE_CLASS" @click="emit('action')">
       {{ actionLabel }}

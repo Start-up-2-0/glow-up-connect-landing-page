@@ -8,17 +8,17 @@ const { acceptAll, rejectNonEssential, openPreferences } = useConsent()
 
 <template>
   <div
-    class="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-glow-inverse-surface/95 p-4 shadow-lg backdrop-blur-md sm:p-5"
+    class="fixed inset-x-0 bottom-0 z-50 border-t border-glow-border-soft bg-glow-surface p-4 shadow-lg backdrop-blur-md sm:p-5"
     role="dialog"
     aria-labelledby="cookie-banner-title"
     aria-describedby="cookie-banner-desc"
   >
     <div class="mx-auto flex max-w-6xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div class="min-w-0 flex-1">
-        <p id="cookie-banner-title" class="font-satoshi text-sm font-semibold text-white">
+        <p id="cookie-banner-title" class="font-satoshi text-sm font-semibold text-glow-text">
           Cookies e serviços de terceiros
         </p>
-        <p id="cookie-banner-desc" class="mt-1 text-sm text-white/65">
+        <p id="cookie-banner-desc" class="mt-1 text-sm text-glow-text-subtle">
           Usamos cookies essenciais para login e preferências. Com sua autorização, também
           compartilhamos dados com parceiros como Mercado Pago e APIs de CEP para pagamentos e
           cadastro de endereço.
@@ -31,21 +31,21 @@ const { acceptAll, rejectNonEssential, openPreferences } = useConsent()
       <div class="flex flex-wrap gap-2 lg:shrink-0">
         <button
           type="button"
-          class="rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-white/70 hover:bg-white/5"
+          class="rounded-lg border border-glow-border-soft px-4 py-2 text-sm font-medium text-glow-text-subtle hover:bg-glow-hover-surface"
           @click="rejectNonEssential"
         >
           Apenas essenciais
         </button>
         <button
           type="button"
-          class="rounded-lg border border-white/15 px-4 py-2 text-sm font-medium text-white hover:bg-white/5"
+          class="rounded-lg border border-glow-border-soft px-4 py-2 text-sm font-medium text-glow-text hover:bg-glow-hover-surface"
           @click="openPreferences"
         >
           Personalizar
         </button>
         <button
           type="button"
-          class="rounded-lg bg-glow-gold-cta px-4 py-2 text-sm font-medium text-white hover:brightness-95"
+          class="rounded-lg bg-glow-gold-cta px-4 py-2 text-sm font-medium text-glow-canvas hover:brightness-95"
           @click="acceptAll"
         >
           Aceitar todos

@@ -73,7 +73,7 @@ const tiles = computed(() => {
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.95rem;
   line-height: 1.5;
-  color: rgb(255 255 255 / 0.55);
+  color: var(--glow-text-muted);
 }
 
 .loja-galeria__grid {
@@ -100,9 +100,9 @@ const tiles = computed(() => {
   position: relative;
   overflow: hidden;
   min-height: 8.5rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
+  border: 1px solid var(--glow-border-soft);
   border-radius: 1.15rem;
-  background: #120a2a;
+  background: var(--glow-canvas);
 }
 
 .loja-reveal.is-visible .loja-galeria__tile {
@@ -116,8 +116,8 @@ const tiles = computed(() => {
   object-fit: contain;
   padding: 1.5rem;
   background:
-    radial-gradient(circle at 30% 20%, rgb(201 162 39 / 0.18), transparent 55%),
-    #0d0820;
+    radial-gradient(circle at 30% 20%, var(--glow-accent-glow), transparent 55%),
+    var(--glow-canvas);
 }
 
 .loja-galeria__placeholder {
@@ -128,18 +128,18 @@ const tiles = computed(() => {
   min-height: inherit;
   text-align: center;
   background:
-    linear-gradient(145deg, rgb(82 46 95 / 0.35), transparent 60%),
-    #0f0a22;
+    linear-gradient(145deg, color-mix(in srgb, var(--glow-purple) 35%, transparent), transparent 60%),
+    var(--glow-surface);
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgb(255 255 255 / 0.55);
+  color: var(--glow-text-muted);
 }
 
 .loja-galeria__placeholder small {
   font-size: 0.72rem;
   font-weight: 500;
-  color: rgb(255 255 255 / 0.35);
+  color: var(--glow-placeholder);
 }
 
 @keyframes loja-card-in {

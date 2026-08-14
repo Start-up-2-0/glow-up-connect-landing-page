@@ -120,11 +120,11 @@ watch(tipoAssinatura, (tipo) => {
             <PromocaoLancamentoBanner variant="landing" :promocao="promocao" />
           </div>
 
-          <LoadingSpinner v-if="loading" class="mt-16 !text-white" />
+          <LoadingSpinner v-if="loading" class="mt-16 !text-glow-text" />
           <p v-else-if="erro" class="mt-16 text-center text-sm text-red-300">{{ erro }}</p>
           <EmptyState
             v-else-if="planos.length === 0"
-            class="mt-16 text-white [&_h3]:text-white [&_p]:text-white/60"
+            class="mt-16 text-glow-text [&_h3]:text-glow-text [&_p]:text-glow-text-muted"
             title="Nenhum plano disponível"
             description="Tente novamente mais tarde."
           />

@@ -40,17 +40,17 @@ const chapter = STORY_CHAPTERS.funcionamento
             <li
               v-for="step in HOW_IT_WORKS"
               :key="step.step"
-              class="group relative rounded-3xl border border-white/15 bg-white/[0.06] p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-white/[0.08] sm:p-6"
+              class="group relative rounded-3xl border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-6"
             >
               <span
                 class="landing-icon-pop inline-flex size-12 items-center justify-center rounded-2xl bg-glow-gold/15 font-montserrat text-sm font-black text-glow-gold"
               >
                 {{ step.step }}
               </span>
-              <h3 class="mt-5 font-montserrat text-xl font-semibold text-white">
+              <h3 class="mt-5 font-montserrat text-xl font-semibold text-glow-text">
                 {{ step.titulo }}
               </h3>
-              <p class="mt-3 font-poppins text-sm font-light leading-relaxed text-white/60">
+              <p class="mt-3 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
                 {{ step.descricao }}
               </p>
             </li>

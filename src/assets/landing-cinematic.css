@@ -3,10 +3,15 @@
   isolation: isolate;
 }
 
-/* Wash removido: landing usa fundo escuro contínuo */
+/* Wash removido: o canvas segue o tema da plataforma */
 
 .landing-showcase-arc {
   margin-top: -1px;
+}
+
+.landing-glass-card {
+  border-color: var(--glow-border-soft);
+  background: var(--glow-surface);
 }
 
 .landing-shot-stage__frame {
@@ -19,7 +24,7 @@
     55% 45% at 50% 40%,
     transparent 0%,
     transparent 42%,
-    rgba(13, 8, 37, 0.18) 100%
+    color-mix(in srgb, var(--glow-canvas) 18%, transparent) 100%
   );
   mix-blend-mode: multiply;
   transition: opacity 0.6s ease;
@@ -63,8 +68,8 @@
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: var(--palette-lilac-medium, #92679b);
-  box-shadow: 0 0 0 3px rgba(146, 103, 155, 0.28);
+  background: var(--glow-gold-cta);
+  box-shadow: 0 0 0 3px var(--glow-accent-glow);
   flex-shrink: 0;
 }
 
@@ -76,7 +81,7 @@
   height: 10px;
   margin-top: -5px;
   border-radius: 999px;
-  background: rgba(146, 103, 155, 0.45);
+  background: var(--glow-accent-glow);
   animation: landing-callout-pulse 2.4s ease-out infinite;
 }
 
@@ -90,12 +95,12 @@
 .landing-callout__bubble {
   margin-left: 0.35rem;
   border-radius: 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(20, 12, 48, 0.88);
+  border: 1px solid var(--glow-border-soft);
+  background: color-mix(in srgb, var(--glow-surface) 92%, transparent);
   padding: 0.55rem 0.7rem;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--glow-shadow-md);
   backdrop-filter: blur(10px);
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--glow-text-subtle);
 }
 
 .landing-callout--left {
@@ -210,7 +215,7 @@
   background: linear-gradient(
     180deg,
     transparent,
-    rgba(235, 231, 247, 0.85) 45%,
+    color-mix(in srgb, var(--glow-canvas) 85%, transparent) 45%,
     transparent
   );
 }
@@ -219,7 +224,7 @@
   background: linear-gradient(
     180deg,
     transparent,
-    rgba(13, 8, 37, 0.55) 45%,
+    color-mix(in srgb, var(--glow-canvas) 55%, transparent) 45%,
     transparent
   );
 }
@@ -268,11 +273,6 @@
     mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 2rem), transparent 100%);
     -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 2rem), transparent 100%);
     padding-right: 1.5rem;
-  }
-
-  .landing-glass-card {
-    border-color: rgba(255, 255, 255, 0.14);
-    background: rgba(255, 255, 255, 0.06);
   }
 }
 

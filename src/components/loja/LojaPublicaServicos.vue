@@ -144,7 +144,7 @@ function limparBusca() {
 
         <p
           v-if="servicos.length === 0"
-          class="mx-auto mt-14 max-w-lg text-center font-poppins text-base font-light text-white/50"
+          class="mx-auto mt-14 max-w-lg text-center font-poppins text-base font-light text-glow-text-muted"
         >
           Nenhum serviço público disponível no momento. Volte em breve ou fale com a loja.
         </p>
@@ -152,13 +152,13 @@ function limparBusca() {
         <template v-else>
           <!-- Toolbar -->
           <div
-            class="sticky top-[4.25rem] z-30 mt-10 rounded-2xl border border-white/10 bg-[#0b0818]/90 p-3 backdrop-blur-xl sm:p-4"
+            class="sticky top-[4.25rem] z-30 mt-10 rounded-2xl border border-glow-border-soft bg-glow-canvas p-3 backdrop-blur-xl sm:p-4"
           >
             <div class="flex flex-col gap-3 lg:flex-row lg:items-center">
               <label class="relative min-w-0 flex-1">
                 <span class="sr-only">Buscar serviço</span>
                 <svg
-                  class="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/35"
+                  class="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-glow-placeholder"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -172,12 +172,12 @@ function limparBusca() {
                   v-model="busca"
                   type="search"
                   placeholder="Buscar por nome…"
-                  class="h-11 w-full rounded-full border border-white/15 bg-white/[0.05] py-2 pl-10 pr-10 font-satoshi text-sm text-white outline-none transition placeholder:text-white/35 focus:border-glow-gold/45 focus:ring-1 focus:ring-glow-gold/30"
+                  class="h-11 w-full rounded-full border border-glow-border-soft bg-glow-surface py-2 pl-10 pr-10 font-satoshi text-sm text-glow-text outline-none transition placeholder:text-glow-placeholder focus:border-glow-gold/45 focus:ring-1 focus:ring-glow-gold/30"
                 />
                 <button
                   v-if="busca"
                   type="button"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-white/40 transition hover:text-white"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-glow-placeholder transition hover:text-glow-text"
                   aria-label="Limpar busca"
                   @click="limparBusca"
                 >
@@ -189,13 +189,13 @@ function limparBusca() {
                 <span class="sr-only">Ordenar</span>
                 <select
                   v-model="ordenacao"
-                  class="h-11 rounded-full border border-white/15 bg-white/[0.05] px-4 font-satoshi text-sm text-white outline-none transition focus:border-glow-gold/45"
+                  class="h-11 rounded-full border border-glow-border-soft bg-glow-surface px-4 font-satoshi text-sm text-glow-text outline-none transition focus:border-glow-gold/45"
                 >
                   <option
                     v-for="opt in ordenacoes"
                     :key="opt.id"
                     :value="opt.id"
-                    class="bg-[#120a2a] text-white"
+                    class="bg-glow-surface text-glow-text"
                   >
                     {{ opt.label }}
                   </option>
@@ -212,7 +212,7 @@ function limparBusca() {
                 :class="
                   filtroDuracao === filtro.id
                     ? 'border-glow-gold/40 bg-glow-gold/15 text-glow-gold'
-                    : 'border-white/12 bg-white/[0.04] text-white/60 hover:border-white/25 hover:text-white'
+                    : 'border-glow-border-soft bg-glow-surface text-glow-text-muted hover:border-glow-border-accent hover:text-glow-text'
                 "
                 @click="filtroDuracao = filtro.id"
               >
@@ -225,7 +225,7 @@ function limparBusca() {
           </div>
 
           <div class="mt-4 flex items-baseline justify-between gap-3">
-            <p class="font-satoshi text-xs font-medium text-white/45">
+            <p class="font-satoshi text-xs font-medium text-glow-text-muted">
               <template v-if="filtrados.length === 0">Nenhum serviço encontrado</template>
               <template v-else>
                 {{ filtrados.length }}
@@ -237,7 +237,7 @@ function limparBusca() {
             </p>
             <p
               v-if="categoria"
-              class="hidden font-satoshi text-[11px] font-semibold uppercase tracking-[0.16em] text-white/30 sm:block"
+              class="hidden font-satoshi text-[11px] font-semibold uppercase tracking-[0.16em] text-glow-placeholder sm:block"
             >
               {{ categoria }}
             </p>
@@ -245,12 +245,12 @@ function limparBusca() {
 
           <div
             v-if="filtrados.length === 0"
-            class="mt-8 rounded-2xl border border-dashed border-white/15 px-6 py-12 text-center"
+            class="mt-8 rounded-2xl border border-dashed border-glow-border-soft px-6 py-12 text-center"
           >
-            <p class="font-montserrat text-base font-semibold text-white/80">
+            <p class="font-montserrat text-base font-semibold text-glow-text-soft">
               Nada por aqui
             </p>
-            <p class="mt-2 font-poppins text-sm font-light text-white/45">
+            <p class="mt-2 font-poppins text-sm font-light text-glow-text-muted">
               Ajuste a busca ou os filtros para ver outros serviços.
             </p>
             <button
@@ -277,7 +277,7 @@ function limparBusca() {
                 class="mb-3 flex items-center gap-3 font-satoshi text-xs font-semibold uppercase tracking-[0.2em] text-glow-gold/80"
               >
                 <span>{{ grupo.label }}</span>
-                <span class="h-px flex-1 bg-white/10" aria-hidden="true" />
+                <span class="h-px flex-1 bg-glow-hover-surface" aria-hidden="true" />
               </h3>
 
               <ul
@@ -289,26 +289,26 @@ function limparBusca() {
                   class="group"
                 >
                   <div
-                    class="flex h-full flex-col justify-between rounded-2xl border border-white/12 bg-white/[0.045] px-3.5 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-glow-gold/30 hover:bg-white/[0.07]"
+                    class="flex h-full flex-col justify-between rounded-2xl border border-glow-border-soft bg-glow-surface px-3.5 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-glow-gold/30 hover:bg-glow-hover-surface"
                   >
                     <div class="flex items-start justify-between gap-2">
-                      <h4 class="min-w-0 font-montserrat text-sm font-semibold leading-snug text-white sm:text-[0.9375rem]">
+                      <h4 class="min-w-0 font-montserrat text-sm font-semibold leading-snug text-glow-text sm:text-[0.9375rem]">
                         <span class="line-clamp-2">{{ servico.nome }}</span>
                       </h4>
                       <span
-                        class="shrink-0 rounded-full border border-white/10 bg-black/20 px-2 py-0.5 font-satoshi text-[10px] font-semibold tabular-nums text-white/50"
+                        class="shrink-0 rounded-full border border-glow-border-soft bg-glow-hover-surface px-2 py-0.5 font-satoshi text-[10px] font-semibold tabular-nums text-glow-text-muted"
                       >
                         {{ servico.duracaoMinutosEstimada }} min
                       </span>
                     </div>
 
-                    <div class="mt-3 flex items-center justify-between gap-2 border-t border-white/10 pt-2.5">
+                    <div class="mt-3 flex items-center justify-between gap-2 border-t border-glow-border-soft pt-2.5">
                       <p class="min-w-0 truncate font-montserrat text-sm font-bold text-glow-gold">
                         {{ precoLabel(servico) }}
                       </p>
                       <RouterLink
                         :to="lojaAgendarPath(publicGuid)"
-                        class="inline-flex shrink-0 items-center gap-1 rounded-full border border-white/20 px-2.5 py-1 font-satoshi text-[11px] font-semibold text-white/80 transition group-hover:border-glow-gold/40 group-hover:text-white"
+                        class="inline-flex shrink-0 items-center gap-1 rounded-full border border-glow-border-soft px-2.5 py-1 font-satoshi text-[11px] font-semibold text-glow-text-soft transition group-hover:border-glow-gold/40 group-hover:text-glow-text"
                       >
                         Agendar
                         <span aria-hidden="true">→</span>
@@ -323,11 +323,11 @@ function limparBusca() {
           <div v-if="temMais" class="mt-8 flex justify-center">
             <button
               type="button"
-              class="rounded-full border border-white/20 bg-white/[0.05] px-6 py-2.5 font-satoshi text-sm font-semibold text-white transition hover:border-glow-gold/35 hover:bg-white/[0.08]"
+              class="rounded-full border border-glow-border-soft bg-glow-surface px-6 py-2.5 font-satoshi text-sm font-semibold text-glow-text transition hover:border-glow-gold/35 hover:bg-glow-hover-surface"
               @click="verMais"
             >
               Ver mais {{ Math.min(PAGE_SIZE, restantes) }} serviços
-              <span class="text-white/40">({{ restantes }} restantes)</span>
+              <span class="text-glow-placeholder">({{ restantes }} restantes)</span>
             </button>
           </div>
         </template>

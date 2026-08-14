@@ -209,10 +209,10 @@ function syncUserMarker() {
   if (!userAccuracyCircle) {
     userAccuracyCircle = L.circle(latlng, {
       radius: Math.max(props.userAccuracy ?? 40, 20),
-      color: '#c9a227',
+      color: '#e6ad01',
       weight: 1,
       opacity: 0.4,
-      fillColor: '#c9a227',
+      fillColor: '#e6ad01',
       fillOpacity: 0.1,
       interactive: false,
     }).addTo(map)
@@ -480,7 +480,7 @@ defineExpose({
 .explorar-landing-mapa__canvas {
   width: 100%;
   height: 100%;
-  background: #120a2a;
+  background: var(--glow-canvas);
   border-radius: inherit;
 }
 
@@ -551,7 +551,7 @@ defineExpose({
 
 .explorar-landing-marker:hover {
   transform: translate(-1.05rem, calc(-100% - 0.5rem)) scale(1.04);
-  border-color: var(--glow-gold, #c9a227);
+  border-color: var(--glow-gold-cta);
   box-shadow:
     0 14px 28px -12px rgb(0 0 0 / 0.6),
     0 0 0 3px rgb(201 162 39 / 0.22);
@@ -559,7 +559,7 @@ defineExpose({
 
 .explorar-landing-marker--selected {
   transform: translate(-1.05rem, calc(-100% - 0.5rem)) scale(1.05);
-  border-color: var(--glow-gold, #c9a227);
+  border-color: var(--glow-gold-cta);
   background: linear-gradient(135deg, rgb(201 162 39 / 0.28), rgb(26 18 56 / 0.95));
   box-shadow:
     0 14px 28px -12px rgb(0 0 0 / 0.6),
@@ -567,7 +567,7 @@ defineExpose({
 }
 
 .explorar-landing-marker--destaque {
-  border-color: color-mix(in srgb, #c9a227 70%, #fff);
+  border-color: color-mix(in srgb, var(--glow-gold-cta) 70%, #fff);
 }
 
 .explorar-landing-marker__avatar {
@@ -579,7 +579,7 @@ defineExpose({
   overflow: hidden;
   border-radius: 9999px;
   border: 1.5px solid rgb(255 255 255 / 0.85);
-  background: var(--glow-gold, #c9a227);
+  background: var(--glow-gold-cta);
 }
 
 .explorar-landing-marker__logo {
@@ -593,7 +593,7 @@ defineExpose({
   font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #0d0825;
+  color: var(--glow-canvas);
   line-height: 1;
 }
 
@@ -661,8 +661,8 @@ defineExpose({
 }
 
 .explorar-landing-cluster--hot {
-  background: #c9a227;
-  color: #0d0825;
+  background: var(--glow-gold-cta);
+  color: var(--glow-canvas);
 }
 
 .explorar-landing-cluster--sm {
@@ -765,11 +765,11 @@ defineExpose({
 }
 
 .explorar-landing-dot--destaque .explorar-landing-dot__core {
-  background: #c9a227;
+  background: var(--glow-gold-cta);
 }
 
 .explorar-landing-dot--selected .explorar-landing-dot__core {
-  background: #c9a227;
+  background: var(--glow-gold-cta);
 }
 
 .explorar-landing-dot--selected .explorar-landing-dot__meta {
@@ -786,7 +786,7 @@ defineExpose({
   font-family: Satoshi, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #0d0825;
+  color: var(--glow-canvas);
 }
 
 /* Ponto do usuário */
@@ -804,7 +804,7 @@ defineExpose({
   height: 1.1rem;
   border-radius: 9999px;
   border: 2px solid #fff;
-  background: #c9a227;
+  background: var(--glow-gold-cta);
   box-shadow:
     0 0 0 6px rgb(201 162 39 / 0.22),
     0 6px 14px -6px rgb(0 0 0 / 0.55);
@@ -841,7 +841,7 @@ defineExpose({
 .explorar-landing-mapa .leaflet-container {
   font-family: Urbanist, ui-sans-serif, system-ui, sans-serif;
   z-index: 0;
-  background: #120a2a;
+  background: var(--glow-canvas);
   border-radius: inherit;
 }
 

@@ -7,7 +7,7 @@ const whatsappUrl = computed(() => {
   const digits = phone.replace(/\D/g, '')
   if (!digits) return null
   const text = encodeURIComponent(
-    'Olá! Quero saber mais sobre o Glow Up Connect para minha barbearia/salão.',
+    'Olá! Quero saber mais sobre o Glow Up Connect para o meu negócio.',
   )
   return `https://wa.me/${digits}?text=${text}`
 })
@@ -19,7 +19,7 @@ const whatsappUrl = computed(() => {
     :href="whatsappUrl"
     target="_blank"
     rel="noopener noreferrer"
-    class="landing-wa-fab fixed bottom-5 right-4 z-50 flex size-12 items-center justify-center rounded-full bg-glow-purple shadow-[0_8px_28px_rgba(82,46,95,0.45)] transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-glow-gold-cta/50 focus:ring-offset-2 focus:ring-offset-glow-inverse-surface sm:bottom-8 sm:right-8 sm:size-16"
+    class="landing-wa-fab fixed bottom-5 right-4 z-50 flex size-12 items-center justify-center rounded-full bg-[#25D366] shadow-[0_8px_28px_rgba(37,211,102,0.4)] transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#25D366]/50 focus:ring-offset-2 focus:ring-offset-glow-canvas sm:bottom-8 sm:right-8 sm:size-16"
     aria-label="Falar no WhatsApp"
   >
     <svg class="size-7 text-white sm:size-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

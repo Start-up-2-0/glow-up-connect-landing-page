@@ -15,7 +15,7 @@ defineProps<{
     :class="
       variant === 'modal'
         ? 'border border-glow-text/10 bg-glow-canvas/80'
-        : 'border border-white/10 bg-white/[0.06]'
+        : 'border border-glow-border-soft bg-glow-surface'
     "
   >
     <div v-for="item in PLANO_LIMITE_ITEMS" :key="item.key">
@@ -24,7 +24,7 @@ defineProps<{
         :class="
           variant === 'modal'
             ? 'text-[10px] text-glow-text/50'
-            : 'text-[9px] text-white/40'
+            : 'text-[9px] text-glow-placeholder'
         "
       >
         {{ item.label }}
@@ -34,7 +34,7 @@ defineProps<{
         :class="
           variant === 'modal'
             ? 'text-sm text-glow-text'
-            : 'text-xs text-white/85'
+            : 'text-xs text-glow-text-soft'
         "
       >
         {{ formatLimite(plano[item.key]) }}

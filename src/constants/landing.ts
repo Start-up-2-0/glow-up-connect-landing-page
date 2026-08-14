@@ -337,9 +337,9 @@ export const TESTIMONIALS: TestimonialItem[] = [
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
-    pergunta: 'O Glow Up Connect é para barbearias ou salões de beleza?',
+    pergunta: 'O Glow Up Connect é só para barbearias e salões?',
     resposta:
-      'Para ambos. A plataforma foi desenhada para estabelecimentos de beleza — barbearias, salões e studios — com agenda, equipe, financeiro e presença digital no mesmo lugar.',
+      'Sim. A plataforma foi feita para barbearias e salões — com equipe ou como profissional autônomo — com agenda, financeiro e presença digital no mesmo lugar.',
   },
   {
     pergunta: 'Preciso instalar algum programa no computador?',

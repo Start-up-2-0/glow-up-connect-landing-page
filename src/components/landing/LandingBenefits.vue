@@ -35,17 +35,17 @@ const chapter = STORY_CHAPTERS.beneficios
           <article
             v-for="benefit in BUSINESS_BENEFITS"
             :key="benefit.titulo"
-            class="group rounded-3xl border border-white/15 bg-white/[0.06] p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-white/[0.08] sm:p-6"
+            class="group rounded-3xl border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-6"
           >
             <div
               class="landing-icon-pop flex size-11 items-center justify-center rounded-xl bg-glow-gold/15 text-glow-gold"
             >
               <LandingFeatureIcon :name="benefit.icon" />
             </div>
-            <h3 class="mt-5 font-montserrat text-lg font-semibold text-white">
+            <h3 class="mt-5 font-montserrat text-lg font-semibold text-glow-text">
               {{ benefit.titulo }}
             </h3>
-            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-white/60">
+            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
               {{ benefit.descricao }}
             </p>
           </article>

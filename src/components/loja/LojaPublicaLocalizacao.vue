@@ -50,13 +50,13 @@ const embedUrl = computed(() => {
 
           <p
             v-if="enderecoCompleto"
-            class="mt-8 font-poppins text-base font-light leading-relaxed text-white/70 sm:text-lg"
+            class="mt-8 font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg"
           >
             {{ enderecoCompleto }}
           </p>
           <p
             v-else
-            class="mt-8 font-poppins text-base font-light text-white/45"
+            class="mt-8 font-poppins text-base font-light text-glow-text-muted"
           >
             Endereço não informado publicamente.
           </p>
@@ -73,7 +73,7 @@ const embedUrl = computed(() => {
 
         <div
           v-if="embedUrl"
-          class="min-h-[18rem] overflow-hidden rounded-[2rem] border border-white/15 bg-[#0d0820] shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] landing-glass-card"
+          class="min-h-[18rem] overflow-hidden rounded-[2rem] border border-glow-border-soft bg-glow-canvas shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] landing-glass-card"
         >
           <iframe
             :src="embedUrl"

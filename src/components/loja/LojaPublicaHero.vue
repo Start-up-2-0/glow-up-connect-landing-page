@@ -17,7 +17,7 @@ const { isVisible } = useRevealOnScroll()
 <template>
   <header class="relative overflow-hidden pt-24 sm:pt-28">
     <div
-      class="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#160e33] via-[#0d0825] to-[#1a0f35]"
+      class="pointer-events-none absolute inset-0 bg-gradient-to-br from-glow-surface via-glow-canvas to-glow-bg-elevated"
       aria-hidden="true"
     />
     <div
@@ -33,7 +33,7 @@ const { isVisible } = useRevealOnScroll()
     <div class="relative mx-auto max-w-[1280px] px-4 pb-14 lg:px-8 lg:pb-20">
       <RouterLink
         :to="ROUTE_PATHS.EXPLORAR_LOJAS"
-        class="mb-8 inline-flex font-satoshi text-sm font-semibold text-white/55 transition hover:text-white"
+        class="mb-8 inline-flex font-satoshi text-sm font-semibold text-glow-text-muted transition hover:text-glow-text"
       >
         ← Voltar ao mapa
       </RouterLink>
@@ -44,7 +44,7 @@ const { isVisible } = useRevealOnScroll()
         :class="isVisible && 'is-visible'"
       >
         <div
-          class="mx-auto flex size-32 items-center justify-center overflow-hidden rounded-[1.75rem] border border-glow-gold/40 bg-[#0a0718] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] sm:size-40 md:mx-0"
+          class="mx-auto flex size-32 items-center justify-center overflow-hidden rounded-[1.75rem] border border-glow-gold/40 bg-glow-avatar-bg shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] sm:size-40 md:mx-0"
         >
           <img
             v-if="loja.logo"
@@ -71,25 +71,25 @@ const { isVisible } = useRevealOnScroll()
           >
             {{ loja.categoria }}
           </p>
-          <h1 class="mt-3 font-montserrat text-3xl font-light leading-[1.15] text-white sm:text-4xl lg:text-5xl">
+          <h1 class="mt-3 font-montserrat text-3xl font-light leading-[1.15] text-glow-text sm:text-4xl lg:text-5xl">
             <span class="font-black">{{ loja.nome }}</span>
           </h1>
 
           <div class="mt-5 flex flex-wrap gap-2">
             <span
-              class="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 font-satoshi text-xs font-semibold text-white/85"
+              class="inline-flex items-center gap-1.5 rounded-full border border-glow-border-soft bg-glow-surface px-3 py-1.5 font-satoshi text-xs font-semibold text-glow-text-soft"
             >
               <span class="text-glow-gold" aria-hidden="true">★</span>
               <template v-if="(loja.notaMedia ?? 0) > 0">
                 {{ loja.notaMedia!.toFixed(1).replace('.', ',') }}
-                <span class="font-normal text-white/45">({{ loja.totalAvaliacoes ?? 0 }})</span>
+                <span class="font-normal text-glow-text-muted">({{ loja.totalAvaliacoes ?? 0 }})</span>
               </template>
               <template v-else>Sem avaliações</template>
             </span>
 
             <span
               v-if="loja.distanciaKm != null"
-              class="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 font-satoshi text-xs font-semibold text-white/55"
+              class="rounded-full border border-glow-border-soft bg-glow-surface px-3 py-1.5 font-satoshi text-xs font-semibold text-glow-text-muted"
             >
               {{ formatDistanciaKm(loja.distanciaKm) }}
             </span>
@@ -99,8 +99,8 @@ const { isVisible } = useRevealOnScroll()
               class="rounded-full border px-3 py-1.5 font-satoshi text-xs font-semibold"
               :class="
                 loja.abertoAgora
-                  ? 'border-emerald-300/35 text-emerald-300'
-                  : 'border-white/15 text-white/50'
+                  ? 'border-glow-success/35 text-glow-success'
+                  : 'border-glow-border-soft text-glow-text-muted'
               "
             >
               {{ loja.abertoAgora ? 'Aberto agora' : 'Fechado agora' }}
@@ -112,7 +112,7 @@ const { isVisible } = useRevealOnScroll()
 
           <p
             v-if="enderecoResumo"
-            class="mt-5 max-w-xl font-poppins text-sm font-light leading-relaxed text-white/60 sm:text-base"
+            class="mt-5 max-w-xl font-poppins text-sm font-light leading-relaxed text-glow-text-muted sm:text-base"
           >
             {{ enderecoResumo }}
           </p>

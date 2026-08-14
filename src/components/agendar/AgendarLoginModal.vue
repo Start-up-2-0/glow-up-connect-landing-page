@@ -82,24 +82,24 @@ async function handleSubmit() {
       @keydown.escape="close"
     >
       <div
-        class="w-full max-w-md rounded-2xl border border-white/15 bg-[#160e33] p-6 shadow-glow-lg sm:p-8"
+        class="w-full max-w-md rounded-2xl border border-glow-border-soft bg-glow-surface p-6 shadow-glow-lg sm:p-8"
       >
         <div class="mb-6 flex items-start justify-between gap-4">
           <div>
             <h2
               id="agendar-login-title"
-              class="font-montserrat text-xl font-semibold text-white"
+              class="font-montserrat text-xl font-semibold text-glow-text"
             >
               Entrar com meu código
             </h2>
-            <p class="mt-1 font-poppins text-sm font-light text-white/55">
+            <p class="mt-1 font-poppins text-sm font-light text-glow-text-muted">
               Use o código pessoal da sua conta Glow. A sessão dura 15 minutos ou até confirmar o
               agendamento.
             </p>
           </div>
           <button
             type="button"
-            class="rounded-full p-1 text-white/50 transition hover:bg-white/10 hover:text-white"
+            class="rounded-full p-1 text-glow-text-muted transition hover:bg-glow-hover-surface hover:text-glow-text"
             aria-label="Fechar"
             :disabled="loading"
             @click="close"
@@ -124,7 +124,7 @@ async function handleSubmit() {
               :class="[GLOW_INPUT_CLASS, 'mt-2 font-mono tracking-wider uppercase']"
               :disabled="loading"
             />
-            <p class="mt-2 font-poppins text-xs text-white/40">
+            <p class="mt-2 font-poppins text-xs text-glow-placeholder">
               Encontre o código em Meu perfil → Segurança no app Glow Up Connect.
             </p>
           </div>

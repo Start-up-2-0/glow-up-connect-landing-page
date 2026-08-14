@@ -20,16 +20,16 @@ const props = withDefaults(
 )
 
 const classes = computed(() => [
-  'landing-cta inline-flex w-full items-center justify-center gap-2.5 rounded-[80px] font-montserrat focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-glow-inverse-surface sm:w-auto',
+  'landing-cta inline-flex w-full items-center justify-center gap-2.5 rounded-[80px] font-montserrat focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-glow-canvas sm:w-auto',
   props.size === 'md' ? 'h-14 px-6 text-base font-medium sm:h-[60px] sm:text-lg' : 'h-11 px-5 text-base font-medium',
   props.variant === 'gold' &&
-    'landing-cta--shine bg-glow-gold-cta text-white focus:ring-glow-gold-cta/50',
+    'landing-cta--shine bg-glow-gold-cta text-glow-canvas focus:ring-glow-gold-cta/50',
   props.variant === 'purple' &&
-    'landing-cta--shine bg-glow-purple text-white focus:ring-glow-purple/50',
+    'landing-cta--shine bg-glow-gold-dark text-glow-canvas focus:ring-glow-gold/50',
   props.variant === 'outline' &&
-    'border border-white/40 bg-transparent text-white focus:ring-white/20 focus:ring-offset-glow-inverse-surface',
+    'border border-glow-border-accent bg-transparent text-glow-text focus:ring-glow-border-accent focus:ring-offset-glow-canvas',
   props.variant === 'ghost' &&
-    'border border-white/30 bg-transparent text-white focus:ring-white/30 focus:ring-offset-glow-inverse-surface',
+    'border border-glow-border-accent bg-transparent text-glow-text focus:ring-glow-border-accent focus:ring-offset-glow-canvas',
 ])
 </script>
 

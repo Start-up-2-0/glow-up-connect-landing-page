@@ -28,7 +28,7 @@ defineProps<{
       <p class="font-satoshi text-[10px] font-semibold uppercase tracking-[0.14em] text-glow-gold">
         {{ callout.label }}
       </p>
-      <p class="mt-1 max-w-[11rem] font-poppins text-xs font-light leading-snug text-white/70">
+      <p class="mt-1 max-w-[11rem] font-poppins text-xs font-light leading-snug text-glow-text-subtle">
         {{ callout.detail }}
       </p>
     </div>

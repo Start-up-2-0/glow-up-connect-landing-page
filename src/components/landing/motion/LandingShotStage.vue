@@ -104,12 +104,12 @@ const mobileCallouts = computed(() => false)
       <li
         v-for="item in callouts"
         :key="item.id"
-        class="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3"
+        class="rounded-2xl border border-glow-border-soft bg-glow-surface px-4 py-3"
       >
         <p class="font-satoshi text-[10px] font-semibold uppercase tracking-[0.14em] text-glow-gold">
           {{ item.label }}
         </p>
-        <p class="mt-1 font-poppins text-sm font-light text-white/60">
+        <p class="mt-1 font-poppins text-sm font-light text-glow-text-muted">
           {{ item.detail }}
         </p>
       </li>

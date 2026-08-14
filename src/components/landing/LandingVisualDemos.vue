@@ -44,12 +44,12 @@ const chapter = STORY_CHAPTERS.demonstracao
               <p class="font-satoshi text-xs font-semibold uppercase tracking-[0.2em] text-glow-gold">
                 {{ String(index + 1).padStart(2, '0') }} · {{ demo.titulo }}
               </p>
-              <h3 class="mt-3 font-montserrat text-2xl font-semibold leading-snug text-white sm:text-3xl">
+              <h3 class="mt-3 font-montserrat text-2xl font-semibold leading-snug text-glow-text sm:text-3xl">
                 {{ demo.beneficio }}
               </h3>
-              <p class="mt-4 max-w-md font-poppins text-base font-light leading-relaxed text-white/60">
-                Interface pensada para barbearias e salões: clara no celular da recepção e completa no
-                computador da gestão.
+              <p class="mt-4 max-w-md font-poppins text-base font-light leading-relaxed text-glow-text-muted">
+                Interface pensada para barbearias e salões: clara no celular da recepção e
+                completa no computador da gestão.
               </p>
             </div>
             <div :class="index % 2 === 1 ? 'lg:order-1' : ''" class="min-w-0 max-w-full">

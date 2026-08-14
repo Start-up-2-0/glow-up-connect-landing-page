@@ -465,7 +465,7 @@ onMounted(async () => {
             eyebrow="Rede ao vivo"
             title="Explore lojas"
             highlight="perto de você"
-            subtitle="Mapa interativo com barbearias e salões reais da plataforma."
+            subtitle="Mapa interativo com barbearias e salões da plataforma."
           />
         </div>
 
@@ -534,7 +534,7 @@ onMounted(async () => {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #0b0b0b;
+  background: var(--glow-canvas);
 }
 
 .explorar-pdx__top {
@@ -622,7 +622,7 @@ onMounted(async () => {
 }
 
 .explorar-pdx__search-input:focus {
-  border-color: var(--glow-gold, #c9a227);
+  border-color: var(--glow-gold-cta);
 }
 
 .explorar-pdx__search-input::placeholder {
@@ -714,8 +714,8 @@ onMounted(async () => {
 
 .explorar-pdx__square:hover:not(:disabled),
 .explorar-pdx__square--active {
-  color: var(--glow-gold, #c9a227);
-  border-color: var(--glow-gold, #c9a227);
+  color: var(--glow-gold-cta);
+  border-color: var(--glow-gold-cta);
 }
 
 .explorar-pdx__square:disabled {
@@ -731,7 +731,7 @@ onMounted(async () => {
   height: 0.95rem;
   border-radius: 9999px;
   background: #63e2b7;
-  color: #0b0b0b;
+  color: var(--glow-canvas);
   font-size: 0.58rem;
   font-weight: 700;
   display: grid;
@@ -869,7 +869,7 @@ onMounted(async () => {
 }
 
 .explorar-pdx__select:focus {
-  border-color: var(--glow-gold, #c9a227);
+  border-color: var(--glow-gold-cta);
 }
 
 .explorar-pdx__dock-actions {
@@ -897,8 +897,8 @@ onMounted(async () => {
 
 .explorar-pdx__primary {
   border: none;
-  background: var(--glow-gold, #c9a227);
-  color: #0d0825;
+  background: var(--glow-gold-cta);
+  color: var(--glow-canvas);
 }
 
 .explorar-dock-enter-active,

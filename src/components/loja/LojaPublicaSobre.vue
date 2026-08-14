@@ -58,12 +58,12 @@ const diferenciais = [
           <li
             v-for="item in diferenciais"
             :key="item.titulo"
-            class="rounded-2xl border border-white/12 bg-white/[0.045] px-5 py-6 text-center transition duration-200 hover:-translate-y-0.5 hover:border-glow-gold/25 hover:bg-white/[0.07] sm:px-6"
+            class="rounded-2xl border border-glow-border-soft bg-glow-surface px-5 py-6 text-center transition duration-200 hover:-translate-y-0.5 hover:border-glow-gold/25 hover:bg-glow-hover-surface sm:px-6"
           >
-            <h3 class="font-montserrat text-base font-semibold text-white">
+            <h3 class="font-montserrat text-base font-semibold text-glow-text">
               {{ item.titulo }}
             </h3>
-            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-white/50">
+            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
               {{ item.texto }}
             </p>
           </li>

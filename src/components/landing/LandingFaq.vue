@@ -30,7 +30,7 @@ function toggle(index: number) {
         <div
           v-for="(item, index) in FAQ_ITEMS"
           :key="item.pergunta"
-          class="overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] landing-glass-card transition duration-300 hover:border-glow-gold/25"
+          class="overflow-hidden rounded-2xl border border-glow-border-soft bg-glow-surface landing-glass-card transition duration-300 hover:border-glow-gold/25"
         >
           <button
             type="button"
@@ -38,7 +38,7 @@ function toggle(index: number) {
             :aria-expanded="openIndex === index"
             @click="toggle(index)"
           >
-            <span class="font-montserrat text-base font-semibold text-white sm:text-lg">
+            <span class="font-montserrat text-base font-semibold text-glow-text sm:text-lg">
               {{ item.pergunta }}
             </span>
             <span
@@ -55,7 +55,7 @@ function toggle(index: number) {
             :class="openIndex === index ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
           >
             <div class="overflow-hidden">
-              <p class="px-5 pb-5 font-poppins text-sm font-light leading-relaxed text-white/60">
+              <p class="px-5 pb-5 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
                 {{ item.resposta }}
               </p>
             </div>

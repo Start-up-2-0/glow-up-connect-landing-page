@@ -34,7 +34,7 @@ const emit = defineEmits<{
       </button>
       <div
         v-else
-        class="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white"
+        class="flex size-8 shrink-0 items-center justify-center rounded-full bg-glow-hover-surface text-glow-text"
         aria-hidden="true"
       >
         <svg class="size-4" viewBox="0 0 24 24" fill="none">

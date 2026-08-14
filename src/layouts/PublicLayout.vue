@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router'
 import { ROUTE_PATHS } from '@/constants/routes'
 import { APP_NAME } from '@/constants/storageKeys'
 import { APP_URL } from '@/constants/urls'
+import LandingThemeToggle from '@/components/landing/LandingThemeToggle.vue'
 </script>
 
 <template>
@@ -13,6 +14,7 @@ import { APP_URL } from '@/constants/urls'
           {{ APP_NAME }}
         </RouterLink>
         <div class="flex items-center gap-3">
+          <LandingThemeToggle />
           <a
             :href="`${APP_URL}/auth/login`"
             class="text-sm font-medium text-glow-text-subtle hover:text-glow-text"
@@ -21,7 +23,7 @@ import { APP_URL } from '@/constants/urls'
           </a>
           <a
             :href="`${APP_URL}/auth/register`"
-            class="rounded-lg bg-glow-gold px-4 py-2 text-sm font-medium text-white hover:brightness-95"
+            class="rounded-lg bg-glow-gold-cta px-4 py-2 text-sm font-medium text-glow-canvas hover:brightness-95"
           >
             Criar conta
           </a>

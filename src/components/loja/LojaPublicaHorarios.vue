@@ -38,45 +38,45 @@ const hojeLabel = computed(() => {
           :class="isVisible && 'is-visible'"
         >
           <article
-            class="relative overflow-hidden rounded-[2rem] border border-white/15 bg-white/[0.06] p-7 landing-glass-card sm:p-9"
+            class="relative overflow-hidden rounded-[2rem] border border-glow-border-soft bg-glow-surface p-7 landing-glass-card sm:p-9"
           >
             <div
               class="pointer-events-none absolute -right-8 top-0 h-32 w-32 rounded-full bg-glow-gold/20 blur-3xl"
               aria-hidden="true"
             />
 
-            <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
+            <p class="font-satoshi text-[11px] font-semibold uppercase tracking-[0.2em] text-glow-text-muted">
               Hoje
             </p>
 
             <p
               v-if="abertoAgora != null"
               class="mt-4 font-montserrat text-3xl font-black sm:text-4xl"
-              :class="abertoAgora ? 'text-emerald-300' : 'text-white/55'"
+              :class="abertoAgora ? 'text-glow-success' : 'text-glow-text-muted'"
             >
               {{ abertoAgora ? 'Aberto agora' : 'Fechado agora' }}
             </p>
             <p
               v-else
-              class="mt-4 font-montserrat text-3xl font-black text-white/45 sm:text-4xl"
+              class="mt-4 font-montserrat text-3xl font-black text-glow-text-muted sm:text-4xl"
             >
               Horário sob consulta
             </p>
 
             <p
               v-if="hojeLabel"
-              class="mt-3 font-poppins text-lg font-light text-white/75"
+              class="mt-3 font-poppins text-lg font-light text-glow-text-subtle"
             >
               {{ hojeLabel }}
             </p>
             <p
               v-else
-              class="mt-3 font-poppins text-base font-light text-white/40"
+              class="mt-3 font-poppins text-base font-light text-glow-placeholder"
             >
               Intervalo de hoje ainda não informado.
             </p>
 
-            <p class="mt-8 border-t border-white/10 pt-5 font-poppins text-sm font-light leading-relaxed text-white/45">
+            <p class="mt-8 border-t border-glow-border-soft pt-5 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
               Dias e turnos podem variar. A disponibilidade real aparece ao escolher data e horário
               no fluxo de agendamento.
             </p>

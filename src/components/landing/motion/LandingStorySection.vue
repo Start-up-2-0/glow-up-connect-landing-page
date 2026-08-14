@@ -7,7 +7,7 @@ withDefaults(
   defineProps<{
     chapterIndex?: string
     chapterLabel?: string
-    /** Mantido por compatibilidade — landing agora é sempre escura */
+    /** Mantido por compatibilidade — o tema vem dos tokens glow-* */
     tone?: 'light' | 'dark' | 'canvas'
     showProgress?: boolean
   }>(),
@@ -33,7 +33,7 @@ const depthStyle = computed(() => {
 <template>
   <section
     ref="progressRoot"
-    class="landing-story relative overflow-x-clip bg-transparent text-white"
+    class="landing-story relative overflow-x-clip bg-transparent text-glow-text"
     :data-in-view="inView"
   >
     <div
@@ -56,7 +56,7 @@ const depthStyle = computed(() => {
         </span>
         <span
           v-if="chapterLabel"
-          class="font-satoshi text-[11px] font-medium uppercase tracking-[0.18em] text-white/45"
+          class="font-satoshi text-[11px] font-medium uppercase tracking-[0.18em] text-glow-text-muted"
         >
           {{ chapterLabel }}
         </span>

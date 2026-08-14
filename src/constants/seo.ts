@@ -12,16 +12,16 @@ export interface SeoMeta {
 
 export const SEO_BY_PATH: Record<string, SeoMeta> = {
   [ROUTE_PATHS.HOME]: {
-    title: `${APP_NAME} — Gestão para barbearias e salões de beleza`,
+    title: `${APP_NAME} — Gestão para barbearias e salões`,
     description:
-      'Plataforma de gestão para barbearias e salões: agenda, clientes, financeiro, comissões, equipe e agendamento online em um só lugar.',
+      'Plataforma de gestão para barbearias e salões: agenda, clientes, financeiro, comissões, equipe e agendamento online.',
     path: ROUTE_PATHS.HOME,
     ogType: 'website',
   },
   [ROUTE_PATHS.EXPLORAR_LOJAS]: {
     title: `Explorar Lojas | ${APP_NAME}`,
     description:
-      'Encontre barbearias e salões de beleza próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.',
+      'Encontre barbearias e salões próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.',
     path: ROUTE_PATHS.EXPLORAR_LOJAS,
     ogType: 'website',
   },

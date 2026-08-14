@@ -77,8 +77,8 @@ function goNext() {
                 class="landing-tab shrink-0 rounded-full px-3.5 py-2 font-satoshi text-sm sm:px-4"
                 :class="
                   active.id === item.id
-                    ? 'bg-white font-semibold text-glow-inverse-surface shadow-glow-sm'
-                    : 'bg-white/10 font-medium text-white/65 hover:bg-white/15 hover:text-white'
+                    ? 'bg-glow-gold-cta font-semibold text-glow-canvas shadow-glow-sm'
+                    : 'bg-glow-hover-surface font-medium text-glow-text-subtle hover:bg-glow-hover-surface hover:text-glow-text'
                 "
                 @click="select(item.id)"
               >
@@ -99,20 +99,20 @@ function goNext() {
             >
               <p
                 :key="active.id"
-                class="min-w-0 max-w-2xl font-poppins text-sm font-light leading-relaxed text-white/60 sm:text-base"
+                class="min-w-0 max-w-2xl font-poppins text-sm font-light leading-relaxed text-glow-text-muted sm:text-base"
               >
                 {{ active.beneficio }}
               </p>
             </Transition>
             <div class="flex shrink-0 items-center gap-2">
-              <span class="font-satoshi text-xs text-white/40">
+              <span class="font-satoshi text-xs text-glow-placeholder">
                 {{ String(activeIndex + 1).padStart(2, '0') }}
                 /
                 {{ String(SHOWCASE_ITEMS.length).padStart(2, '0') }}
               </span>
               <button
                 type="button"
-                class="flex size-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:-translate-y-0.5 hover:border-glow-gold/40"
+                class="flex size-9 items-center justify-center rounded-full border border-glow-border-soft bg-glow-hover-surface text-glow-text transition hover:-translate-y-0.5 hover:border-glow-gold/40"
                 aria-label="Tela anterior"
                 @click="goPrev"
               >
@@ -122,7 +122,7 @@ function goNext() {
               </button>
               <button
                 type="button"
-                class="flex size-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:-translate-y-0.5 hover:border-glow-gold/40"
+                class="flex size-9 items-center justify-center rounded-full border border-glow-border-soft bg-glow-hover-surface text-glow-text transition hover:-translate-y-0.5 hover:border-glow-gold/40"
                 aria-label="Próxima tela"
                 @click="goNext"
               >

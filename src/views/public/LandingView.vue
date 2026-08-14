@@ -48,7 +48,7 @@ useJsonLd([
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     description:
-      'Plataforma de gestão para barbearias e salões de beleza: agenda, clientes, financeiro, comissões e equipe.',
+      'Plataforma de gestão para barbearias e salões: agenda, clientes, financeiro, comissões e equipe.',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'BRL',
@@ -70,7 +70,7 @@ watch(() => route.hash, handleHashScroll)
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col overflow-x-hidden bg-glow-inverse-surface text-white">
+  <div class="flex min-h-dvh flex-col overflow-x-hidden bg-glow-canvas text-glow-text">
     <LandingNavbar />
     <main id="conteudo-principal" class="flex-1">
       <LandingHero />

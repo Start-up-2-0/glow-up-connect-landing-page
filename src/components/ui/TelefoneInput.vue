@@ -34,10 +34,10 @@ const displayValue = computed(() => {
 })
 
 const prefixClass =
-  'inline-flex h-[49px] shrink-0 items-center rounded-l-lg border border-r-0 border-white/15 bg-white/[0.04] px-3.5 font-satoshi text-sm font-medium text-white/55'
+  'inline-flex h-[49px] shrink-0 items-center rounded-l-lg border border-r-0 border-glow-border-soft bg-glow-surface px-3.5 font-satoshi text-sm font-medium text-glow-text-muted'
 
 const dashboardInputClass =
-  'h-[49px] w-full border border-white/15 bg-white/[0.06] px-4 font-satoshi text-sm text-white outline-none transition placeholder:text-white/35 focus:border-glow-gold/50 focus:ring-1 focus:ring-glow-gold/40 disabled:cursor-not-allowed disabled:opacity-60'
+  'h-[49px] w-full border border-glow-border-soft bg-glow-surface px-4 font-satoshi text-sm text-glow-text outline-none transition placeholder:text-glow-placeholder focus:border-glow-gold/50 focus:ring-1 focus:ring-glow-gold/40 disabled:cursor-not-allowed disabled:opacity-60'
 
 const inputClass = computed(() => {
   let shape: string
@@ -89,7 +89,7 @@ function onKeydown(event: KeyboardEvent) {
     <label
       v-if="label"
       :for="inputId"
-      class="font-satoshi text-sm font-normal text-white/80"
+      class="font-satoshi text-sm font-normal text-glow-text-soft"
     >
       {{ label }}
     </label>
@@ -122,7 +122,7 @@ function onKeydown(event: KeyboardEvent) {
     <p
       v-else-if="hint"
       :id="`${inputId}-hint`"
-      class="font-urbanist text-xs leading-snug text-white/55"
+      class="font-urbanist text-xs leading-snug text-glow-text-muted"
     >
       {{ hint }}
     </p>

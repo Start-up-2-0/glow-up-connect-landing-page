@@ -19,7 +19,7 @@ const socialLinks = [
 </script>
 
 <template>
-  <footer class="relative overflow-hidden bg-glow-inverse-surface text-white">
+  <footer class="relative overflow-hidden bg-glow-canvas text-glow-text">
     <div
       class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-glow-gold/40 to-transparent"
       aria-hidden="true"
@@ -30,13 +30,13 @@ const socialLinks = [
         <div class="col-span-3 lg:col-span-1">
           <RouterLink
             :to="ROUTE_PATHS.HOME"
-            class="font-satoshi text-xl text-white sm:text-2xl"
+            class="font-satoshi text-xl text-glow-text sm:text-2xl"
             @click="goToSection(LANDING_SECTIONS.inicio)"
           >
             <span class="font-light">GlowUp </span>
             <span class="font-black">Connect</span>
           </RouterLink>
-          <p class="mt-5 max-w-sm font-poppins text-sm font-light leading-relaxed text-white/55">
+          <p class="mt-5 max-w-sm font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
             {{ FOOTER_TAGLINE }}
           </p>
           <p class="mt-6 font-satoshi text-sm font-black text-glow-gold">
@@ -45,20 +45,20 @@ const socialLinks = [
         </div>
 
         <div class="min-w-0">
-          <p class="font-montserrat text-xs font-semibold text-white sm:text-sm">Navegação</p>
+          <p class="font-montserrat text-xs font-semibold text-glow-text sm:text-sm">Navegação</p>
           <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé — navegação">
             <button
               v-for="link in NAV_LINKS"
               :key="link.id"
               type="button"
-              class="text-left font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              class="text-left font-satoshi text-xs text-glow-text-muted transition hover:text-glow-text sm:text-sm"
               @click="goToNavLink(link)"
             >
               {{ link.label }}
             </button>
             <button
               type="button"
-              class="text-left font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              class="text-left font-satoshi text-xs text-glow-text-muted transition hover:text-glow-text sm:text-sm"
               @click="goToSection(LANDING_SECTIONS.inicio)"
             >
               Início
@@ -67,23 +67,23 @@ const socialLinks = [
         </div>
 
         <div class="min-w-0">
-          <p class="font-montserrat text-xs font-semibold text-white sm:text-sm">Conta</p>
+          <p class="font-montserrat text-xs font-semibold text-glow-text sm:text-sm">Conta</p>
           <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé — conta">
             <a
               :href="`${APP_URL}/auth/login`"
-              class="font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              class="font-satoshi text-xs text-glow-text-muted transition hover:text-glow-text sm:text-sm"
             >
               Entrar
             </a>
             <a
               :href="`${APP_URL}/auth/register`"
-              class="font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              class="font-satoshi text-xs text-glow-text-muted transition hover:text-glow-text sm:text-sm"
             >
               Criar conta
             </a>
             <button
               type="button"
-              class="text-left font-satoshi text-xs text-white/55 transition hover:text-white sm:text-sm"
+              class="text-left font-satoshi text-xs text-glow-text-muted transition hover:text-glow-text sm:text-sm"
               @click="goToSection(LANDING_SECTIONS.planos)"
             >
               Ver planos
@@ -92,12 +92,12 @@ const socialLinks = [
         </div>
 
         <div class="min-w-0">
-          <p class="font-montserrat text-xs font-semibold text-white sm:text-sm">Contato</p>
-          <div class="mt-3 flex flex-col gap-2 font-satoshi text-xs text-white/55 sm:mt-4 sm:gap-2.5 sm:text-sm">
-            <a :href="FOOTER_CONTACT.emailHref" class="break-all transition hover:text-white">
+          <p class="font-montserrat text-xs font-semibold text-glow-text sm:text-sm">Contato</p>
+          <div class="mt-3 flex flex-col gap-2 font-satoshi text-xs text-glow-text-muted sm:mt-4 sm:gap-2.5 sm:text-sm">
+            <a :href="FOOTER_CONTACT.emailHref" class="break-all transition hover:text-glow-text">
               {{ FOOTER_CONTACT.email }}
             </a>
-            <a :href="FOOTER_CONTACT.phoneHref" class="transition hover:text-white">
+            <a :href="FOOTER_CONTACT.phoneHref" class="transition hover:text-glow-text">
               {{ FOOTER_CONTACT.phone }}
             </a>
           </div>
@@ -108,7 +108,7 @@ const socialLinks = [
               :href="social.href"
               target="_blank"
               rel="noopener noreferrer"
-              class="rounded-full border border-white/15 px-2.5 py-1 text-center font-satoshi text-[10px] text-white/70 transition hover:border-glow-gold/40 hover:text-white sm:px-3 sm:py-1.5 sm:text-xs"
+              class="rounded-full border border-glow-border-soft px-2.5 py-1 text-center font-satoshi text-[10px] text-glow-text-subtle transition hover:border-glow-gold/40 hover:text-glow-text sm:px-3 sm:py-1.5 sm:text-xs"
             >
               {{ social.label }}
             </a>
@@ -117,16 +117,16 @@ const socialLinks = [
       </div>
 
       <div
-        class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between"
+        class="mt-14 flex flex-col gap-4 border-t border-glow-border-soft pt-8 sm:flex-row sm:items-center sm:justify-between"
       >
-        <p class="font-satoshi text-xs text-white/45">
+        <p class="font-satoshi text-xs text-glow-text-muted">
           {{ new Date().getFullYear() }} Glow Up Connect. Todos os direitos reservados.
         </p>
-        <nav class="flex flex-wrap gap-x-5 gap-y-2 font-satoshi text-xs text-white/45" aria-label="Políticas">
-          <RouterLink :to="ROUTE_PATHS.TERMOS_DE_USO" class="transition hover:text-white">
+        <nav class="flex flex-wrap gap-x-5 gap-y-2 font-satoshi text-xs text-glow-text-muted" aria-label="Políticas">
+          <RouterLink :to="ROUTE_PATHS.TERMOS_DE_USO" class="transition hover:text-glow-text">
             Termos de uso
           </RouterLink>
-          <RouterLink :to="ROUTE_PATHS.POLITICA_COOKIES" class="transition hover:text-white">
+          <RouterLink :to="ROUTE_PATHS.POLITICA_COOKIES" class="transition hover:text-glow-text">
             Política de cookies
           </RouterLink>
         </nav>
