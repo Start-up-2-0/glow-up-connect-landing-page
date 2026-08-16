@@ -5,6 +5,7 @@ export const ROUTE_NAMES = {
   POLITICA_COOKIES: 'politica-cookies',
   LOJA_PUBLICA: 'loja-publica',
   LOJA_AGENDAR: 'loja-agendar',
+  CONVITE_EQUIPE: 'convite-equipe',
 } as const
 
 export const ROUTE_PATHS = {
@@ -14,6 +15,7 @@ export const ROUTE_PATHS = {
   POLITICA_COOKIES: '/politica-de-cookies',
   LOJA_PUBLICA: '/loja/:publicGuid',
   LOJA_AGENDAR: '/loja/:publicGuid/agendar',
+  CONVITE_EQUIPE: '/convite/:token',
 } as const
 
 export const LANDING_PLANOS_HASH = '#planos'
@@ -33,4 +35,8 @@ export function lojaAgendarComProfissionalPath(
   profissionalPublicGuid: string,
 ): string {
   return `/loja/${publicGuid}/agendar?profissional=${encodeURIComponent(profissionalPublicGuid)}`
+}
+
+export function conviteEquipePath(token: string): string {
+  return `/convite/${encodeURIComponent(token)}`
 }

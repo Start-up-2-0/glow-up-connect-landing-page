@@ -7,6 +7,9 @@ export const API_ERROR_MESSAGES: Record<string, string> = {
   USER_BLOCKED: 'Conta temporariamente bloqueada. Tente mais tarde.',
   USER_INACTIVE: 'Conta inativa. Entre em contato com o suporte.',
   EMAIL_JA_CADASTRADO: 'Este e-mail já está cadastrado.',
+  CONVITE_NEGOCIO_INDISPONIVEL:
+    'Este convite expirou ou não está mais disponível. Solicite um novo convite ao administrador da loja.',
+  CONVITE_NEGOCIO_INVALIDO: 'Convite inválido.',
   HORARIO_INDISPONIVEL: 'Horário indisponível. Escolha outro horário.',
   NOT_IMPLEMENTED: 'Funcionalidade ainda não disponível.',
 }

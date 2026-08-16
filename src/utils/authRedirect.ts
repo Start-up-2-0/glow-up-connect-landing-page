@@ -6,6 +6,7 @@ export const APP_AUTH_PATHS = {
   REGISTER: '/auth/register',
   CONFIRM_EMAIL: '/auth/confirmar-email',
   MEUS_AGENDAMENTOS: '/meus-agendamentos',
+  DASHBOARD: '/dashboard',
 } as const
 
 /**
@@ -42,4 +43,8 @@ export function authConfirmEmailUrl(redirect?: string): string {
 
 export function appMeusAgendamentosUrl(): string {
   return authAppUrl(APP_AUTH_PATHS.MEUS_AGENDAMENTOS)
+}
+
+export function appDashboardUrl(): string {
+  return authAppUrl(APP_AUTH_PATHS.DASHBOARD)
 }

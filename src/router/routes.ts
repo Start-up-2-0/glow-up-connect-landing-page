@@ -27,6 +27,12 @@ export const routes: RouteRecordRaw[] = [
     meta: { layout: 'landing', title: 'Loja' },
   },
   {
+    path: ROUTE_PATHS.CONVITE_EQUIPE,
+    name: ROUTE_NAMES.CONVITE_EQUIPE,
+    component: () => import('@/views/public/ConviteEquipeView.vue'),
+    meta: { layout: 'agendar-publico', title: 'Convite para equipe' },
+  },
+  {
     path: ROUTE_PATHS.TERMOS_DE_USO,
     name: ROUTE_NAMES.TERMOS_DE_USO,
     component: () => import('@/views/public/TermosDeUsoView.vue'),
