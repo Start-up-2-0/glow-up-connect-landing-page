@@ -5,11 +5,12 @@ export interface EnderecoResumo {
   estado: string
 }
 
-/** Catálogo de categorias de estabelecimento (extensível). */
+/** Catálogo de categorias do marketplace, separado por tipo de operação. */
 export interface EstabelecimentoCategoria {
   id: number
   nome: string
   slug?: string
+  tipoAssinatura?: 'Estabelecimento' | 'ProfissionalAutonomo'
 }
 
 export interface EstabelecimentoProximo {
