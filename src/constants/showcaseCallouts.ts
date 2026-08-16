@@ -163,12 +163,13 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
 }
 
 export const STORY_CHAPTERS = {
-  funcionamento: { index: '01', label: 'Como funciona' },
-  funcionalidades: { index: '02', label: 'Funcionalidades' },
-  beneficios: { index: '03', label: 'Benefícios' },
-  explorar: { index: '04', label: 'Explorar lojas' },
-  demonstracao: { index: '05', label: 'Demonstração' },
-  resultados: { index: '06', label: 'Resultados' },
-  oferta: { index: '07', label: 'Planos' },
-  cta: { index: '08', label: 'Comece agora' },
+  publico: { index: '01', label: 'Do pequeno ao grande' },
+  funcionamento: { index: '02', label: 'Como funciona' },
+  funcionalidades: { index: '03', label: 'Funcionalidades' },
+  beneficios: { index: '04', label: 'Benefícios' },
+  explorar: { index: '05', label: 'Explorar lojas' },
+  demonstracao: { index: '06', label: 'Demonstração' },
+  resultados: { index: '07', label: 'Resultados' },
+  oferta: { index: '08', label: 'Planos' },
+  cta: { index: '09', label: 'Comece agora' },
 } as const

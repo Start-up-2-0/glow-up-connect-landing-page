@@ -80,6 +80,19 @@ onMounted(() => bind(heroSection.value))
             {{ HERO_COPY.subtitulo }}
           </p>
 
+          <ul
+            class="hero-enter hero-enter-d3 mt-5 flex flex-wrap gap-2"
+            aria-label="Público atendido"
+          >
+            <li
+              v-for="publico in HERO_COPY.audiencia"
+              :key="publico"
+              class="rounded-full border border-glow-gold/30 bg-glow-gold/10 px-3 py-1 font-satoshi text-[11px] font-semibold uppercase tracking-[0.12em] text-glow-gold"
+            >
+              {{ publico }}
+            </li>
+          </ul>
+
           <div class="hero-enter hero-enter-d4 mt-9 flex w-full flex-col gap-3 sm:flex-row sm:items-center">
             <a :href="`${APP_URL}/auth/register`" class="w-full sm:w-auto">
               <LandingCtaButton :label="HERO_COPY.ctaPrimario" class="w-full justify-center sm:w-auto" />
@@ -96,17 +109,11 @@ onMounted(() => bind(heroSection.value))
           <dl
             class="hero-enter hero-enter-d5 mt-10 grid grid-cols-3 gap-2 border-t border-glow-border-soft pt-8 sm:max-w-md sm:gap-4"
           >
-            <div>
-              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">Foco</dt>
-              <dd class="mt-1 font-montserrat text-sm font-semibold text-glow-text">Beleza</dd>
-            </div>
-            <div>
-              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">Operação</dt>
-              <dd class="mt-1 font-montserrat text-sm font-semibold text-glow-text">Completa</dd>
-            </div>
-            <div>
-              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">Setup</dt>
-              <dd class="mt-1 font-montserrat text-sm font-semibold text-glow-text">Minutos</dd>
+            <div v-for="porte in HERO_COPY.portes" :key="porte.dt">
+              <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">
+                {{ porte.dt }}
+              </dt>
+              <dd class="mt-1 font-montserrat text-sm font-semibold text-glow-text">{{ porte.dd }}</dd>
             </div>
           </dl>
         </div>

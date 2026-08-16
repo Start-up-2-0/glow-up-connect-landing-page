@@ -1,5 +1,6 @@
 export const LANDING_SECTIONS = {
   inicio: 'inicio',
+  publico: 'publico',
   plataforma: 'plataforma',
   comoFunciona: 'como-funciona',
   funcionalidades: 'funcionalidades',
@@ -96,22 +97,102 @@ export const NAV_LINKS: readonly NavLink[] = [
 ] as const
 
 export const HERO_COPY = {
-  eyebrow: 'Feito para o seu negócio',
+  eyebrow: 'Para barbeiros, cabeleireiros e salões',
   tituloLinha1: 'Organize a operação',
   tituloDestaque: 'do dia a dia',
   tituloLinha2: 'em um só lugar',
   subtitulo:
-    'Agenda, clientes, financeiro e equipe — do agendamento ao caixa, sem planilha e sem improviso.',
+    'Do profissional autônomo ao grande estabelecimento — agenda, clientes e financeiro para negócios pequenos, médios e grandes.',
+  audiencia: ['Barbeiros', 'Cabeleireiros(as)', 'Pequenos', 'Médios', 'Grandes'] as const,
+  portes: [
+    { dt: 'Pequeno', dd: 'Autônomo' },
+    { dt: 'Médio', dd: 'Equipe' },
+    { dt: 'Grande', dd: 'Operação' },
+  ] as const,
   ctaPrimario: 'Começar agora',
   ctaSecundario: 'Ver na prática',
 } as const
+
+export type AudiencePorteId = 'pequeno' | 'medio' | 'grande'
+
+export interface AudienceProfile {
+  id: AudiencePorteId
+  step: string
+  porte: string
+  titulo: string
+  descricao: string
+  pontos: readonly string[]
+  tipoAssinatura: 'Estabelecimento' | 'ProfissionalAutonomo'
+  cta: string
+  icon: FeatureIconId
+}
+
+export const AUDIENCE_INTRO = {
+  eyebrow: 'Para quem é',
+  titulo: 'Do pequeno ao grande',
+  destaque: 'o sistema cresce com você',
+  subtitulo:
+    'Atendemos barbeiros e cabeleireiros(as) autônomos — e barbearias e salões de todos os portes.',
+  oficios: ['Barbeiros', 'Cabeleireiros(as)', 'Barbearias', 'Salões'] as const,
+} as const
+
+export const AUDIENCE_PROFILES: readonly AudienceProfile[] = [
+  {
+    id: 'pequeno',
+    step: '01',
+    porte: 'Pequeno negócio',
+    titulo: 'Autônomos e operações enxutas',
+    descricao:
+      'Barbeiros e cabeleireiros(as) que atendem sozinhos. Agenda, clientes e caixa no celular — sem a complexidade de uma equipe.',
+    pontos: [
+      'Agenda e clientes no celular',
+      'Agendamento online 24h',
+      'Financeiro sem planilha',
+    ],
+    tipoAssinatura: 'ProfissionalAutonomo',
+    cta: 'Ver planos para autônomos',
+    icon: 'servicos',
+  },
+  {
+    id: 'medio',
+    step: '02',
+    porte: 'Médio negócio',
+    titulo: 'Barbearias e salões em crescimento',
+    descricao:
+      'Equipe pequena ou média, comissões e uma rotina que já não cabe no WhatsApp.',
+    pontos: [
+      'Agenda por profissional',
+      'Comissões transparentes',
+      'Papéis e permissões',
+    ],
+    tipoAssinatura: 'Estabelecimento',
+    cta: 'Ver planos para o salão',
+    icon: 'equipe',
+  },
+  {
+    id: 'grande',
+    step: '03',
+    porte: 'Grande negócio',
+    titulo: 'Operações com muitos profissionais',
+    descricao:
+      'Alta ocupação, vários atendentes e gestão centralizada — do agendamento ao caixa, em um só painel.',
+    pontos: [
+      'Visão unificada da operação',
+      'Indicadores e ocupação',
+      'Controle de acessos e caixa',
+    ],
+    tipoAssinatura: 'Estabelecimento',
+    cta: 'Ver planos para a operação',
+    icon: 'dashboard',
+  },
+]
 
 export const SHOWCASE_INTRO = {
   eyebrow: 'Na prática',
   titulo: 'Veja a operação',
   destaque: 'funcionando',
   subtitulo:
-    'Do agendamento ao caixa: telas pensadas para o ritmo real de barbearias e salões.',
+    'Do agendamento ao caixa: telas pensadas para autônomos, barbearias e salões — do pequeno ao grande.'
 } as const
 
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
@@ -185,13 +266,13 @@ export const HOW_IT_WORKS: HowItWorksStep[] = [
     step: '01',
     titulo: 'Crie sua conta',
     descricao:
-      'Cadastre o estabelecimento em minutos. Sem instalação complexa — tudo na nuvem, pronto para usar.',
+      'Cadastre-se em minutos como profissional autônomo ou com o estabelecimento. Sem instalação — tudo na nuvem.',
   },
   {
     step: '02',
     titulo: 'Configure o negócio',
     descricao:
-      'Adicione serviços, profissionais, horários e preços. Em poucos passos sua operação já está no ar.',
+      'Adicione serviços, horários e preços. Se tiver equipe, inclua os profissionais. Em poucos passos sua operação já está no ar.',
   },
   {
     step: '03',
@@ -203,7 +284,7 @@ export const HOW_IT_WORKS: HowItWorksStep[] = [
     step: '04',
     titulo: 'Gerencie o dia a dia',
     descricao:
-      'Acompanhe caixa, comissões, equipe e indicadores — foque no atendimento enquanto o sistema cuida da gestão.',
+      'Acompanhe caixa, agenda e indicadores — foque no atendimento enquanto o sistema cuida da gestão.',
   },
 ]
 
@@ -211,19 +292,19 @@ export const FEATURES: FeatureItem[] = [
   {
     icon: 'agenda',
     titulo: 'Agenda unificada',
-    descricao: 'Visualize todos os horários da equipe em um calendário claro e responsivo.',
+    descricao: 'Visualize todos os horários em um calendário claro e responsivo.',
     beneficio: 'Menos conflitos de horário e cadeiras sempre bem aproveitadas.',
   },
   {
     icon: 'online',
-    titulo: 'Booking online',
+    titulo: 'Agendamento online',
     descricao: 'Clientes agendam pelo celular, escolhendo serviço, profissional e horário.',
     beneficio: 'Agenda preenchida mesmo fora do horário comercial.',
   },
   {
     icon: 'clientes',
-    titulo: 'CRM de clientes',
-    descricao: 'Cadastro completo com histórico de serviços e preferências.',
+    titulo: 'Clientes',
+    descricao: 'Histórico de serviços e preferências de cada cliente — tudo em um só lugar.',
     beneficio: 'Retorno mais frequente e atendimento personalizado.',
   },
   {
@@ -304,42 +385,52 @@ export const BUSINESS_BENEFITS: BenefitItem[] = [
 export const SOCIAL_STATS = [
   { valor: '4k+', rotulo: 'Usuários na plataforma', hint: 'Em crescimento contínuo' },
   { valor: '12k+', rotulo: 'Agendamentos realizados', hint: 'Operação validada no dia a dia' },
-  { valor: '2k+', rotulo: 'Profissionais conectados', hint: 'Barbearias e salões' },
+  { valor: '2k+', rotulo: 'Profissionais conectados', hint: 'Pequenos, médios e grandes negócios' },
   { valor: '96%', rotulo: 'Aprovação dos clientes', hint: 'Experiência que gera confiança' },
 ] as const
 
 export const TESTIMONIALS: TestimonialItem[] = [
   {
-    nome: 'Marina Souza',
-    cargo: 'Proprietária',
-    estabelecimento: 'Studio Aura Beauty',
+    nome: 'Lucas Ferreira',
+    cargo: 'Pequeno negócio · Barbeiro autônomo',
+    estabelecimento: 'Studio Lucas Cut',
     quote:
-      'Antes a agenda era um caos de mensagens. Com o Glow Up Connect, a equipe sabe exatamente o que fazer — e o caixa fechou com muito mais clareza.',
-    rating: 5,
-  },
-  {
-    nome: 'Rafael Mendes',
-    cargo: 'Sócio',
-    estabelecimento: 'Barber House 97',
-    quote:
-      'As comissões deixaram de ser briga no fim do mês. Os profissionais confiam nos números e eu confio na operação.',
+      'Atendo sozinho e não precisava de um sistema de salão inteiro. A agenda e o financeiro cabem na minha rotina — e o cliente marca sozinho.',
     rating: 5,
   },
   {
     nome: 'Camila Duarte',
-    cargo: 'Gerente',
+    cargo: 'Médio negócio · Proprietária',
     estabelecimento: 'Salão Bela Arte',
     quote:
-      'O agendamento online preencheu horários que antes ficavam vazios. Parece que o salão trabalha mesmo quando estamos fechados.',
+      'Com a equipe crescendo, o WhatsApp não dava conta. Agora cada profissional tem horário, comissão e o caixa fecha sem discussão.',
+    rating: 5,
+  },
+  {
+    nome: 'Rafael Mendes',
+    cargo: 'Grande negócio · Sócio',
+    estabelecimento: 'Barber House 97',
+    quote:
+      'Várias cadeiras, muita gente na operação. O painel unifica agenda, ocupação e resultado — eu vejo o negócio inteiro, não só o dia.',
     rating: 5,
   },
 ]
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
-    pergunta: 'O Glow Up Connect é só para barbearias e salões?',
+    pergunta: 'Vocês atendem negócios pequenos, médios e grandes?',
     resposta:
-      'Sim. A plataforma foi feita para barbearias e salões — com equipe ou como profissional autônomo — com agenda, financeiro e presença digital no mesmo lugar.',
+      'Sim. Do barbeiro ou cabeleireiro autônomo ao grande salão com muitos profissionais: a plataforma se adapta ao porte — agenda, financeiro e presença digital no mesmo lugar.',
+  },
+  {
+    pergunta: 'Sou barbeiro ou cabeleireiro autônomo. Consigo usar?',
+    resposta:
+      'Sim. Há planos específicos para profissionais autônomos — barbeiros e cabeleireiros(as) que atendem sozinhos — com agenda, clientes, financeiro e agendamento online, sem precisar montar uma equipe.',
+  },
+  {
+    pergunta: 'O Glow Up Connect também serve barbearias e salões com equipe?',
+    resposta:
+      'Sim. Estabelecimentos médios e grandes usam agenda por profissional, comissões, permissões e indicadores da operação completa.',
   },
   {
     pergunta: 'Preciso instalar algum programa no computador?',
@@ -359,7 +450,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     pergunta: 'Posso começar com um plano menor e mudar depois?',
     resposta:
-      'Sim. Escolha o plano adequado ao momento do negócio e evolua conforme a operação cresce. Sem burocracia desnecessária.',
+      'Sim. Comece no porte atual — autônomo, médio ou grande — e evolua o plano conforme a operação cresce. Sem burocracia desnecessária.',
   },
   {
     pergunta: 'Há suporte se eu tiver dúvidas na configuração?',
@@ -372,13 +463,13 @@ export const FINAL_CTA = {
   titulo: 'Pronto para colocar',
   destaque: 'a operação sob controle?',
   subtitulo:
-    'Cadastre-se, configure em poucos passos e comece a atender com agenda, caixa e equipe no mesmo lugar.',
+    'Do autônomo ao grande salão: cadastre-se, configure em poucos passos e comece a atender com agenda e caixa no mesmo lugar.',
   cta: 'Criar minha conta',
   secondary: 'Ver planos',
 } as const
 
 export const FOOTER_TAGLINE =
-  'Gestão para barbearias e salões — do agendamento ao caixa, com a operação sob controle.'
+  'Gestão para negócios de todos os portes — barbeiros, cabeleireiros e salões, do agendamento ao caixa.'
 
 export const FOOTER_CONTACT = {
   email: 'contato@glowup.com.br',

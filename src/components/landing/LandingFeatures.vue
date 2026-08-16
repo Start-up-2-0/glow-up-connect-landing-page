@@ -21,10 +21,10 @@ const chapter = STORY_CHAPTERS.funcionalidades
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader
           eyebrow="Funcionalidades"
-          title="Tudo que sua"
-          highlight="barbearia ou salão"
+          title="Tudo que o seu"
+          highlight="atendimento"
           title-after="precisa"
-          subtitle="Agenda, clientes, equipe e financeiro no mesmo lugar — recursos que resolvem a rotina, não só preenchem uma lista."
+          subtitle="Para barbeiros e cabeleireiros autônomos — e para barbearias e salões pequenos, médios e grandes. Recursos que resolvem a rotina, não só preenchem uma lista."
         />
 
         <div

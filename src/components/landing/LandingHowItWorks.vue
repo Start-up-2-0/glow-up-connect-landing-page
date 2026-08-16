@@ -23,7 +23,7 @@ const chapter = STORY_CHAPTERS.funcionamento
           title="Do primeiro acesso"
           highlight="ao atendimento"
           title-after="em quatro passos"
-          subtitle="Sem curva íngreme: você cadastra, configura e já começa a atender — mesmo sem experiência com software de gestão."
+          subtitle="Sem curva íngreme: você cadastra, configura e já começa a atender — do autônomo ao grande estabelecimento."
         />
 
         <div class="relative mt-12 sm:mt-16">

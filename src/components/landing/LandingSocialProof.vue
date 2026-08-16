@@ -23,7 +23,7 @@ const chapter = STORY_CHAPTERS.resultados
           eyebrow="Prova social"
           title="Quem já usa"
           highlight="sente a diferença"
-          subtitle="Números e depoimentos de quem organiza agenda, caixa e equipe com o Glow Up Connect."
+          subtitle="Números e depoimentos de negócios pequenos, médios e grandes — barbeiros, cabeleireiros e estabelecimentos."
         />
 
         <div

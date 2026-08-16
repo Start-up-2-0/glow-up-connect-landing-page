@@ -13,11 +13,13 @@ import { LANDING_SECTIONS } from '@/constants/landing'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { usePlanosStore } from '@/stores/planos.store'
 import { useApiError } from '@/composables/useApiError'
+import { useLandingPlanosPref } from '@/composables/useLandingPlanosPref'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import type { Plano, TipoAssinatura } from '@/types/plano.types'
 
 const { isVisible } = useRevealOnScroll()
 const { isVisible: promoVisible } = useRevealOnScroll('promoRoot')
+const { tipoPreferido } = useLandingPlanosPref()
 const chapter = STORY_CHAPTERS.oferta
 
 const planosStore = usePlanosStore()
@@ -49,13 +51,13 @@ const copyTitulo = computed(() =>
 )
 
 const copyHighlight = computed(() =>
-  tipoAssinatura.value === 'ProfissionalAutonomo' ? 'sem equipe' : 'da sua operação',
+  tipoAssinatura.value === 'ProfissionalAutonomo' ? 'sem equipe' : 'do pequeno ao grande',
 )
 
 const copySubtitle = computed(() =>
   tipoAssinatura.value === 'ProfissionalAutonomo'
-    ? 'Essencial e Premium pensados para profissionais autônomos — sem surpresas e sem taxas escondidas.'
-    : 'Do começo ao crescimento — sem surpresas e sem taxas escondidas.',
+    ? 'Essencial e Premium pensados para barbeiros e cabeleireiros autônomos — sem surpresas e sem taxas escondidas.'
+    : 'Para barbearias e salões pequenos, médios e grandes — sem surpresas e sem taxas escondidas.',
 )
 
 function isPopular(plano: Plano): boolean {
@@ -83,6 +85,14 @@ async function carregarPlanos(tipo: TipoAssinatura) {
 watch(tipoAssinatura, (tipo) => {
   if (tipo) void carregarPlanos(tipo)
 })
+
+watch(
+  tipoPreferido,
+  (tipo) => {
+    if (tipo) tipoAssinatura.value = tipo
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

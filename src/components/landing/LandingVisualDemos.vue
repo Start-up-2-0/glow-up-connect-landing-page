@@ -48,7 +48,7 @@ const chapter = STORY_CHAPTERS.demonstracao
                 {{ demo.beneficio }}
               </h3>
               <p class="mt-4 max-w-md font-poppins text-base font-light leading-relaxed text-glow-text-muted">
-                Interface pensada para barbearias e salões: clara no celular da recepção e
+                Interface pensada para barbeiros, cabeleireiros e salões: clara no celular e
                 completa no computador da gestão.
               </p>
             </div>

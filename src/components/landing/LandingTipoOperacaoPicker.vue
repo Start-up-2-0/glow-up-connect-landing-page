@@ -18,12 +18,13 @@ const opcoes: Array<{
     value: 'Estabelecimento',
     titulo: 'Tenho um estabelecimento com equipe',
     descricao:
-      'Barbearia ou salão — com vários profissionais e gestão de equipe.',
+      'Barbearia ou salão — do pequeno time ao grande estabelecimento, com gestão de equipe.',
   },
   {
     value: 'ProfissionalAutonomo',
     titulo: 'Trabalho como profissional autônomo',
-    descricao: 'Atendo sozinho. Agenda, clientes e serviços pensados para a sua operação individual.',
+    descricao:
+      'Barbeiro ou cabeleireiro(a) — atendo sozinho. Agenda, clientes e serviços pensados para a sua operação individual.',
   },
 ]
 </script>
@@ -34,7 +35,7 @@ const opcoes: Array<{
       Como você trabalha?
     </legend>
     <p class="text-center font-urbanist text-sm text-glow-text-subtle">
-      Escolha o modelo certo para a sua realidade. Os planos e a experiência se adaptam a essa escolha.
+      Escolha o modelo certo para o porte do seu negócio. Os planos e a experiência se adaptam a essa escolha.
     </p>
 
     <div class="grid gap-3 sm:grid-cols-2">

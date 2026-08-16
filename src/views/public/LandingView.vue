@@ -3,6 +3,7 @@ import { onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import LandingNavbar from '@/components/landing/LandingNavbar.vue'
 import LandingHero from '@/components/landing/LandingHero.vue'
+import LandingAudience from '@/components/landing/LandingAudience.vue'
 import LandingProductShowcase from '@/components/landing/LandingProductShowcase.vue'
 import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue'
 import LandingFeatures from '@/components/landing/LandingFeatures.vue'
@@ -48,7 +49,7 @@ useJsonLd([
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     description:
-      'Plataforma de gestão para barbearias e salões: agenda, clientes, financeiro, comissões e equipe.',
+      'Plataforma de gestão para barbeiros, cabeleireiros e salões — negócios pequenos, médios e grandes: agenda, clientes, financeiro e agendamento online.',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'BRL',
@@ -74,6 +75,7 @@ watch(() => route.hash, handleHashScroll)
     <LandingNavbar />
     <main id="conteudo-principal" class="flex-1">
       <LandingHero />
+      <LandingAudience />
       <LandingProductShowcase />
       <LandingHowItWorks />
       <LandingFeatures />
