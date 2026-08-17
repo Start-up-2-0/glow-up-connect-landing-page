@@ -3,6 +3,11 @@ export const GLOW_INPUT_CLASS =
 
 export const GLOW_LABEL_CLASS = 'font-satoshi text-sm font-normal text-glow-text-soft'
 
+export const GLOW_PLACEHOLDER_TEXT_CLASS = 'font-inter text-sm font-normal text-glow-placeholder'
+
+export const GLOW_AVATAR_DROPZONE_CLASS =
+  'flex h-[49px] w-full cursor-pointer items-center rounded-lg border border-dashed border-glow-border-soft transition hover:border-glow-gold'
+
 export const GLOW_BUTTON_PRIMARY_CLASS =
   'flex h-[53px] w-full items-center justify-center rounded-full bg-glow-gold-cta px-[10px] text-xl font-medium text-glow-canvas transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70'
 

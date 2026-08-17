@@ -26,5 +26,10 @@ export interface AceitarConviteCadastroPayload {
     email: string
     telefone: string
     senha: string
+    avatarBase64?: string
+    avatarContentType?: string
   }
+  nomePublico?: string
+  foto?: string
+  fotoContentType?: string
 }
