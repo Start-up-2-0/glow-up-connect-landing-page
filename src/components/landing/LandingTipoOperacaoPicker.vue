@@ -24,7 +24,7 @@ const opcoes: Array<{
     value: 'ProfissionalAutonomo',
     titulo: 'Trabalho como profissional autônomo',
     descricao:
-      'Barbeiro ou cabeleireiro(a) — atendo sozinho. Agenda, clientes e serviços pensados para a sua operação individual.',
+      'Profissional autônomo — atendo sozinho. Agenda, clientes e serviços pensados para a sua operação individual.',
   },
 ]
 </script>
