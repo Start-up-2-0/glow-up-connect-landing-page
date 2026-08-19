@@ -28,6 +28,8 @@ export interface EstabelecimentoProximo {
   /** Coordenadas do estabelecimento para o mapa (quando geocodificado). */
   latitude?: number | null
   longitude?: number | null
+  /** Formato comercial: loja vs profissional autônomo. */
+  tipoAssinatura?: 'Estabelecimento' | 'ProfissionalAutonomo' | null
 }
 
 export interface EstabelecimentosProximosResponse {
@@ -52,6 +54,7 @@ export interface EstabelecimentoPublico {
   horarioFechamento?: string
   categoriaId?: number
   categoria?: string
+  tipoAssinatura?: 'Estabelecimento' | 'ProfissionalAutonomo' | null
 }
 
 export interface ListarProximosParams {

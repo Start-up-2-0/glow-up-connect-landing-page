@@ -15,9 +15,9 @@ export function resolveTipoAssinatura(value?: string | null): TipoAssinatura {
   return value === 'ProfissionalAutonomo' ? 'ProfissionalAutonomo' : 'Estabelecimento'
 }
 
-export function visivelNoMarketplace(item: {
-  tipoAssinatura?: TipoAssinatura | string | null
-}): boolean {
+export function visivelNoMarketplace<T extends { tipoAssinatura?: TipoAssinatura | string | null }>(
+  item: T,
+): boolean {
   if (FEATURE_FLAGS.lojasHabilitadas) return true
   return item.tipoAssinatura === 'ProfissionalAutonomo'
 }
