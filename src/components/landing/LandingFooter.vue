@@ -4,13 +4,18 @@ import {
   FOOTER_CONTACT,
   FOOTER_TAGLINE,
   LANDING_SECTIONS,
-  NAV_LINKS,
 } from '@/constants/landing'
+import { FEATURE_FLAGS } from '@/config/features'
+import { navLinksVisiveis } from '@/utils/tipoAssinatura'
 import { ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 
 const { goToSection, goToNavLink } = useLandingScroll()
+const navLinks = navLinksVisiveis()
+const tagline = FEATURE_FLAGS.lojasHabilitadas
+  ? FOOTER_TAGLINE
+  : 'Gestão para barbeiros e cabeleireiros autônomos — do agendamento ao caixa.'
 
 const socialLinks = [
   { label: 'Instagram', href: 'https://instagram.com', external: true },
@@ -37,7 +42,7 @@ const socialLinks = [
             <span class="font-black">Connect</span>
           </RouterLink>
           <p class="mt-5 max-w-sm font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
-            {{ FOOTER_TAGLINE }}
+            {{ tagline }}
           </p>
           <p class="mt-6 font-satoshi text-sm font-black text-glow-gold">
             {{ FOOTER_CONTACT.hashtag }}
@@ -48,7 +53,7 @@ const socialLinks = [
           <p class="font-montserrat text-xs font-semibold text-glow-text sm:text-sm">Navegação</p>
           <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé — navegação">
             <button
-              v-for="link in NAV_LINKS"
+              v-for="link in navLinks"
               :key="link.id"
               type="button"
               class="text-left font-satoshi text-xs text-glow-text-muted transition hover:text-glow-text sm:text-sm"

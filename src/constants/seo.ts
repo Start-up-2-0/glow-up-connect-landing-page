@@ -1,3 +1,4 @@
+import { FEATURE_FLAGS } from '@/config/features'
 import { APP_NAME } from '@/constants/storageKeys'
 import { ROUTE_PATHS } from '@/constants/routes'
 import { siteUrl } from '@/constants/urls'
@@ -12,16 +13,22 @@ export interface SeoMeta {
 
 export const SEO_BY_PATH: Record<string, SeoMeta> = {
   [ROUTE_PATHS.HOME]: {
-    title: `${APP_NAME} — Gestão para barbeiros, cabeleireiros e salões`,
-    description:
-      'Plataforma de gestão para barbeiros, cabeleireiros e salões — negócios pequenos, médios e grandes: agenda, clientes, financeiro e agendamento online.',
+    title: FEATURE_FLAGS.lojasHabilitadas
+      ? `${APP_NAME} — Gestão para barbeiros, cabeleireiros e salões`
+      : `${APP_NAME} — Gestão para barbeiros e cabeleireiros autônomos`,
+    description: FEATURE_FLAGS.lojasHabilitadas
+      ? 'Plataforma de gestão para barbeiros, cabeleireiros e salões — negócios pequenos, médios e grandes: agenda, clientes, financeiro e agendamento online.'
+      : 'Plataforma de gestão para barbeiros e cabeleireiros autônomos: agenda, clientes, financeiro e agendamento online.',
     path: ROUTE_PATHS.HOME,
     ogType: 'website',
   },
   [ROUTE_PATHS.EXPLORAR_LOJAS]: {
-    title: `Explorar Lojas | ${APP_NAME}`,
-    description:
-      'Encontre barbearias e salões próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.',
+    title: FEATURE_FLAGS.lojasHabilitadas
+      ? `Explorar Lojas | ${APP_NAME}`
+      : `Explorar profissionais | ${APP_NAME}`,
+    description: FEATURE_FLAGS.lojasHabilitadas
+      ? 'Encontre barbearias e salões próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.'
+      : 'Encontre profissionais autônomos próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.',
     path: ROUTE_PATHS.EXPLORAR_LOJAS,
     ogType: 'website',
   },

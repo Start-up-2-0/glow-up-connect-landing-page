@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { FINAL_CTA, LANDING_SECTIONS } from '@/constants/landing'
+import { FEATURE_FLAGS } from '@/config/features'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
@@ -10,6 +11,9 @@ import LandingStorySection from '@/components/landing/motion/LandingStorySection
 const { goToSection } = useLandingScroll()
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.cta
+const subtitulo = FEATURE_FLAGS.lojasHabilitadas
+  ? FINAL_CTA.subtitulo
+  : 'Cadastre-se, configure em poucos passos e comece a atender com agenda e caixa no mesmo lugar.'
 </script>
 
 <template>
@@ -44,7 +48,7 @@ const chapter = STORY_CHAPTERS.cta
           <span class="font-black text-glow-gold"> {{ FINAL_CTA.destaque }}</span>
         </h2>
         <p class="mx-auto mt-5 max-w-xl font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg">
-          {{ FINAL_CTA.subtitulo }}
+          {{ subtitulo }}
         </p>
         <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a :href="`${APP_URL}/auth/register`">

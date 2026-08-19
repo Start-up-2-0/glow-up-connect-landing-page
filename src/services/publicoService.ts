@@ -21,6 +21,7 @@ import type {
   ListarProximosParams,
   ObterEstabelecimentoParams,
 } from '@/types/estabelecimento.types'
+import type { TipoAssinatura } from '@/types/plano.types'
 
 function unwrap<T>(response: { data: ApiSuccessResponse<T> }): T {
   return response.data.data
@@ -53,10 +54,11 @@ export const publicoService = {
       .then(unwrap)
   },
 
-  listarCategorias() {
+  listarCategorias(tipoAssinatura?: TipoAssinatura) {
     return api
       .get<ApiSuccessResponse<EstabelecimentoCategoria[]>>(
         '/publico/estabelecimentos/categorias',
+        { params: tipoAssinatura ? { tipoAssinatura } : undefined },
       )
       .then(unwrap)
   },

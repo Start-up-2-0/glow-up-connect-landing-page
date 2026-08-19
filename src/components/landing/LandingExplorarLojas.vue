@@ -22,6 +22,11 @@ import type {
   EstabelecimentoCategoria,
   EstabelecimentoProximo,
 } from '@/types/estabelecimento.types'
+import { FEATURE_FLAGS } from '@/config/features'
+import {
+  tipoAssinaturaParaCategorias,
+  visivelNoMarketplace,
+} from '@/utils/tipoAssinatura'
 import { formatDistanciaKm } from '@/utils/formatters'
 
 const props = withDefaults(
@@ -81,9 +86,10 @@ const localLabel = computed(() => {
 })
 
 const itensFiltrados = computed(() => {
+  const visiveis = itens.value.filter(visivelNoMarketplace)
   const q = busca.value.trim().toLowerCase()
   const notaMin = filtros.value.notaMinima
-  return itens.value.filter((item) => {
+  return visiveis.filter((item) => {
     if (notaMin > 0 && (item.notaMedia ?? 0) < notaMin) return false
     if (!q) return true
     const hay = [
@@ -126,7 +132,11 @@ const categoriaModel = computed({
 const statusLabel = computed(() => {
   if (loading.value || geoLoading.value) return 'Buscando…'
   const n = itensFiltrados.value.length
-  return `${n} ${n === 1 ? 'loja' : 'lojas'}`
+  return `${n} ${
+    FEATURE_FLAGS.lojasHabilitadas
+      ? n === 1 ? 'loja' : 'lojas'
+      : n === 1 ? 'profissional' : 'profissionais'
+  }`
 })
 
 async function carregar(opts?: { latitude: number; longitude: number }) {
@@ -185,7 +195,7 @@ async function carregar(opts?: { latitude: number; longitude: number }) {
 
 async function carregarCategorias() {
   try {
-    categorias.value = await publicoService.listarCategorias()
+    categorias.value = await publicoService.listarCategorias(tipoAssinaturaParaCategorias())
   } catch {
     categorias.value = []
   }
@@ -243,7 +253,7 @@ onMounted(async () => {
     v-if="isPage"
     :id="LANDING_SECTIONS.explorarLojas"
     class="explorar-immersive"
-    aria-label="Explorar lojas no mapa"
+    aria-label="Explorar profissionais no mapa"
   >
     <div class="explorar-immersive__stage">
       <ExplorarLojasMapa
@@ -277,7 +287,7 @@ onMounted(async () => {
               v-model="busca"
               type="search"
               class="explorar-pdx__search-input"
-              placeholder="Buscar loja, bairro ou cidade…"
+              :placeholder="FEATURE_FLAGS.lojasHabilitadas ? 'Buscar loja, bairro ou cidade…' : 'Buscar profissional, bairro ou cidade…'"
               autocomplete="off"
               aria-label="Buscar estabelecimentos"
               @focus="buscaAberta = true"
@@ -309,7 +319,7 @@ onMounted(async () => {
           <span class="explorar-pdx__status-label">Exibindo:</span>
           {{ localLabel }}
           <span class="explorar-pdx__status-sep">·</span>
-          <strong>Lojas: {{ loading || geoLoading ? '…' : itensFiltrados.length }}</strong>
+          <strong>{{ FEATURE_FLAGS.lojasHabilitadas ? 'Lojas' : 'Profissionais' }}: {{ loading || geoLoading ? '…' : itensFiltrados.length }}</strong>
         </p>
 
         <div class="explorar-pdx__actions">
@@ -379,7 +389,9 @@ onMounted(async () => {
         v-else-if="!loading && !error && itensFiltrados.length === 0"
         class="explorar-pdx__toast explorar-pdx__toast--panel"
       >
-        <p class="text-sm font-semibold text-white">Nenhuma loja nesta área</p>
+        <p class="text-sm font-semibold text-white">
+          {{ FEATURE_FLAGS.lojasHabilitadas ? 'Nenhuma loja nesta área' : 'Nenhum profissional nesta área' }}
+        </p>
         <p class="mt-1 text-xs text-white/50">Amplie o raio ou mova o mapa.</p>
         <button type="button" class="explorar-pdx__link-btn mt-2" @click="limparFiltros">
           Limpar filtros
@@ -463,9 +475,13 @@ onMounted(async () => {
           <LandingSectionHeader
             tone="dark"
             eyebrow="Rede ao vivo"
-            title="Explore lojas"
+            title="Explore profissionais"
             highlight="perto de você"
-            subtitle="Mapa interativo com barbearias e salões da plataforma."
+            :subtitle="
+              FEATURE_FLAGS.lojasHabilitadas
+                ? 'Mapa interativo com barbearias e salões da plataforma.'
+                : 'Mapa interativo com profissionais autônomos da plataforma.'
+            "
           />
         </div>
 

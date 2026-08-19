@@ -110,7 +110,7 @@ function markerHtml(
     return `<button type="button" class="${classes}" aria-label="${label}${escapeHtml(ariaExtra)}" title="${label}">
       <span class="explorar-landing-dot__core">${avatar}</span>
       <span class="explorar-landing-dot__meta">
-        <span class="explorar-landing-dot__kind">Loja</span>
+        <span class="explorar-landing-dot__kind">${item.tipoAssinatura === 'ProfissionalAutonomo' ? 'Profissional' : 'Loja'}</span>
         <span class="explorar-landing-dot__name">${label}</span>
         ${metaHtml}
       </span>

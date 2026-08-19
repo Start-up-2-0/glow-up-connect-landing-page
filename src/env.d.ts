@@ -37,6 +37,8 @@ interface ImportMetaEnv {
   readonly VITE_WHATSAPP_NUMBER?: string
   readonly VITE_TOKEN_HEADER?: string
   readonly VITE_CAPTCHA_SITE_KEY?: string
+  /** true = reativa planos, onboarding e descoberta de estabelecimentos/lojas */
+  readonly VITE_FEATURE_LOJAS?: string
 }
 
 interface ImportMeta {

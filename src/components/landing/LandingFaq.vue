@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { FAQ_ITEMS, LANDING_SECTIONS } from '@/constants/landing'
+import { semItensDeLoja } from '@/utils/tipoAssinatura'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
 
 const openIndex = ref<number | null>(0)
 const { isVisible } = useRevealOnScroll()
+const faqItems = computed(() => semItensDeLoja(FAQ_ITEMS))
 
 function toggle(index: number) {
   openIndex.value = openIndex.value === index ? null : index
@@ -28,7 +30,7 @@ function toggle(index: number) {
         :class="isVisible && 'is-visible'"
       >
         <div
-          v-for="(item, index) in FAQ_ITEMS"
+          v-for="(item, index) in faqItems"
           :key="item.pergunta"
           class="overflow-hidden rounded-2xl border border-glow-border-soft bg-glow-surface landing-glass-card transition duration-300 hover:border-glow-gold/25"
         >

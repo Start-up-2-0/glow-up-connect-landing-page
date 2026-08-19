@@ -15,6 +15,8 @@ import { usePlanosStore } from '@/stores/planos.store'
 import { useApiError } from '@/composables/useApiError'
 import { useLandingPlanosPref } from '@/composables/useLandingPlanosPref'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
+import { FEATURE_FLAGS } from '@/config/features'
+import { TIPO_ASSINATURA_PADRAO } from '@/utils/tipoAssinatura'
 import type { Plano, TipoAssinatura } from '@/types/plano.types'
 
 const { isVisible } = useRevealOnScroll()
@@ -27,7 +29,9 @@ const { planos, promocao, loading } = storeToRefs(planosStore)
 const { resolveError } = useApiError()
 const erro = ref<string | null>(null)
 const planoDetalhesAberto = ref<Plano | null>(null)
-const tipoAssinatura = ref<TipoAssinatura | null>(null)
+const tipoAssinatura = ref<TipoAssinatura | null>(
+  FEATURE_FLAGS.lojasHabilitadas ? null : TIPO_ASSINATURA_PADRAO,
+)
 
 const percentualDescontoPromocao = computed(() =>
   promocao.value?.disponivel ? promocao.value.percentualDescontoMensalidade : null,
@@ -84,12 +88,13 @@ async function carregarPlanos(tipo: TipoAssinatura) {
 
 watch(tipoAssinatura, (tipo) => {
   if (tipo) void carregarPlanos(tipo)
-})
+}, { immediate: true })
 
 watch(
   tipoPreferido,
   (tipo) => {
-    if (tipo) tipoAssinatura.value = tipo
+    if (!tipo) return
+    tipoAssinatura.value = FEATURE_FLAGS.lojasHabilitadas ? tipo : TIPO_ASSINATURA_PADRAO
   },
   { immediate: true },
 )
@@ -116,7 +121,7 @@ watch(
           :subtitle="copySubtitle"
         />
 
-        <div class="mt-10">
+        <div v-if="FEATURE_FLAGS.lojasHabilitadas" class="mt-10">
           <LandingTipoOperacaoPicker v-model="tipoAssinatura" />
         </div>
 

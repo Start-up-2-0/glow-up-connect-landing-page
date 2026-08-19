@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, useTemplateRef } from 'vue'
 import { HERO_COPY, LANDING_SECTIONS } from '@/constants/landing'
+import { FEATURE_FLAGS } from '@/config/features'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import { useHeroParallax } from '@/composables/useHeroParallax'
@@ -20,6 +21,14 @@ const {
 } = useHeroParallax()
 
 onMounted(() => bind(heroSection.value))
+
+const subtitulo = FEATURE_FLAGS.lojasHabilitadas
+  ? HERO_COPY.subtitulo
+  : 'Agenda, clientes e financeiro para barbeiros e cabeleireiros autônomos — tudo em um só lugar.'
+const audiencia = FEATURE_FLAGS.lojasHabilitadas
+  ? HERO_COPY.audiencia
+  : (['Barbeiros', 'Cabeleireiros(as)'] as const)
+const portes = FEATURE_FLAGS.lojasHabilitadas ? HERO_COPY.portes : HERO_COPY.portes.slice(0, 1)
 </script>
 
 <template>
@@ -77,7 +86,7 @@ onMounted(() => bind(heroSection.value))
           <p
             class="hero-enter hero-enter-d3 mt-6 max-w-lg font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg"
           >
-            {{ HERO_COPY.subtitulo }}
+            {{ subtitulo }}
           </p>
 
           <ul
@@ -85,7 +94,7 @@ onMounted(() => bind(heroSection.value))
             aria-label="Público atendido"
           >
             <li
-              v-for="publico in HERO_COPY.audiencia"
+              v-for="publico in audiencia"
               :key="publico"
               class="rounded-full border border-glow-gold/30 bg-glow-gold/10 px-3 py-1 font-satoshi text-[11px] font-semibold uppercase tracking-[0.12em] text-glow-gold"
             >
@@ -109,7 +118,7 @@ onMounted(() => bind(heroSection.value))
           <dl
             class="hero-enter hero-enter-d5 mt-10 grid grid-cols-3 gap-2 border-t border-glow-border-soft pt-8 sm:max-w-md sm:gap-4"
           >
-            <div v-for="porte in HERO_COPY.portes" :key="porte.dt">
+            <div v-for="porte in portes" :key="porte.dt">
               <dt class="font-satoshi text-[10px] uppercase tracking-wider text-glow-text-muted">
                 {{ porte.dt }}
               </dt>

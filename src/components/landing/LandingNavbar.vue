@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { LANDING_SECTIONS, NAV_LINKS } from '@/constants/landing'
+import { LANDING_SECTIONS } from '@/constants/landing'
+import { navLinksVisiveis } from '@/utils/tipoAssinatura'
 import { ROUTE_NAMES, ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
@@ -14,11 +15,12 @@ const menuOpen = ref(false)
 const activeSection = ref<string>(LANDING_SECTIONS.inicio)
 const scrolled = ref(false)
 
+const navLinks = navLinksVisiveis()
 const isExplorarPage = computed(() => route.path === ROUTE_PATHS.EXPLORAR_LOJAS)
 const isLojaPublicaPage = computed(() => route.name === ROUTE_NAMES.LOJA_PUBLICA)
 const forceSolidNav = computed(() => isExplorarPage.value || isLojaPublicaPage.value)
 
-async function handleNavClick(link: (typeof NAV_LINKS)[number]) {
+async function handleNavClick(link: (typeof navLinks)[number]) {
   menuOpen.value = false
   activeSection.value = link.id
   await goToNavLink(link)
@@ -52,7 +54,7 @@ function updateActiveSection() {
   const offset = 120
   const sections = [
     LANDING_SECTIONS.inicio,
-    ...NAV_LINKS.filter((l) => !l.path).map((l) => l.id),
+    ...navLinks.filter((l) => !l.path).map((l) => l.id),
   ]
   for (let i = sections.length - 1; i >= 0; i--) {
     const el = document.getElementById(sections[i])
@@ -109,7 +111,7 @@ watch(
         aria-label="Navegação principal"
       >
         <button
-          v-for="link in NAV_LINKS"
+          v-for="link in navLinks"
           :key="link.id"
           type="button"
           class="rounded-full px-3 py-2 font-satoshi text-sm transition"
@@ -172,7 +174,7 @@ watch(
       >
         <nav class="flex flex-col gap-1" aria-label="Menu mobile">
           <button
-            v-for="link in NAV_LINKS"
+            v-for="link in navLinks"
             :key="link.id"
             type="button"
             class="rounded-xl px-3 py-2.5 text-left font-satoshi text-base text-glow-text"

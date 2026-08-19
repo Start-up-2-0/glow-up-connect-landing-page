@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { FEATURE_FLAGS } from '@/config/features'
 import { ROUTE_NAMES, ROUTE_PATHS } from '@/constants/routes'
 
 export const routes: RouteRecordRaw[] = [
@@ -12,7 +13,7 @@ export const routes: RouteRecordRaw[] = [
     path: ROUTE_PATHS.EXPLORAR_LOJAS,
     name: ROUTE_NAMES.EXPLORAR_LOJAS,
     component: () => import('@/views/public/ExplorarLojasView.vue'),
-    meta: { layout: 'landing', title: 'Explorar Lojas' },
+    meta: { layout: 'landing', title: FEATURE_FLAGS.lojasHabilitadas ? 'Explorar Lojas' : 'Explorar profissionais' },
   },
   {
     path: ROUTE_PATHS.LOJA_AGENDAR,

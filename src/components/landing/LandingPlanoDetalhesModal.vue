@@ -5,6 +5,7 @@ import LandingPlanoLimites from '@/components/landing/LandingPlanoLimites.vue'
 import { appOnboardingUrl } from '@/constants/urls'
 import { aplicarDescontoPercentual, formatBRL } from '@/utils/formatters'
 import { getPlanoFeatures } from '@/utils/planoDisplay'
+import { TIPO_ASSINATURA_PADRAO } from '@/utils/tipoAssinatura'
 import type { Plano, TipoAssinatura } from '@/types/plano.types'
 
 const props = withDefaults(
@@ -18,7 +19,7 @@ const props = withDefaults(
   {
     popular: false,
     percentualDesconto: null,
-    tipoAssinatura: 'Estabelecimento',
+    tipoAssinatura: TIPO_ASSINATURA_PADRAO,
   },
 )
 

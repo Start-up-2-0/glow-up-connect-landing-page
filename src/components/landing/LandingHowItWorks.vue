@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { HOW_IT_WORKS, LANDING_SECTIONS } from '@/constants/landing'
+import { FEATURE_FLAGS } from '@/config/features'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
@@ -7,6 +8,26 @@ import LandingStorySection from '@/components/landing/motion/LandingStorySection
 
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.funcionamento
+const subtitle = FEATURE_FLAGS.lojasHabilitadas
+  ? 'Sem curva íngreme: você cadastra, configura e já começa a atender — do autônomo ao grande estabelecimento.'
+  : 'Sem curva íngreme: você cadastra, configura e já começa a atender como profissional autônomo.'
+const passos = FEATURE_FLAGS.lojasHabilitadas
+  ? HOW_IT_WORKS
+  : HOW_IT_WORKS.map((step) =>
+      step.step === '01'
+        ? {
+            ...step,
+            descricao:
+              'Cadastre-se em minutos como profissional autônomo. Sem instalação — tudo na nuvem.',
+          }
+        : step.step === '02'
+          ? {
+              ...step,
+              descricao:
+                'Adicione serviços, horários e preços. Em poucos passos sua operação já está no ar.',
+            }
+          : step,
+    )
 </script>
 
 <template>
@@ -23,7 +44,7 @@ const chapter = STORY_CHAPTERS.funcionamento
           title="Do primeiro acesso"
           highlight="ao atendimento"
           title-after="em quatro passos"
-          subtitle="Sem curva íngreme: você cadastra, configura e já começa a atender — do autônomo ao grande estabelecimento."
+          :subtitle="subtitle"
         />
 
         <div class="relative mt-12 sm:mt-16">
@@ -38,7 +59,7 @@ const chapter = STORY_CHAPTERS.funcionamento
             :class="isVisible && 'is-visible'"
           >
             <li
-              v-for="step in HOW_IT_WORKS"
+              v-for="step in passos"
               :key="step.step"
               class="group relative rounded-3xl border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-6"
             >

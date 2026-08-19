@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { planoService } from '@/services/planoService'
 import type { Plano, PromocaoLancamento, TipoAssinatura } from '@/types/plano.types'
+import { TIPO_ASSINATURA_PADRAO } from '@/utils/tipoAssinatura'
 
 const CACHE_TTL_MS = 5 * 60 * 1000
 
@@ -21,7 +22,7 @@ export const usePlanosStore = defineStore('planos', () => {
 
   async function fetchPlanos(
     force = false,
-    tipoAssinatura: TipoAssinatura = 'Estabelecimento',
+    tipoAssinatura: TipoAssinatura = TIPO_ASSINATURA_PADRAO,
   ) {
     if (
       !force

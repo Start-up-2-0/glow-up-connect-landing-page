@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { BUSINESS_BENEFITS, LANDING_SECTIONS } from '@/constants/landing'
+import { semItensDeLoja } from '@/utils/tipoAssinatura'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import LandingFeatureIcon from '@/components/landing/LandingFeatureIcon.vue'
@@ -8,6 +10,7 @@ import LandingStorySection from '@/components/landing/motion/LandingStorySection
 
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.beneficios
+const benefitItems = computed(() => semItensDeLoja(BUSINESS_BENEFITS))
 </script>
 
 <template>
@@ -33,7 +36,7 @@ const chapter = STORY_CHAPTERS.beneficios
           :class="isVisible && 'is-visible'"
         >
           <article
-            v-for="benefit in BUSINESS_BENEFITS"
+            v-for="benefit in benefitItems"
             :key="benefit.titulo"
             class="group rounded-3xl border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-6"
           >

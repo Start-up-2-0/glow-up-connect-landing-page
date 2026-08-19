@@ -15,6 +15,7 @@ import LandingFaq from '@/components/landing/LandingFaq.vue'
 import LandingFinalCta from '@/components/landing/LandingFinalCta.vue'
 import LandingFooter from '@/components/landing/LandingFooter.vue'
 import LandingWhatsappFab from '@/components/landing/LandingWhatsappFab.vue'
+import { FEATURE_FLAGS } from '@/config/features'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import { useJsonLd, useSeo } from '@/composables/useSeo'
 import { APP_NAME } from '@/constants/storageKeys'
@@ -48,8 +49,9 @@ useJsonLd([
     name: APP_NAME,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
-    description:
-      'Plataforma de gestão para barbeiros, cabeleireiros e salões — negócios pequenos, médios e grandes: agenda, clientes, financeiro e agendamento online.',
+    description: FEATURE_FLAGS.lojasHabilitadas
+      ? 'Plataforma de gestão para barbeiros, cabeleireiros e salões — negócios pequenos, médios e grandes: agenda, clientes, financeiro e agendamento online.'
+      : 'Plataforma de gestão para barbeiros e cabeleireiros autônomos: agenda, clientes, financeiro e agendamento online.',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'BRL',

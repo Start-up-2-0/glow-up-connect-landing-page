@@ -44,6 +44,7 @@ export interface ShowcaseItem {
   titulo: string
   beneficio: string
   mockup: MockupVariant
+  requerLojas?: boolean
 }
 
 export interface HowItWorksStep {
@@ -57,12 +58,14 @@ export interface FeatureItem {
   descricao: string
   beneficio: string
   icon: FeatureIconId
+  requerLojas?: boolean
 }
 
 export interface BenefitItem {
   titulo: string
   descricao: string
   icon: FeatureIconId
+  requerLojas?: boolean
 }
 
 export interface TestimonialItem {
@@ -76,6 +79,7 @@ export interface TestimonialItem {
 export interface FaqItem {
   pergunta: string
   resposta: string
+  requerLojas?: boolean
 }
 
 export type NavLink = {
@@ -230,6 +234,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     beneficio:
       'Calcule e acompanhe comissões sem conflito — transparência que fortalece a equipe.',
     mockup: 'comissao',
+    requerLojas: true,
   },
   {
     id: 'online',
@@ -244,6 +249,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     beneficio:
       'Controle acessos, papéis e performance dos profissionais em um painel simples.',
     mockup: 'equipe',
+    requerLojas: true,
   },
   {
     id: 'explorar',
@@ -318,12 +324,14 @@ export const FEATURES: FeatureItem[] = [
     titulo: 'Comissões automáticas',
     descricao: 'Regras de comissão por profissional e serviço, sem cálculo manual.',
     beneficio: 'Equipe motivada e fechamento sem discussão.',
+    requerLojas: true,
   },
   {
     icon: 'equipe',
     titulo: 'Gestão de equipe',
     descricao: 'Permissões, desempenho e organização dos profissionais.',
     beneficio: 'Operação escalável sem perder o controle.',
+    requerLojas: true,
   },
   {
     icon: 'relatorios',
@@ -359,6 +367,7 @@ export const BUSINESS_BENEFITS: BenefitItem[] = [
     icon: 'equipe',
     titulo: 'Equipe alinhada',
     descricao: 'Comissões transparentes e papéis claros aumentam confiança e produtividade.',
+    requerLojas: true,
   },
   {
     icon: 'clientes',
@@ -421,6 +430,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     pergunta: 'Vocês atendem negócios pequenos, médios e grandes?',
     resposta:
       'Sim. Do barbeiro ou cabeleireiro autônomo ao grande salão com muitos profissionais: a plataforma se adapta ao porte — agenda, financeiro e presença digital no mesmo lugar.',
+    requerLojas: true,
   },
   {
     pergunta: 'Sou barbeiro ou cabeleireiro autônomo. Consigo usar?',
@@ -431,6 +441,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     pergunta: 'O Glow Up Connect também serve barbearias e salões com equipe?',
     resposta:
       'Sim. Estabelecimentos médios e grandes usam agenda por profissional, comissões, permissões e indicadores da operação completa.',
+    requerLojas: true,
   },
   {
     pergunta: 'Preciso instalar algum programa no computador?',
@@ -446,6 +457,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     pergunta: 'Como funcionam as comissões dos profissionais?',
     resposta:
       'Você define as regras de comissão e o sistema acompanha os valores com base nos atendimentos — com transparência para o dono e para a equipe.',
+    requerLojas: true,
   },
   {
     pergunta: 'Posso começar com um plano menor e mudar depois?',

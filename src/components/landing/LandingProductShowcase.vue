@@ -1,24 +1,44 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import {
   LANDING_SECTIONS,
   SHOWCASE_INTRO,
   SHOWCASE_ITEMS,
 } from '@/constants/landing'
+import { FEATURE_FLAGS } from '@/config/features'
+import { semItensDeLoja } from '@/utils/tipoAssinatura'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
 import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
 import LandingShotStage from '@/components/landing/motion/LandingShotStage.vue'
 
-const activeId = ref(SHOWCASE_ITEMS[0].id)
+const showcaseItems = computed(() => {
+  const items = semItensDeLoja(SHOWCASE_ITEMS).map((item) => {
+    if (FEATURE_FLAGS.lojasHabilitadas || item.id !== 'explorar') return item
+    return {
+      ...item,
+      titulo: 'Explorar profissionais',
+      beneficio:
+        'Apareça para novos clientes na região e atraia demanda qualificada para o seu atendimento.',
+    }
+  })
+  return items
+})
+
+const activeId = ref(showcaseItems.value[0]?.id ?? SHOWCASE_ITEMS[0].id)
+watch(showcaseItems, (items) => {
+  if (!items.some((item) => item.id === activeId.value)) {
+    activeId.value = items[0]?.id ?? SHOWCASE_ITEMS[0].id
+  }
+})
 const { isVisible } = useRevealOnScroll()
 
 const active = computed(
-  () => SHOWCASE_ITEMS.find((item) => item.id === activeId.value) ?? SHOWCASE_ITEMS[0],
+  () => showcaseItems.value.find((item) => item.id === activeId.value) ?? showcaseItems.value[0],
 )
 
 const activeIndex = computed(() =>
-  SHOWCASE_ITEMS.findIndex((item) => item.id === activeId.value),
+  showcaseItems.value.findIndex((item) => item.id === activeId.value),
 )
 
 function select(id: string) {
@@ -27,12 +47,14 @@ function select(id: string) {
 
 function goPrev() {
   const i = activeIndex.value
-  activeId.value = SHOWCASE_ITEMS[i <= 0 ? SHOWCASE_ITEMS.length - 1 : i - 1].id
+  const items = showcaseItems.value
+  activeId.value = items[i <= 0 ? items.length - 1 : i - 1]!.id
 }
 
 function goNext() {
   const i = activeIndex.value
-  activeId.value = SHOWCASE_ITEMS[i >= SHOWCASE_ITEMS.length - 1 ? 0 : i + 1].id
+  const items = showcaseItems.value
+  activeId.value = items[i >= items.length - 1 ? 0 : i + 1]!.id
 }
 </script>
 
@@ -54,7 +76,11 @@ function goNext() {
           :eyebrow="SHOWCASE_INTRO.eyebrow"
           :title="SHOWCASE_INTRO.titulo"
           :highlight="SHOWCASE_INTRO.destaque"
-          :subtitle="SHOWCASE_INTRO.subtitulo"
+          :subtitle="
+            FEATURE_FLAGS.lojasHabilitadas
+              ? SHOWCASE_INTRO.subtitulo
+              : 'Do agendamento ao caixa: telas pensadas para barbeiros e cabeleireiros autônomos.'
+          "
         />
 
         <div
@@ -69,7 +95,7 @@ function goNext() {
               aria-label="Telas da plataforma"
             >
               <button
-                v-for="item in SHOWCASE_ITEMS"
+                v-for="item in showcaseItems"
                 :key="item.id"
                 type="button"
                 role="tab"
@@ -108,7 +134,7 @@ function goNext() {
               <span class="font-satoshi text-xs text-glow-placeholder">
                 {{ String(activeIndex + 1).padStart(2, '0') }}
                 /
-                {{ String(SHOWCASE_ITEMS.length).padStart(2, '0') }}
+                {{ String(showcaseItems.length).padStart(2, '0') }}
               </span>
               <button
                 type="button"

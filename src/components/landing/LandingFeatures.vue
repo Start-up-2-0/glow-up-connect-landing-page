@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { FEATURES, LANDING_SECTIONS } from '@/constants/landing'
+import { FEATURE_FLAGS } from '@/config/features'
+import { semItensDeLoja } from '@/utils/tipoAssinatura'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import LandingFeatureIcon from '@/components/landing/LandingFeatureIcon.vue'
@@ -8,6 +11,10 @@ import LandingStorySection from '@/components/landing/motion/LandingStorySection
 
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.funcionalidades
+const featureItems = computed(() => semItensDeLoja(FEATURES))
+const subtitle = FEATURE_FLAGS.lojasHabilitadas
+  ? 'Para barbeiros e cabeleireiros autônomos — e para barbearias e salões pequenos, médios e grandes. Recursos que resolvem a rotina, não só preenchem uma lista.'
+  : 'Para barbeiros e cabeleireiros autônomos. Recursos que resolvem a rotina, não só preenchem uma lista.'
 </script>
 
 <template>
@@ -24,7 +31,7 @@ const chapter = STORY_CHAPTERS.funcionalidades
           title="Tudo que o seu"
           highlight="atendimento"
           title-after="precisa"
-          subtitle="Para barbeiros e cabeleireiros autônomos — e para barbearias e salões pequenos, médios e grandes. Recursos que resolvem a rotina, não só preenchem uma lista."
+          :subtitle="subtitle"
         />
 
         <div
@@ -33,7 +40,7 @@ const chapter = STORY_CHAPTERS.funcionalidades
           :class="isVisible && 'is-visible'"
         >
           <article
-            v-for="feature in FEATURES"
+            v-for="feature in featureItems"
             :key="feature.titulo"
             class="group rounded-3xl border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-6"
           >

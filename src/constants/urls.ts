@@ -1,3 +1,5 @@
+import { TIPO_ASSINATURA_PADRAO } from '@/utils/tipoAssinatura'
+
 export const APP_URL = (import.meta.env.VITE_APP_URL?.trim() || 'https://app.glowupconnect.com.br').replace(
   /\/+$/,
   '',
@@ -10,7 +12,7 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL?.trim() || 'https://glowu
 
 export function appOnboardingUrl(
   planoId: number | string,
-  tipoAssinatura: 'Estabelecimento' | 'ProfissionalAutonomo' = 'Estabelecimento',
+  tipoAssinatura: 'Estabelecimento' | 'ProfissionalAutonomo' = TIPO_ASSINATURA_PADRAO,
 ): string {
   const params = new URLSearchParams({
     planoId: String(planoId),

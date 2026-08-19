@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import {
   AUDIENCE_INTRO,
   AUDIENCE_PROFILES,
   LANDING_SECTIONS,
   type AudienceProfile,
 } from '@/constants/landing'
+import { FEATURE_FLAGS } from '@/config/features'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { useLandingScroll } from '@/composables/useLandingScroll'
 import { useLandingPlanosPref } from '@/composables/useLandingPlanosPref'
@@ -17,6 +19,30 @@ const { goToSection } = useLandingScroll()
 const { preferirTipo } = useLandingPlanosPref()
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.publico
+
+const perfis = computed(() =>
+  FEATURE_FLAGS.lojasHabilitadas
+    ? AUDIENCE_PROFILES
+    : AUDIENCE_PROFILES.filter((perfil) => perfil.tipoAssinatura === 'ProfissionalAutonomo'),
+)
+
+const oficios = computed(() =>
+  FEATURE_FLAGS.lojasHabilitadas
+    ? AUDIENCE_INTRO.oficios
+    : AUDIENCE_INTRO.oficios.filter((oficio) => oficio !== 'Barbearias' && oficio !== 'Salões'),
+)
+
+const intro = computed(() =>
+  FEATURE_FLAGS.lojasHabilitadas
+    ? AUDIENCE_INTRO
+    : {
+        ...AUDIENCE_INTRO,
+        titulo: 'Feito para quem atende',
+        destaque: 'sozinho',
+        subtitulo:
+          'Atendemos barbeiros e cabeleireiros(as) autônomos — agenda, clientes e financeiro no celular.',
+      },
+)
 
 function verPlanos(perfil: AudienceProfile) {
   preferirTipo(perfil.tipoAssinatura)
@@ -35,10 +61,10 @@ function verPlanos(perfil: AudienceProfile) {
     <div class="px-4 pb-20 pt-4 lg:px-8 lg:pb-28 lg:pt-6">
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader
-          :eyebrow="AUDIENCE_INTRO.eyebrow"
-          :title="AUDIENCE_INTRO.titulo"
-          :highlight="AUDIENCE_INTRO.destaque"
-          :subtitle="AUDIENCE_INTRO.subtitulo"
+          :eyebrow="intro.eyebrow"
+          :title="intro.titulo"
+          :highlight="intro.destaque"
+          :subtitle="intro.subtitulo"
         />
 
         <ul
@@ -46,7 +72,7 @@ function verPlanos(perfil: AudienceProfile) {
           aria-label="Ofícios atendidos"
         >
           <li
-            v-for="oficio in AUDIENCE_INTRO.oficios"
+            v-for="oficio in oficios"
             :key="oficio"
             class="rounded-full border border-glow-gold/25 bg-glow-gold/10 px-3 py-1 font-satoshi text-[11px] font-semibold uppercase tracking-[0.12em] text-glow-gold"
           >
@@ -62,11 +88,14 @@ function verPlanos(perfil: AudienceProfile) {
 
           <div
             ref="revealRoot"
-            class="landing-stagger relative grid gap-5 md:grid-cols-2 lg:grid-cols-3"
-            :class="isVisible && 'is-visible'"
+            class="landing-stagger relative grid gap-5 md:grid-cols-2"
+            :class="[
+              isVisible && 'is-visible',
+              perfis.length > 1 ? 'lg:grid-cols-3' : 'lg:grid-cols-1 lg:max-w-xl lg:mx-auto',
+            ]"
           >
             <article
-              v-for="perfil in AUDIENCE_PROFILES"
+              v-for="perfil in perfis"
               :key="perfil.id"
               class="flex flex-col rounded-3xl border border-glow-border-soft bg-glow-surface p-5 landing-glass-card transition duration-300 hover:-translate-y-1 hover:border-glow-gold/30 hover:bg-glow-hover-surface sm:p-6"
             >
