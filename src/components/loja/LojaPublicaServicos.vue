@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import LandingSectionHeader from '@/components/landing/LandingSectionHeader.vue'
 import LandingStorySection from '@/components/landing/motion/LandingStorySection.vue'
+import ServicoImagem from '@/components/servicos/ServicoImagem.vue'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
 import { lojaAgendarPath } from '@/constants/routes'
 import type { ServicoPublico } from '@/types/agendamento.types'
@@ -291,18 +292,29 @@ function limparBusca() {
                   <div
                     class="flex h-full flex-col justify-between rounded-2xl border border-glow-border-soft bg-glow-surface px-3.5 py-3 transition duration-200 hover:-translate-y-0.5 hover:border-glow-gold/30 hover:bg-glow-hover-surface"
                   >
-                    <div class="flex items-start justify-between gap-2">
-                      <h4 class="min-w-0 font-montserrat text-sm font-semibold leading-snug text-glow-text sm:text-[0.9375rem]">
-                        <span class="line-clamp-2">{{ servico.nome }}</span>
-                      </h4>
-                      <span
-                        class="shrink-0 rounded-full border border-glow-border-soft bg-glow-hover-surface px-2 py-0.5 font-satoshi text-[10px] font-semibold tabular-nums text-glow-text-muted"
-                      >
-                        {{ servico.duracaoMinutosEstimada }} min
-                      </span>
+                    <div class="mb-3 flex items-start gap-3">
+                      <ServicoImagem :imagem="servico.imagem" :alt="servico.nome" size="sm" />
+                      <div class="min-w-0 flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                          <h4 class="min-w-0 font-montserrat text-sm font-semibold leading-snug text-glow-text sm:text-[0.9375rem]">
+                            <span class="line-clamp-2">{{ servico.nome }}</span>
+                          </h4>
+                          <span
+                            v-if="servico.tipoServico === 'Combo'"
+                            class="rounded-full bg-glow-gold-cta/15 px-2 py-0.5 font-satoshi text-[10px] font-semibold uppercase tracking-wide text-glow-gold-cta"
+                          >
+                            Combo
+                          </span>
+                        </div>
+                        <span
+                          class="mt-1 inline-flex rounded-full border border-glow-border-soft bg-glow-hover-surface px-2 py-0.5 font-satoshi text-[10px] font-semibold tabular-nums text-glow-text-muted"
+                        >
+                          {{ servico.duracaoMinutosEstimada }} min
+                        </span>
+                      </div>
                     </div>
 
-                    <div class="mt-3 flex items-center justify-between gap-2 border-t border-glow-border-soft pt-2.5">
+                    <div class="flex items-center justify-between gap-2 border-t border-glow-border-soft pt-2.5">
                       <p class="min-w-0 truncate font-montserrat text-sm font-bold text-glow-gold">
                         {{ precoLabel(servico) }}
                       </p>

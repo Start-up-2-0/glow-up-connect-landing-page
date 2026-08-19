@@ -83,6 +83,7 @@ const {
   duracaoTotal,
   activeProfissionalGuid,
   toggleServico,
+  estadoSelecaoServico,
   escolherIdentidade,
   continuarComoLogado,
   escolherModoProfissional,
@@ -569,7 +570,11 @@ async function handleConfirmar() {
               :duracao-minutos="servico.duracaoMinutosEstimada"
               :preco-minimo="servico.precoMinimo"
               :preco-maximo="servico.precoMaximo"
+              :imagem="servico.imagem"
+              :tipo-servico="servico.tipoServico"
               :selected="selectedServicoIds.includes(servico.id)"
+              :disabled="estadoSelecaoServico(servico).disabled"
+              :motivo-bloqueio="estadoSelecaoServico(servico).motivoBloqueio"
               @toggle="toggleServico(servico.id)"
             />
           </div>
