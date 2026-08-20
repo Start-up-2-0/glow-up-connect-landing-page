@@ -3,10 +3,12 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AuthAvatarUpload from '@/components/auth/AuthAvatarUpload.vue'
 import AuthPasswordRules from '@/components/auth/AuthPasswordRules.vue'
+import AuthRecaptcha from '@/components/auth/AuthRecaptcha.vue'
 import UserAvatar from '@/components/layout/UserAvatar.vue'
 import TelefoneInput from '@/components/ui/TelefoneInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { useApiError } from '@/composables/useApiError'
+import { useCaptcha } from '@/composables/useCaptcha'
 import { convitePublicoService } from '@/services/convitePublicoService'
 import { appDashboardUrl, authConfirmEmailUrl } from '@/utils/authRedirect'
 import { compressAvatarFile, validateAvatarFile } from '@/utils/avatarFile'
@@ -30,6 +32,9 @@ const ROLE_LABELS: Record<string, string> = {
 const route = useRoute()
 const authStore = useAuthStore()
 const { resolveError } = useApiError()
+const captchaRef = ref<InstanceType<typeof AuthRecaptcha> | null>(null)
+const captchaResetNonce = ref(0)
+const { enabled: captchaEnabled } = useCaptcha()
 
 const token = computed(() => String(route.params.token ?? ''))
 const loading = ref(true)
@@ -137,15 +142,30 @@ async function carregarPreview() {
 }
 
 async function aceitarLogado() {
-  submitting.value = true
   formError.value = null
+
+  let captchaToken: string | undefined
+  if (!authStore.isAuthenticated) {
+    captchaToken = captchaRef.value?.getToken()
+    if (captchaEnabled && !captchaToken) {
+      formError.value = 'Marque o reCAPTCHA antes de continuar.'
+      return
+    }
+  }
+
+  submitting.value = true
   try {
     if (!authStore.isAuthenticated) {
-      await authStore.login({ email: loginEmail.value.trim(), senha: loginSenha.value })
+      await authStore.login({
+        email: loginEmail.value.trim(),
+        senha: loginSenha.value,
+        captchaToken,
+      })
     }
     await convitePublicoService.aceitar(token.value)
     modo.value = 'sucesso'
   } catch (err) {
+    captchaResetNonce.value += 1
     formError.value = resolveError(err, 'Não foi possível aceitar o convite.')
   } finally {
     submitting.value = false
@@ -322,6 +342,7 @@ onMounted(() => {
               class="h-11 w-full rounded-lg border border-glow-border-soft bg-glow-canvas px-3 font-urbanist text-sm"
             />
           </div>
+          <AuthRecaptcha ref="captchaRef" :reset-nonce="captchaResetNonce" />
         </template>
         <p v-if="formError" class="font-urbanist text-sm text-red-600">{{ formError }}</p>
         <div class="flex flex-wrap gap-2">

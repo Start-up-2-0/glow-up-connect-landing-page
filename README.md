@@ -28,6 +28,7 @@ npm run preview
 | `VITE_SITE_URL` | URL canônica do site (SEO, sitemap) |
 | `VITE_APP_NAME` | Nome da marca |
 | `VITE_WHATSAPP_NUMBER` | Número do FAB WhatsApp |
+| `VITE_CAPTCHA_SITE_KEY` | Site key reCAPTCHA v2 (mesmo valor do app) |
 
 ### Runtime (Caddy no Railway)
 
