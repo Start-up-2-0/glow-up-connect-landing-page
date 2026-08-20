@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AuthAvatarUpload from '@/components/auth/AuthAvatarUpload.vue'
+import AuthPasswordRules from '@/components/auth/AuthPasswordRules.vue'
 import UserAvatar from '@/components/layout/UserAvatar.vue'
 import TelefoneInput from '@/components/ui/TelefoneInput.vue'
 import { useAuthStore } from '@/stores/auth.store'
@@ -10,6 +11,7 @@ import { convitePublicoService } from '@/services/convitePublicoService'
 import { appDashboardUrl, authConfirmEmailUrl } from '@/utils/authRedirect'
 import { compressAvatarFile, validateAvatarFile } from '@/utils/avatarFile'
 import { telefoneToApi } from '@/utils/formatters'
+import { getUnmetPasswordRules } from '@/utils/passwordRules'
 import type { ConvitePreview } from '@/types/convite.types'
 
 type Modo = 'escolha' | 'login' | 'cadastro' | 'sucesso' | 'sucesso_cadastro'
@@ -155,8 +157,25 @@ async function aceitarComCadastro() {
   avatarError.value = null
   fotoError.value = null
 
+  const nomeTrim = nome.value.trim()
+  if (nomeTrim.length < 3) {
+    formError.value = 'Nome deve ter entre 3 e 150 caracteres.'
+    return
+  }
+
+  if (!email.value.trim()) {
+    formError.value = 'Informe o e-mail.'
+    return
+  }
+
   if (!telefone.value.trim()) {
     formError.value = 'Informe o telefone.'
+    return
+  }
+
+  const regrasPendentes = getUnmetPasswordRules(senha.value)
+  if (regrasPendentes.length > 0) {
+    formError.value = `A senha deve conter: ${regrasPendentes.join(' ')}`
     return
   }
 
@@ -165,7 +184,6 @@ async function aceitarComCadastro() {
     return
   }
 
-  const nomeTrim = nome.value.trim()
   if (ehProfissional.value && !nomePublico.value.trim()) {
     nomePublico.value = nomeTrim
   }
@@ -420,6 +438,7 @@ onMounted(() => {
             autocomplete="new-password"
             class="h-11 w-full rounded-lg border border-glow-border-soft bg-glow-canvas px-3 font-urbanist text-sm"
           />
+          <AuthPasswordRules class="mt-2" :password="senha" />
         </div>
         <div>
           <label class="mb-1 block font-urbanist text-sm font-medium">Confirmar senha</label>

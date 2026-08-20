@@ -17,6 +17,7 @@ import {
   toDateOnlyString,
   telefoneToApi,
 } from '@/utils/formatters'
+import { getUnmetPasswordRules } from '@/utils/passwordRules'
 import {
   clearAgendarWizardDraft,
   readAgendarWizardDraft,
@@ -678,8 +679,9 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
       return false
     }
 
-    if (senha.length < 6) {
-      error.value = 'A senha deve ter pelo menos 6 caracteres.'
+    const regrasPendentes = getUnmetPasswordRules(senha)
+    if (regrasPendentes.length > 0) {
+      error.value = `A senha deve conter: ${regrasPendentes.join(' ')}`
       return false
     }
 

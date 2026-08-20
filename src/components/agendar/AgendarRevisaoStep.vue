@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AuthPasswordRules from '@/components/auth/AuthPasswordRules.vue'
 import UserAvatar from '@/components/layout/UserAvatar.vue'
 import type { ServicoPublico } from '@/types/agendamento.types'
 import {
@@ -131,6 +132,7 @@ const emit = defineEmits<{
           autocomplete="new-password"
           :class="[GLOW_INPUT_CLASS, 'mt-2']"
         />
+        <AuthPasswordRules class="mt-2" :password="cadastroSenha" />
       </div>
     </section>
 

@@ -25,3 +25,19 @@ export function isApiErrorResponse(data: unknown): data is ApiErrorResponse {
     'code' in data
   )
 }
+
+export interface ValidationProblemDetails {
+  type?: string
+  title?: string
+  status: number
+  errors?: Record<string, string[]>
+}
+
+export function isValidationProblemDetails(data: unknown): data is ValidationProblemDetails {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'errors' in data &&
+    typeof (data as ValidationProblemDetails).errors === 'object'
+  )
+}

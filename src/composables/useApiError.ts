@@ -1,5 +1,9 @@
 import type { AxiosError } from 'axios'
-import { isApiErrorResponse, type ApiErrorResponse } from '@/types/api.types'
+import {
+  isApiErrorResponse,
+  isValidationProblemDetails,
+  type ApiErrorResponse,
+} from '@/types/api.types'
 import { DEFAULT_ERROR_MESSAGE, getApiErrorMessage } from '@/constants/apiErrors'
 
 export function useApiError() {
@@ -14,11 +18,18 @@ export function useApiError() {
   function resolveError(error: unknown, fallback = DEFAULT_ERROR_MESSAGE): string {
     if (!error || typeof error !== 'object') return fallback
 
-    const axiosError = error as AxiosError<ApiErrorResponse>
+    const axiosError = error as AxiosError<unknown>
     const data = axiosError.response?.data
 
     if (isApiErrorResponse(data)) {
       return getApiErrorMessage(data.code, data.message || fallback)
+    }
+
+    if (isValidationProblemDetails(data)) {
+      const firstField = Object.values(data.errors ?? {})
+        .flat()
+        .find((message): message is string => typeof message === 'string')
+      if (firstField) return firstField
     }
 
     if (data && typeof data === 'object' && 'message' in data) {
