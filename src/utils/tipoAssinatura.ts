@@ -39,7 +39,7 @@ export function navLinksVisiveis(): NavLink[] {
     if (!FEATURE_FLAGS.lojasHabilitadas) {
       return { ...link, label: 'Explorar profissionais' }
     }
-    return { ...link, label: 'Explorar lojas e profissionais' }
+    return { ...link }
   })
 }
 
