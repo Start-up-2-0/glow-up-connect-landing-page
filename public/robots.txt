@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /convite/
+Disallow: /loja/*/agendar
 
 Sitemap: https://glowupconnect.com.br/sitemap.xml
