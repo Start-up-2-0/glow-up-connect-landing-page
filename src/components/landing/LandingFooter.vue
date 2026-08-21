@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import {
   FOOTER_CONTACT,
@@ -17,10 +18,22 @@ const tagline = FEATURE_FLAGS.lojasHabilitadas
   ? FOOTER_TAGLINE
   : 'Gestão para barbeiros e cabeleireiros autônomos — do agendamento ao caixa.'
 
-const socialLinks = [
-  { label: 'Instagram', href: 'https://instagram.com', external: true },
-  { label: 'WhatsApp', href: `https://wa.me/5579999999999`, external: true },
-] as const
+const whatsappHref = computed(() => {
+  const phone = import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined
+  if (!phone) return null
+  const digits = phone.replace(/\D/g, '')
+  return digits ? `https://wa.me/${digits}` : null
+})
+
+const socialLinks = computed(() => {
+  const links: { label: string; href: string }[] = [
+    { label: 'Instagram', href: 'https://www.instagram.com/glowupconnectapp' },
+  ]
+  if (whatsappHref.value) {
+    links.push({ label: 'WhatsApp', href: whatsappHref.value })
+  }
+  return links
+})
 </script>
 
 <template>
