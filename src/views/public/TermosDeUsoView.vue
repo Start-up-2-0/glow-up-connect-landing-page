@@ -11,7 +11,7 @@ useSeo({ path: ROUTE_PATHS.TERMOS_DE_USO })
 useJsonLd({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: `Termos de Uso | ${APP_NAME}`,
+  name: `Termos de uso | ${APP_NAME}`,
   url: `${SITE_URL}${ROUTE_PATHS.TERMOS_DE_USO}`,
   isPartOf: {
     '@type': 'WebSite',
@@ -24,7 +24,7 @@ useJsonLd({
 
 <template>
   <LegalDocumentShell
-    title="Termos de Uso"
+    title="Termos de uso"
     :subtitle="`Versão ${TERMS_VERSION} — última atualização: junho de 2026`"
   >
     <section>

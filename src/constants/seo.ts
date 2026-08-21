@@ -24,7 +24,7 @@ export const SEO_BY_PATH: Record<string, SeoMeta> = {
   },
   [ROUTE_PATHS.EXPLORAR_LOJAS]: {
     title: FEATURE_FLAGS.lojasHabilitadas
-      ? `Explorar Lojas | ${APP_NAME}`
+      ? `Explorar lojas | ${APP_NAME}`
       : `Explorar profissionais | ${APP_NAME}`,
     description: FEATURE_FLAGS.lojasHabilitadas
       ? 'Encontre barbearias e salões próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.'
@@ -33,14 +33,14 @@ export const SEO_BY_PATH: Record<string, SeoMeta> = {
     ogType: 'website',
   },
   [ROUTE_PATHS.TERMOS_DE_USO]: {
-    title: `Termos de Uso | ${APP_NAME}`,
+    title: `Termos de uso | ${APP_NAME}`,
     description:
       'Termos e condições de uso da plataforma Glow Up Connect. Leia as regras de cadastro, uso permitido e responsabilidades.',
     path: ROUTE_PATHS.TERMOS_DE_USO,
     ogType: 'article',
   },
   [ROUTE_PATHS.POLITICA_COOKIES]: {
-    title: `Política de Cookies | ${APP_NAME}`,
+    title: `Política de cookies | ${APP_NAME}`,
     description:
       'Saiba como a Glow Up Connect utiliza cookies e tecnologias similares para login, preferências e serviços de terceiros.',
     path: ROUTE_PATHS.POLITICA_COOKIES,

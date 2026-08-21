@@ -18,7 +18,7 @@ useSeo({
 <template>
   <div class="relative h-dvh overflow-hidden bg-glow-canvas text-glow-text">
     <h1 class="sr-only">
-      {{ FEATURE_FLAGS.lojasHabilitadas ? 'Explorar Lojas' : 'Explorar profissionais' }}
+      {{ FEATURE_FLAGS.lojasHabilitadas ? 'Explorar lojas' : 'Explorar profissionais' }}
     </h1>
     <main id="conteudo-principal" class="h-full">
       <LandingExplorarLojas variant="page" />

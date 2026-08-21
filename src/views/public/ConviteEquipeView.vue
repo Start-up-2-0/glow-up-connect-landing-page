@@ -321,7 +321,7 @@ onMounted(() => {
           {{ authStore.isAuthenticated ? 'Confirmar entrada' : 'Entrar' }}
         </h2>
         <p v-if="authStore.isAuthenticated && authStore.usuario" class="font-urbanist text-sm text-glow-text-subtle">
-          Logado como {{ authStore.usuario.email }}. Confirme para entrar na loja.
+          Você está logado como {{ authStore.usuario.email }}. Confirme para entrar na loja.
         </p>
         <template v-else>
           <div>

@@ -11,7 +11,7 @@ useSeo({ path: ROUTE_PATHS.POLITICA_COOKIES })
 useJsonLd({
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: `Política de Cookies | ${APP_NAME}`,
+  name: `Política de cookies | ${APP_NAME}`,
   url: `${SITE_URL}${ROUTE_PATHS.POLITICA_COOKIES}`,
   isPartOf: {
     '@type': 'WebSite',
@@ -24,7 +24,7 @@ useJsonLd({
 
 <template>
   <LegalDocumentShell
-    title="Política de Cookies"
+    title="Política de cookies"
     :subtitle="`Versão ${CONSENT_POLICY_VERSION} — última atualização: junho de 2026`"
   >
     <section>
