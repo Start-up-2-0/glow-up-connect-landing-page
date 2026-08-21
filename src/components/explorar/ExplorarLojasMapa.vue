@@ -3,6 +3,8 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import type { EstabelecimentoProximo } from '@/types/estabelecimento.types'
 import { estabelecimentoTemCoordenadas } from '@/utils/explorarMapa'
 import { formatDistanciaKm } from '@/utils/formatters'
+
+const APP_RESUMED_EVENT = 'guc:app-resumed'
 const props = defineProps<{
   itens: EstabelecimentoProximo[]
   userLat?: number | null
@@ -306,6 +308,13 @@ function onDragStart() {
   userDragging = true
 }
 
+function onAppResumed() {
+  // Após background longo o Leaflet frequentemente fica com size/hit-test quebrados.
+  requestAnimationFrame(() => {
+    map?.invalidateSize({ animate: false })
+  })
+}
+
 onMounted(async () => {
   if (!mapEl.value || import.meta.env.SSR) return
 
@@ -366,9 +375,14 @@ onMounted(async () => {
   requestAnimationFrame(() => {
     map?.invalidateSize()
   })
+
+  window.addEventListener(APP_RESUMED_EVENT, onAppResumed)
+  window.visualViewport?.addEventListener('resize', onAppResumed)
 })
 
 onUnmounted(() => {
+  window.removeEventListener(APP_RESUMED_EVENT, onAppResumed)
+  window.visualViewport?.removeEventListener('resize', onAppResumed)
   if (moveTimer) clearTimeout(moveTimer)
   if (suppressTimer) clearTimeout(suppressTimer)
   map?.off('dragstart', onDragStart)

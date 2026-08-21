@@ -17,6 +17,14 @@ export default defineConfig(({ mode }) => {
         dynamicRoutes: ['/termos-de-uso', '/politica-de-cookies', '/explorar-lojas'],
         changefreq: 'weekly',
         priority: 0.8,
+        generateRobotsTxt: true,
+        robots: [
+          {
+            userAgent: '*',
+            allow: '/',
+            disallow: ['/convite/', '/loja/*/agendar'],
+          },
+        ],
       }),
     ],
     resolve: {
@@ -30,6 +38,12 @@ export default defineConfig(({ mode }) => {
           manualChunks(id) {
             if (id.includes('node_modules/vue') || id.includes('node_modules/vue-router') || id.includes('node_modules/pinia')) {
               return 'vue-vendor'
+            }
+            if (id.includes('node_modules/axios')) {
+              return 'http-vendor'
+            }
+            if (id.includes('node_modules/leaflet')) {
+              return 'map-vendor'
             }
           },
         },

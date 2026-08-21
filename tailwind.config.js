@@ -8,10 +8,10 @@ export default {
     extend: {
       fontFamily: {
         satoshi: ['Satoshi', 'system-ui', 'sans-serif'],
-        inter: ['Inter', 'system-ui', 'sans-serif'],
-        urbanist: ['Urbanist', 'Inter', 'system-ui', 'sans-serif'],
-        montserrat: ['Montserrat', 'system-ui', 'sans-serif'],
-        poppins: ['Poppins', 'system-ui', 'sans-serif'],
+        inter: ['Urbanist', 'system-ui', 'sans-serif'],
+        urbanist: ['Urbanist', 'system-ui', 'sans-serif'],
+        montserrat: ['Montserrat', 'Satoshi', 'system-ui', 'sans-serif'],
+        poppins: ['Poppins', 'Urbanist', 'system-ui', 'sans-serif'],
       },
       colors: {
         glow: {

@@ -7,6 +7,7 @@ import { aplicarDescontoPercentual, formatBRL } from '@/utils/formatters'
 import { getPlanoFeatures } from '@/utils/planoDisplay'
 import { TIPO_ASSINATURA_PADRAO } from '@/utils/tipoAssinatura'
 import type { Plano, TipoAssinatura } from '@/types/plano.types'
+import { lockBodyScroll, unlockBodyScroll } from '@/utils/bodyScrollLock'
 
 const props = withDefaults(
   defineProps<{
@@ -52,12 +53,12 @@ watch(
     if (typeof document === 'undefined') return
 
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
+      lockBodyScroll()
       window.addEventListener('keydown', handleKeydown)
       return
     }
 
-    document.body.style.overflow = ''
+    unlockBodyScroll()
     window.removeEventListener('keydown', handleKeydown)
   },
   { immediate: true },
@@ -65,7 +66,7 @@ watch(
 
 onUnmounted(() => {
   if (typeof document === 'undefined') return
-  document.body.style.overflow = ''
+  if (props.open) unlockBodyScroll()
   window.removeEventListener('keydown', handleKeydown)
 })
 </script>

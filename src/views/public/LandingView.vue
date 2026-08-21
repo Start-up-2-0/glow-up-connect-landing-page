@@ -1,18 +1,8 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { defineAsyncComponent, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import LandingNavbar from '@/components/landing/LandingNavbar.vue'
 import LandingHero from '@/components/landing/LandingHero.vue'
-import LandingAudience from '@/components/landing/LandingAudience.vue'
-import LandingProductShowcase from '@/components/landing/LandingProductShowcase.vue'
-import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue'
-import LandingFeatures from '@/components/landing/LandingFeatures.vue'
-import LandingBenefits from '@/components/landing/LandingBenefits.vue'
-import LandingVisualDemos from '@/components/landing/LandingVisualDemos.vue'
-import LandingSocialProof from '@/components/landing/LandingSocialProof.vue'
-import LandingPricing from '@/components/landing/LandingPricing.vue'
-import LandingFaq from '@/components/landing/LandingFaq.vue'
-import LandingFinalCta from '@/components/landing/LandingFinalCta.vue'
 import LandingFooter from '@/components/landing/LandingFooter.vue'
 import LandingWhatsappFab from '@/components/landing/LandingWhatsappFab.vue'
 import { FEATURE_FLAGS } from '@/config/features'
@@ -21,6 +11,20 @@ import { useJsonLd, useSeo } from '@/composables/useSeo'
 import { APP_NAME } from '@/constants/storageKeys'
 import { ROUTE_PATHS } from '@/constants/routes'
 import { SITE_URL } from '@/constants/urls'
+
+/** Seções abaixo da dobra — lazy para reduzir JS/imagens no first paint mobile. */
+const LandingAudience = defineAsyncComponent(() => import('@/components/landing/LandingAudience.vue'))
+const LandingProductShowcase = defineAsyncComponent(
+  () => import('@/components/landing/LandingProductShowcase.vue'),
+)
+const LandingHowItWorks = defineAsyncComponent(() => import('@/components/landing/LandingHowItWorks.vue'))
+const LandingFeatures = defineAsyncComponent(() => import('@/components/landing/LandingFeatures.vue'))
+const LandingBenefits = defineAsyncComponent(() => import('@/components/landing/LandingBenefits.vue'))
+const LandingVisualDemos = defineAsyncComponent(() => import('@/components/landing/LandingVisualDemos.vue'))
+const LandingSocialProof = defineAsyncComponent(() => import('@/components/landing/LandingSocialProof.vue'))
+const LandingPricing = defineAsyncComponent(() => import('@/components/landing/LandingPricing.vue'))
+const LandingFaq = defineAsyncComponent(() => import('@/components/landing/LandingFaq.vue'))
+const LandingFinalCta = defineAsyncComponent(() => import('@/components/landing/LandingFinalCta.vue'))
 
 const route = useRoute()
 const { scrollToSection } = useLandingScroll()
@@ -33,7 +37,7 @@ useJsonLd([
     '@type': 'Organization',
     name: APP_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/favicon.svg`,
+    logo: `${SITE_URL}/favicon.webp`,
     email: 'contato@glowup.com.br',
   },
   {

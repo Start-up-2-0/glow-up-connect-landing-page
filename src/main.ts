@@ -5,6 +5,20 @@ import { routes } from './router/routes'
 import { useConsentStore } from './stores/consent.store'
 import './assets/main.css'
 
+function scheduleIdleWork(fn: () => void, timeout = 2500): void {
+  if (typeof window === 'undefined') return
+  const ric = (
+    window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number
+    }
+  ).requestIdleCallback
+  if (typeof ric === 'function') {
+    ric(fn, { timeout })
+  } else {
+    window.setTimeout(fn, 1)
+  }
+}
+
 export const createApp = ViteSSG(
   App,
   { routes, scrollBehavior(to, _from, savedPosition) {
@@ -21,11 +35,26 @@ export const createApp = ViteSSG(
     const consentStore = useConsentStore(pinia)
     if (isClient) {
       consentStore.hydrate()
-      void import('@/stores/auth.store').then(({ useAuthStore }) => {
-        useAuthStore(pinia).hydrateFromStorage()
+
+      void import('@/composables/useAppLifecycleRecovery').then(({ registerAppLifecycleRecovery }) => {
+        registerAppLifecycleRecovery()
       })
-      import('@/composables/useRequestProof').then(({ ensureRequestProofPool }) => {
-        void ensureRequestProofPool()
+
+      void import('@/stores/auth.store').then(({ useAuthStore }) => {
+        const auth = useAuthStore(pinia)
+        auth.hydrateFromStorage()
+        if (auth.isAuthenticated) {
+          void import('@/composables/useSessionRefresh').then(({ startSessionRefreshScheduler }) => {
+            startSessionRefreshScheduler()
+          })
+        }
+      })
+
+      // Proof pool após first paint — não compete com LCP da landing.
+      scheduleIdleWork(() => {
+        void import('@/composables/useRequestProof').then(({ ensureRequestProofPool }) => {
+          void ensureRequestProofPool()
+        })
       })
     }
   },

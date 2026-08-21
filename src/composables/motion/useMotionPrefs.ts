@@ -38,7 +38,7 @@ export function useMotionPrefs() {
     isNarrow,
     /** Desktop fino: experiência cinematográfica completa */
     get cinematic() {
-      return !reduceMotion.value && !isNarrow.value
+      return !reduceMotion.value && !isNarrow.value && !isCoarsePointer.value
     },
   }
 }
