@@ -24,7 +24,11 @@ import type {
 } from '@/types/estabelecimento.types'
 import { FEATURE_FLAGS } from '@/config/features'
 import {
+  placeholderBuscaMarketplace,
+  rotuloMarketplace,
   tipoAssinaturaParaCategorias,
+  tituloMarketplace,
+  vazioMarketplace,
   visivelNoMarketplace,
 } from '@/utils/tipoAssinatura'
 import { formatDistanciaKm } from '@/utils/formatters'
@@ -132,11 +136,7 @@ const categoriaModel = computed({
 const statusLabel = computed(() => {
   if (loading.value || geoLoading.value) return 'Buscando…'
   const n = itensFiltrados.value.length
-  return `${n} ${
-    FEATURE_FLAGS.lojasHabilitadas
-      ? n === 1 ? 'loja' : 'lojas'
-      : n === 1 ? 'profissional' : 'profissionais'
-  }`
+  return `${n} ${rotuloMarketplace(n)}`
 })
 
 async function carregar(opts?: { latitude: number; longitude: number }) {
@@ -287,9 +287,9 @@ onMounted(async () => {
               v-model="busca"
               type="search"
               class="explorar-pdx__search-input"
-              :placeholder="FEATURE_FLAGS.lojasHabilitadas ? 'Buscar loja, bairro ou cidade…' : 'Buscar profissional, bairro ou cidade…'"
+              :placeholder="placeholderBuscaMarketplace()"
               autocomplete="off"
-              aria-label="Buscar estabelecimentos"
+              aria-label="Buscar lojas e profissionais"
               @focus="buscaAberta = true"
               @blur="buscaAberta = false"
             />
@@ -319,7 +319,7 @@ onMounted(async () => {
           <span class="explorar-pdx__status-label">Exibindo:</span>
           {{ localLabel }}
           <span class="explorar-pdx__status-sep">·</span>
-          <strong>{{ FEATURE_FLAGS.lojasHabilitadas ? 'Lojas' : 'Profissionais' }}: {{ loading || geoLoading ? '…' : itensFiltrados.length }}</strong>
+          <strong>{{ tituloMarketplace() }}: {{ loading || geoLoading ? '…' : itensFiltrados.length }}</strong>
         </p>
 
         <div class="explorar-pdx__actions">
@@ -390,7 +390,7 @@ onMounted(async () => {
         class="explorar-pdx__toast explorar-pdx__toast--panel"
       >
         <p class="text-sm font-semibold text-white">
-          {{ FEATURE_FLAGS.lojasHabilitadas ? 'Nenhuma loja nesta área' : 'Nenhum profissional nesta área' }}
+          {{ vazioMarketplace() }}
         </p>
         <p class="mt-1 text-xs text-white/50">Amplie o raio ou mova o mapa.</p>
         <button type="button" class="explorar-pdx__link-btn mt-2" @click="limparFiltros">
@@ -475,11 +475,11 @@ onMounted(async () => {
           <LandingSectionHeader
             tone="dark"
             eyebrow="Rede ao vivo"
-            title="Explore profissionais"
+            title="Explore lojas e profissionais"
             highlight="perto de você"
             :subtitle="
               FEATURE_FLAGS.lojasHabilitadas
-                ? 'Mapa interativo com barbearias e salões da plataforma.'
+                ? 'Mapa interativo com barbearias, salões e profissionais autônomos da plataforma.'
                 : 'Mapa interativo com profissionais autônomos da plataforma.'
             "
           />

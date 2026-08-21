@@ -95,7 +95,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: 'Como funciona', id: LANDING_SECTIONS.comoFunciona },
   { label: 'Funcionalidades', id: LANDING_SECTIONS.funcionalidades },
   { label: 'Benefícios', id: LANDING_SECTIONS.beneficios },
-  { label: 'Explorar lojas', id: LANDING_SECTIONS.explorarLojas, path: '/explorar-lojas' },
+  { label: 'Explorar lojas e profissionais', id: LANDING_SECTIONS.explorarLojas, path: '/explorar-lojas' },
   { label: 'Planos', id: LANDING_SECTIONS.planos },
   { label: 'FAQ', id: LANDING_SECTIONS.faq },
 ] as const

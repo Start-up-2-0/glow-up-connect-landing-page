@@ -167,7 +167,7 @@ export const STORY_CHAPTERS = {
   funcionamento: { index: '02', label: 'Como funciona' },
   funcionalidades: { index: '03', label: 'Funcionalidades' },
   beneficios: { index: '04', label: 'Benefícios' },
-  explorar: { index: '05', label: 'Explorar lojas' },
+  explorar: { index: '05', label: 'Explorar lojas e profissionais' },
   demonstracao: { index: '06', label: 'Demonstração' },
   resultados: { index: '07', label: 'Resultados' },
   oferta: { index: '08', label: 'Planos' },

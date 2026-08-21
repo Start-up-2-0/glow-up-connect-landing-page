@@ -13,7 +13,7 @@ export const routes: RouteRecordRaw[] = [
     path: ROUTE_PATHS.EXPLORAR_LOJAS,
     name: ROUTE_NAMES.EXPLORAR_LOJAS,
     component: () => import('@/views/public/ExplorarLojasView.vue'),
-    meta: { layout: 'landing', title: FEATURE_FLAGS.lojasHabilitadas ? 'Explorar lojas' : 'Explorar profissionais' },
+    meta: { layout: 'landing', title: FEATURE_FLAGS.lojasHabilitadas ? 'Explorar lojas e profissionais' : 'Explorar profissionais' },
   },
   {
     path: ROUTE_PATHS.LOJA_AGENDAR,

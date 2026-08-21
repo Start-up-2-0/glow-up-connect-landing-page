@@ -24,10 +24,10 @@ export const SEO_BY_PATH: Record<string, SeoMeta> = {
   },
   [ROUTE_PATHS.EXPLORAR_LOJAS]: {
     title: FEATURE_FLAGS.lojasHabilitadas
-      ? `Explorar lojas | ${APP_NAME}`
+      ? `Explorar lojas e profissionais | ${APP_NAME}`
       : `Explorar profissionais | ${APP_NAME}`,
     description: FEATURE_FLAGS.lojasHabilitadas
-      ? 'Encontre barbearias e salões próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.'
+      ? 'Encontre barbearias, salões e profissionais autônomos próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.'
       : 'Encontre profissionais autônomos próximos no mapa. Veja avaliações, distância e agende online no Glow Up Connect.',
     path: ROUTE_PATHS.EXPLORAR_LOJAS,
     ogType: 'website',
