@@ -30,7 +30,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'agenda-dia',
       label: 'Próximos horários',
-      detail: 'Quem vem a seguir, com status — sem planilha.',
+      detail: 'Quem vem a seguir e o status de cada atendimento.',
       x: 42,
       y: 54,
       side: 'right',
@@ -40,7 +40,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'status',
       label: 'Status claros',
-      detail: 'Confirmado, realizado ou cancelado — fácil de ler.',
+      detail: 'Confirmado, realizado ou cancelado. Fácil de ler.',
       x: 78,
       y: 36,
       side: 'left',
@@ -86,7 +86,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'metas',
       label: 'Comissões',
-      detail: 'Valores por profissional, sem cálculo na mão.',
+      detail: 'Valores por profissional, calculados no sistema.',
       x: 48,
       y: 58,
       side: 'right',
@@ -96,7 +96,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'selfserve',
       label: 'Cliente agenda sozinho',
-      detail: 'Escolhe serviço, vê duração e preço — sem WhatsApp.',
+      detail: 'O cliente cria conta, escolhe serviço, vê duração e preço pelo celular.',
       x: 48,
       y: 44,
       side: 'right',
@@ -106,7 +106,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'papeis',
       label: 'Papéis e acessos',
-      detail: 'Dono, admin ou profissional — cada um com seu acesso.',
+      detail: 'Dono, admin ou profissional. Cada um com seu acesso.',
       x: 50,
       y: 56,
       side: 'right',

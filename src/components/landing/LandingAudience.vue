@@ -37,10 +37,10 @@ const intro = computed(() =>
     ? AUDIENCE_INTRO
     : {
         ...AUDIENCE_INTRO,
-        titulo: 'Feito para quem atende',
+        titulo: 'Para quem atende',
         destaque: 'sozinho',
         subtitulo:
-          'Para barbeiros e cabeleireiros(as) que atendem sozinhos — agenda, clientes e financeiro no celular.',
+          'Barbeiros e cabeleireiros(as) autônomos com agenda online, histórico de quem agendou e financeiro no celular.',
       },
 )
 

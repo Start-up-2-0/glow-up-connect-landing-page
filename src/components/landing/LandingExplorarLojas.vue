@@ -274,7 +274,7 @@ onMounted(async () => {
       <!-- Top chrome (estilo PDX) -->
       <header class="explorar-pdx__top">
         <div class="explorar-pdx__search-wrap">
-          <RouterLink :to="'/'" class="explorar-pdx__brand" aria-label="Glow Up Connect — início">
+          <RouterLink :to="'/'" class="explorar-pdx__brand" aria-label="Glow Up Connect, início">
             <span class="font-light">GlowUp</span>
             <span class="font-black">Connect</span>
           </RouterLink>

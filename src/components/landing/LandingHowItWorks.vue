@@ -9,8 +9,8 @@ import LandingStorySection from '@/components/landing/motion/LandingStorySection
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.funcionamento
 const subtitle = FEATURE_FLAGS.lojasHabilitadas
-  ? 'Quatro passos para sair do cadastro e começar a atender com a agenda no ar.'
-  : 'Quatro passos para sair do cadastro e começar a atender como profissional autônomo.'
+  ? 'Cadastro, configuração e primeiro agendamento. Quatro passos para colocar a agenda no ar.'
+  : 'Cadastro, configuração e primeiro agendamento. Quatro passos para começar como autônomo.'
 const passos = FEATURE_FLAGS.lojasHabilitadas
   ? HOW_IT_WORKS
   : HOW_IT_WORKS.map((step) =>

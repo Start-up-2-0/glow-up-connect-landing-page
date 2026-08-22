@@ -101,12 +101,12 @@ export const NAV_LINKS: readonly NavLink[] = [
 ] as const
 
 export const HERO_COPY = {
-  eyebrow: 'Para barbearias, salões e profissionais da beleza',
-  tituloLinha1: 'Agenda, clientes e financeiro',
-  tituloDestaque: 'no mesmo sistema',
-  tituloLinha2: '',
+  eyebrow: 'Barbearias, salões e profissionais autônomos',
+  tituloLinha1: 'Agenda, clientes e caixa',
+  tituloDestaque: 'organizados',
+  tituloLinha2: 'para o seu negócio',
   subtitulo:
-    'A Glow ajuda barbeiros, cabeleireiros e salões a organizar horários, acompanhar o caixa e receber agendamentos online — sem depender só do WhatsApp e de planilhas.',
+    'Configure sua agenda, receba agendamentos online e acompanhe o financeiro. Seus clientes criam conta na plataforma, escolhem profissional ou loja e marcam o horário.',
   audiencia: ['Barbeiros', 'Cabeleireiros(as)', 'Barbearias', 'Salões'] as const,
   portes: [
     { dt: 'Autônomo', dd: 'Atende sozinho' },
@@ -133,10 +133,10 @@ export interface AudienceProfile {
 
 export const AUDIENCE_INTRO = {
   eyebrow: 'Para quem é',
-  titulo: 'Feita para quem vive',
-  destaque: 'de atendimento',
+  titulo: 'Do profissional',
+  destaque: 'ao salão com equipe',
   subtitulo:
-    'Se você corta cabelo, faz barba ou gerencia um salão, a Glow foi pensada para a sua rotina — do profissional que atende sozinho ao estabelecimento com equipe.',
+    'A Glow atende quem trabalha sozinho e quem já tem vários profissionais na operação. O que muda é a profundidade das ferramentas, não a proposta.',
   oficios: ['Barbeiros', 'Cabeleireiros(as)', 'Barbearias', 'Salões'] as const,
 } as const
 
@@ -147,11 +147,11 @@ export const AUDIENCE_PROFILES: readonly AudienceProfile[] = [
     porte: 'Profissional autônomo',
     titulo: 'Quem atende sozinho',
     descricao:
-      'Barbeiros e cabeleireiros(as) que precisam de agenda no celular, histórico de clientes e controle simples do que entra e sai.',
+      'Agenda no celular, histórico de quem agendou com você e controle do que entrou e saiu. Tudo no tamanho certo para quem não tem equipe.',
     pontos: [
-      'Agenda e clientes no celular',
-      'Link de agendamento online',
-      'Caixa sem planilha',
+      'Agenda e agendamentos online',
+      'Link para o cliente marcar',
+      'Financeiro sem planilha',
     ],
     tipoAssinatura: 'ProfissionalAutonomo',
     cta: 'Ver planos para autônomos',
@@ -163,10 +163,10 @@ export const AUDIENCE_PROFILES: readonly AudienceProfile[] = [
     porte: 'Barbearia ou salão',
     titulo: 'Negócios com equipe',
     descricao:
-      'Quando o WhatsApp não dá mais conta: vários profissionais, horários cruzados e comissões que precisam fechar certo.',
+      'Vários profissionais, horários cruzados e comissão para fechar. A Glow centraliza agenda, acessos e caixa em um painel.',
     pontos: [
       'Agenda por profissional',
-      'Comissões claras',
+      'Comissões calculadas no sistema',
       'Acessos por função',
     ],
     tipoAssinatura: 'Estabelecimento',
@@ -179,7 +179,7 @@ export const AUDIENCE_PROFILES: readonly AudienceProfile[] = [
     porte: 'Operação maior',
     titulo: 'Muitos profissionais, um painel',
     descricao:
-      'Alta ocupação e vários atendentes. Você acompanha agenda, caixa e indicadores da operação em um só lugar.',
+      'Alta ocupação e equipe grande pedem visão ampla. Acompanhe agenda, caixa e indicadores da operação inteira.',
     pontos: [
       'Visão unificada do dia',
       'Indicadores de ocupação',
@@ -193,10 +193,10 @@ export const AUDIENCE_PROFILES: readonly AudienceProfile[] = [
 
 export const SHOWCASE_INTRO = {
   eyebrow: 'Na prática',
-  titulo: 'O que você usa',
-  destaque: 'no dia a dia',
+  titulo: 'Conheça as telas',
+  destaque: 'da plataforma',
   subtitulo:
-    'Telas reais da plataforma: da agenda ao financeiro, pensadas para a rotina de barbearias, salões e profissionais autônomos.',
+    'Da agenda ao financeiro. Capturas reais do que você usa para organizar o dia a dia do negócio.',
 } as const
 
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
@@ -204,35 +204,35 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: 'dashboard',
     titulo: 'Painel do dia',
     beneficio:
-      'Veja atendimentos, ocupação e movimento do caixa assim que abre o sistema — sem montar relatório na mão.',
+      'Abriu o sistema e já sabe quantos atendimentos tem, como está a ocupação e o movimento do caixa.',
     mockup: 'dashboard',
   },
   {
     id: 'agenda',
     titulo: 'Agenda por profissional',
     beneficio:
-      'Organize horários, evite choques de horário e saiba quem está livre em cada cadeira.',
+      'Veja quem está livre, evite choque de horário e organize a cadeira de cada profissional.',
     mockup: 'agenda',
   },
   {
     id: 'clientes',
-    titulo: 'Cadastro de clientes',
+    titulo: 'Histórico de clientes',
     beneficio:
-      'Guarde histórico, contato e preferências para lembrar do cliente na próxima visita.',
+      'Veja quem já agendou com você: contato, serviços anteriores e preferências para retomar o atendimento.',
     mockup: 'clientes',
   },
   {
     id: 'financeiro',
     titulo: 'Financeiro do negócio',
     beneficio:
-      'Registre entradas e saídas e acompanhe o resultado do período com clareza.',
+      'Registre entradas e saídas e veja o resultado do período sem montar planilha.',
     mockup: 'financeiro',
   },
   {
     id: 'comissao',
     titulo: 'Comissões',
     beneficio:
-      'Defina as regras e acompanhe o valor de cada profissional — menos discussão no fechamento.',
+      'Defina a regra de cada profissional e acompanhe os valores antes de sentar para fechar o mês.',
     mockup: 'comissao',
     requerLojas: true,
   },
@@ -240,14 +240,14 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: 'online',
     titulo: 'Agendamento online',
     beneficio:
-      'O cliente escolhe serviço, profissional e horário pelo celular. Você recebe o horário na agenda.',
+      'O cliente cria conta, escolhe serviço, profissional e horário pelo celular. O horário cai direto na sua agenda.',
     mockup: 'online',
   },
   {
     id: 'equipe',
     titulo: 'Equipe e acessos',
     beneficio:
-      'Cadastre profissionais, defina papéis e controle o que cada um pode ver e fazer.',
+      'Cadastre profissionais, defina papéis e controle o que cada um pode ver e fazer no sistema.',
     mockup: 'equipe',
     requerLojas: true,
   },
@@ -255,14 +255,14 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: 'explorar',
     titulo: 'Explorar lojas',
     beneficio:
-      'Apareça no mapa para quem busca barbearias e salões na região e recebe novos agendamentos.',
+      'Apareça no mapa para quem busca barbearias e salões na região e receba novos agendamentos.',
     mockup: 'explorar',
   },
   {
     id: 'servicos',
     titulo: 'Catálogo de serviços',
     beneficio:
-      'Cadastre nome, preço, duração e status — o menu do negócio fica sempre atualizado.',
+      'Nome, preço, duração e status de cada serviço. O menu do negócio sempre atualizado.',
     mockup: 'servicos',
   },
 ]
@@ -284,13 +284,13 @@ export const HOW_IT_WORKS: HowItWorksStep[] = [
     step: '03',
     titulo: 'Abra o agendamento',
     descricao:
-      'Compartilhe o link para o cliente marcar online — ou registre horários na recepção.',
+      'Seus clientes criam conta, escolhem serviço e horário pelo link. Você acompanha cada marcação na agenda.',
   },
   {
     step: '04',
     titulo: 'Acompanhe a operação',
     descricao:
-      'Use a agenda, o caixa e os indicadores no dia a dia. O foco continua no atendimento.',
+      'Consulte agenda, caixa e indicadores conforme o dia avança. Você continua focado no atendimento.',
   },
 ]
 
@@ -298,104 +298,104 @@ export const FEATURES: FeatureItem[] = [
   {
     icon: 'agenda',
     titulo: 'Agenda unificada',
-    descricao: 'Horários de todos os profissionais em um calendário fácil de ler no celular ou no computador.',
+    descricao: 'Calendário com horários de todos os profissionais, legível no celular ou no computador.',
     beneficio: 'Menos conflito de horário e cadeira melhor aproveitada.',
   },
   {
     icon: 'online',
     titulo: 'Agendamento online',
-    descricao: 'O cliente escolhe serviço, profissional e horário pelo link da sua página.',
+    descricao: 'O cliente cria conta, escolhe serviço, profissional e horário pelo link da sua página.',
     beneficio: 'Horários preenchidos mesmo fora do expediente.',
   },
   {
     icon: 'clientes',
-    titulo: 'Clientes',
-    descricao: 'Histórico de serviços e dados de contato de quem já passou pela cadeira.',
-    beneficio: 'Atendimento mais pessoal e retorno mais fácil.',
+    titulo: 'Histórico de clientes',
+    descricao: 'Contato e histórico de serviços de quem criou conta e agendou com você.',
+    beneficio: 'Retorno mais fácil e atendimento com contexto.',
   },
   {
     icon: 'financeiro',
     titulo: 'Controle financeiro',
-    descricao: 'Registre movimentações e acompanhe o resultado do negócio.',
-    beneficio: 'Você sabe como está o caixa sem abrir várias planilhas.',
+    descricao: 'Registro de movimentações e resultado do negócio por período.',
+    beneficio: 'Caixa visível sem abrir várias planilhas.',
   },
   {
     icon: 'comissao',
     titulo: 'Comissões',
     descricao: 'Regras por profissional e serviço, calculadas a partir dos atendimentos.',
-    beneficio: 'Fechamento mais transparente para dono e equipe.',
+    beneficio: 'Fechamento transparente para dono e equipe.',
     requerLojas: true,
   },
   {
     icon: 'equipe',
     titulo: 'Gestão de equipe',
     descricao: 'Papéis, permissões e organização dos profissionais no mesmo painel.',
-    beneficio: 'A operação cresce sem perder o controle de acessos.',
+    beneficio: 'Operação maior sem perder controle de acessos.',
     requerLojas: true,
   },
   {
     icon: 'relatorios',
     titulo: 'Indicadores',
-    descricao: 'Painéis com ocupação, faturamento e desempenho da rotina.',
-    beneficio: 'Decisões com base no que realmente aconteceu no salão.',
+    descricao: 'Painéis com ocupação, faturamento e desempenho por período.',
+    beneficio: 'Decisões com base no que aconteceu de fato no salão.',
   },
   {
     icon: 'notificacao',
     titulo: 'Lembretes',
-    descricao: 'Avisos de confirmação que ajudam a reduzir faltas de última hora.',
-    beneficio: 'Menos buracos na agenda do dia.',
+    descricao: 'Confirmações automáticas enviadas ao cliente antes do horário.',
+    beneficio: 'Menos buraco na agenda por falta.',
   },
 ]
 
 export const BUSINESS_BENEFITS: BenefitItem[] = [
   {
     icon: 'agenda',
-    titulo: 'Agenda fora do WhatsApp',
+    titulo: 'Horários registrados',
     descricao:
-      'Horários ficam registrados no sistema, não espalhados em conversas e anotações.',
+      'Cada atendimento fica no sistema. Acabou anotar em papel, conversa ou planilha solta.',
   },
   {
     icon: 'notificacao',
-    titulo: 'Menos faltas no dia',
+    titulo: 'Menos faltas',
     descricao:
-      'Lembretes e confirmações ajudam o cliente a lembrar do horário marcado.',
+      'Lembretes e confirmações ajudam o cliente a comparecer no horário marcado.',
   },
   {
     icon: 'financeiro',
-    titulo: 'Caixa mais claro',
+    titulo: 'Caixa visível',
     descricao:
-      'Entradas, saídas e o que cada atendimento gerou — visíveis quando você precisa.',
+      'Entradas, saídas e o que cada atendimento gerou, prontos quando você precisar consultar.',
   },
   {
     icon: 'equipe',
     titulo: 'Equipe alinhada',
     descricao:
-      'Comissões e acessos definidos reduzem mal-entendido entre dono e profissionais.',
+      'Comissões e acessos definidos no sistema reduzem mal-entendido na operação.',
     requerLojas: true,
   },
   {
     icon: 'clientes',
     titulo: 'Cliente reconhecido',
     descricao:
-      'Histórico à mão para retomar o atendimento com contexto, não do zero.',
+      'Histórico e preferências de quem criou conta e agendou com você. Na próxima visita, você retoma de onde parou.',
   },
   {
     icon: 'relatorios',
     titulo: 'Visão do negócio',
     descricao:
-      'Indicadores mostram ocupação e movimento — útil para planejar horários e capacidade.',
+      'Ocupação e movimento por período para planejar horários e capacidade da equipe.',
   },
   {
     icon: 'automacao',
     titulo: 'Menos retrabalho',
     descricao:
-      'Agenda, clientes e caixa no mesmo fluxo — menos digitar a mesma informação duas vezes.',
+      'Agenda, clientes e caixa conectados. A mesma informação não precisa ser digitada duas vezes.',
   },
   {
     icon: 'dashboard',
-    titulo: 'Rotina mais leve',
+    titulo: 'Dia sob controle',
     descricao:
-      'Um painel para o que importa no dia: quem vem, quanto entra e o que falta fechar.',
+      'Quem vem, quanto entrou e o que ainda falta fechar. Tudo no painel principal.',
   },
 ]
 
@@ -414,7 +414,7 @@ export const TESTIMONIALS: TestimonialItem[] = [
     cargo: 'Pequeno negócio · Barbeiro autônomo',
     estabelecimento: 'Studio Lucas Cut',
     quote:
-      'Atendo sozinho e não precisava de um sistema de salão inteiro. A agenda e o financeiro cabem na minha rotina — e o cliente marca sozinho.',
+      'Atendo sozinho e não precisava de um sistema de salão inteiro. A agenda e o financeiro cabem no meu dia, e o cliente marca sozinho.',
     rating: 5,
   },
   {
@@ -422,7 +422,7 @@ export const TESTIMONIALS: TestimonialItem[] = [
     cargo: 'Médio negócio · Proprietária',
     estabelecimento: 'Salão Bela Arte',
     quote:
-      'Com a equipe crescendo, o WhatsApp não dava conta. Agora cada profissional tem horário, comissão e o caixa fecha sem discussão.',
+      'Com a equipe crescendo, perdemos horários no meio das conversas. Agora cada profissional tem agenda, comissão e o caixa fecha sem discussão.',
     rating: 5,
   },
   {
@@ -430,7 +430,7 @@ export const TESTIMONIALS: TestimonialItem[] = [
     cargo: 'Grande negócio · Sócio',
     estabelecimento: 'Barber House 97',
     quote:
-      'Várias cadeiras, muita gente na operação. O painel unifica agenda, ocupação e resultado — eu vejo o negócio inteiro, não só o dia.',
+      'Várias cadeiras, muita gente na operação. O painel unifica agenda, ocupação e resultado. Eu vejo o negócio inteiro, não só o dia.',
     rating: 5,
   },
 ]
@@ -445,7 +445,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     pergunta: 'Sou barbeiro ou cabeleireiro autônomo. Consigo usar?',
     resposta:
-      'Sim. Há planos para quem atende sozinho: agenda, cadastro de clientes, financeiro e agendamento online, sem precisar montar equipe.',
+      'Sim. Existem planos para quem atende sozinho, com agenda, histórico de clientes, financeiro e agendamento online. Não precisa montar equipe.',
   },
   {
     pergunta: 'Funciona para estabelecimentos com vários profissionais?',
@@ -461,37 +461,42 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     pergunta: 'Meus clientes conseguem agendar online?',
     resposta:
-      'Sim. Eles escolhem serviço e horário pelo link. Você acompanha tudo na agenda do estabelecimento ou do profissional.',
+      'Sim. Eles criam conta na plataforma, escolhem serviço, profissional e horário. Você acompanha tudo na sua agenda.',
+  },
+  {
+    pergunta: 'Preciso cadastrar meus clientes na plataforma?',
+    resposta:
+      'Não. Seus clientes criam a própria conta, escolhem serviço, profissional ou loja e fazem o agendamento online. Você acompanha o histórico de quem marcou com você.',
   },
   {
     pergunta: 'Como funcionam as comissões?',
     resposta:
-      'Você define as regras. O sistema calcula com base nos atendimentos, para dono e equipe acompanharem os valores com clareza.',
+      'Você define as regras. O sistema calcula com base nos atendimentos, para dono e equipe acompanharem os valores.',
     requerLojas: true,
   },
   {
     pergunta: 'Posso começar em um plano menor e mudar depois?',
     resposta:
-      'Sim. Comece no que faz sentido hoje — autônomo ou estabelecimento — e altere o plano quando a operação pedir mais recursos.',
+      'Sim. Comece no plano que faz sentido hoje e mude quando a operação precisar de mais recursos.',
   },
   {
     pergunta: 'Tem suporte se eu travar na configuração?',
     resposta:
-      'Sim. Dá para falar com a equipe pelos canais de contato no rodapé. Também respondemos dúvidas comuns aqui no FAQ.',
+      'Sim. Fale com a equipe pelos canais de contato no rodapé ou consulte as respostas aqui no FAQ.',
   },
 ]
 
 export const FINAL_CTA = {
-  titulo: 'Pronto para organizar',
-  destaque: 'a rotina do negócio?',
+  titulo: 'Comece a organizar',
+  destaque: 'seu negócio hoje',
   subtitulo:
-    'Crie sua conta, cadastre serviços e horários e comece a receber agendamentos com agenda e caixa no mesmo sistema.',
+    'Crie sua conta, cadastre serviços e horários e comece a receber agendamentos. Seus clientes se cadastram e marcam online.',
   cta: 'Criar minha conta',
   secondary: 'Ver planos',
 } as const
 
 export const FOOTER_TAGLINE =
-  'Sistema para barbearias, salões e profissionais da beleza — agenda, clientes e financeiro no dia a dia.'
+  'Gestão para barbearias, salões e profissionais da beleza. Agenda, clientes e financeiro no dia a dia.'
 
 export const FOOTER_CONTACT = {
   email: 'contato@glowup.com.br',

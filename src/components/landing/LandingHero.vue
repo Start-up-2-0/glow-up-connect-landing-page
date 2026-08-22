@@ -24,7 +24,7 @@ onMounted(() => bind(heroSection.value))
 
 const subtitulo = FEATURE_FLAGS.lojasHabilitadas
   ? HERO_COPY.subtitulo
-  : 'A Glow ajuda barbeiros e cabeleireiros autônomos a organizar horários, acompanhar o caixa e receber agendamentos online — sem depender só do WhatsApp.'
+  : 'Configure sua agenda, receba agendamentos online e acompanhe o financeiro. Seus clientes criam conta, escolhem você e marcam o horário.'
 const audiencia = FEATURE_FLAGS.lojasHabilitadas
   ? HERO_COPY.audiencia
   : (['Barbeiros', 'Cabeleireiros(as)'] as const)

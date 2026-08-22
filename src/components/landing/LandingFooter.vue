@@ -21,7 +21,7 @@ const { goToSection, goToNavLink } = useLandingScroll()
 const navLinks = navLinksVisiveis()
 const tagline = FEATURE_FLAGS.lojasHabilitadas
   ? FOOTER_TAGLINE
-  : 'Sistema para barbeiros e cabeleireiros autônomos — agenda, clientes e financeiro no dia a dia.'
+  : 'Gestão para barbeiros e cabeleireiros autônomos. Agenda, clientes e financeiro no dia a dia.'
 
 const whatsappHref = computed(() => getWhatsappHref())
 const phoneLabel = computed(() => getWhatsappLabel())
@@ -66,7 +66,7 @@ const socialLinks = computed(() => {
 
         <div class="min-w-0">
           <p class="font-montserrat text-xs font-semibold text-glow-text sm:text-sm">Navegação</p>
-          <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé — navegação">
+          <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé, navegação">
             <button
               v-for="link in navLinks"
               :key="link.id"
@@ -88,7 +88,7 @@ const socialLinks = computed(() => {
 
         <div class="min-w-0">
           <p class="font-montserrat text-xs font-semibold text-glow-text sm:text-sm">Conta</p>
-          <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé — conta">
+          <nav class="mt-3 flex flex-col gap-2 sm:mt-4 sm:gap-2.5" aria-label="Rodapé, conta">
             <a
               :href="`${APP_URL}/auth/login`"
               class="font-satoshi text-xs text-glow-text-muted transition hover:text-glow-text sm:text-sm"

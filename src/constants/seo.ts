@@ -14,11 +14,11 @@ export interface SeoMeta {
 export const SEO_BY_PATH: Record<string, SeoMeta> = {
   [ROUTE_PATHS.HOME]: {
     title: FEATURE_FLAGS.lojasHabilitadas
-      ? `${APP_NAME} — Agenda e gestão para barbearias, salões e profissionais`
-      : `${APP_NAME} — Agenda e gestão para barbeiros e cabeleireiros autônomos`,
+      ? `${APP_NAME} | Agenda e gestão para barbearias, salões e profissionais`
+      : `${APP_NAME} | Agenda e gestão para barbeiros e cabeleireiros autônomos`,
     description: FEATURE_FLAGS.lojasHabilitadas
-      ? 'Organize agenda, clientes e financeiro de barbearias, salões e profissionais da beleza. Receba agendamentos online e acompanhe o dia a dia em um só sistema.'
-      : 'Organize agenda, clientes e financeiro como barbeiro ou cabeleireiro autônomo. Receba agendamentos online e acompanhe o caixa no celular.',
+      ? 'Agenda, histórico de clientes e financeiro para barbearias, salões e profissionais da beleza. Clientes criam conta e agendam online.'
+      : 'Agenda, histórico de clientes e financeiro para barbeiros e cabeleireiros autônomos. Clientes criam conta e agendam online.',
     path: ROUTE_PATHS.HOME,
     ogType: 'website',
   },

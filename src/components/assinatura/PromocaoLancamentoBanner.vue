@@ -19,10 +19,10 @@ const descontoLabel = computed(() => `${props.promocao.percentualDescontoMensali
     role="status"
   >
     <p class="font-montserrat text-lg font-semibold leading-snug text-glow-text">
-      <span class="text-glow-gold">Promoção de lançamento</span>
-      <span> — {{ promocao.diasTrial }} dias grátis + {{ descontoLabel }} off para sempre</span>
+      <span class="text-glow-gold">Promoção de lançamento.</span>
+      {{ ' ' }}{{ promocao.diasTrial }} dias grátis + {{ descontoLabel }} off para sempre.
     </p>
-    <p class="mt-1.5 font-poppins text-sm font-normal leading-relaxed text-glow-text-subtle">
+    <p class="mt-1.5 font-poppins text-sm font-normal leading-relaxed text-glow-text-muted">
       Restam {{ promocao.vagasRestantes }} vagas. Cartão necessário; primeira cobrança com desconto após o período de teste.
     </p>
   </div>

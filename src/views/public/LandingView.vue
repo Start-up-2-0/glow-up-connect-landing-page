@@ -54,8 +54,8 @@ useJsonLd([
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     description: FEATURE_FLAGS.lojasHabilitadas
-      ? 'Sistema para barbeiros, cabeleireiros e salões: agenda, clientes, financeiro e agendamento online.'
-      : 'Sistema para barbeiros e cabeleireiros autônomos: agenda, clientes, financeiro e agendamento online.',
+      ? 'Agenda, histórico de clientes e financeiro para barbearias, salões e profissionais da beleza, com agendamento online.'
+      : 'Agenda, histórico de clientes e financeiro para barbeiros e cabeleireiros autônomos, com agendamento online.',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'BRL',

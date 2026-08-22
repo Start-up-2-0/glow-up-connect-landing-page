@@ -26,8 +26,8 @@ const benefitItems = computed(() => semItensDeLoja(BUSINESS_BENEFITS))
           tone="dark"
           eyebrow="Benefícios"
           title="O que muda"
-          highlight="na prática"
-          subtitle="Menos horário perdido no WhatsApp, caixa mais claro e cliente com histórico — o ganho está na rotina, não em promessas."
+          highlight="no dia a dia"
+          subtitle="Menos improviso na recepção, mais clareza no caixa e cliente com histórico salvo."
         />
 
         <div

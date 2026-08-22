@@ -18,13 +18,13 @@ const opcoes: Array<{
     value: 'Estabelecimento',
     titulo: 'Tenho barbearia ou salão com equipe',
     descricao:
-      'Agenda por profissional, comissões e acessos — do time pequeno à operação maior.',
+      'Agenda por profissional, comissões e controle de acessos para times pequenos ou grandes.',
   },
   {
     value: 'ProfissionalAutonomo',
     titulo: 'Trabalho como profissional autônomo',
     descricao:
-      'Atendo sozinho. Agenda, clientes e serviços no celular, sem montar equipe.',
+      'Agenda online e histórico de clientes no celular. Sem precisar montar equipe.',
   },
 ]
 </script>
@@ -35,7 +35,7 @@ const opcoes: Array<{
       Como você trabalha?
     </legend>
     <p class="text-center font-urbanist text-sm text-glow-text-muted">
-      Os planos e a experiência mudam conforme o modelo. Escolha o que combina com a sua rotina.
+      Os planos mudam conforme o modelo de trabalho. Escolha o que combina com você.
     </p>
 
     <div class="grid gap-3 sm:grid-cols-2">

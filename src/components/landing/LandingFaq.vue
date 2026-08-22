@@ -21,7 +21,7 @@ function toggle(index: number) {
           eyebrow="FAQ"
           title="Perguntas"
           highlight="frequentes"
-          subtitle="Respostas objetivas antes de você precisar falar com o suporte."
+          subtitle="Respostas objetivas sobre planos, configuração e uso da plataforma."
         />
 
       <div

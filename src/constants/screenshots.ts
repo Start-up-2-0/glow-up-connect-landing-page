@@ -86,19 +86,19 @@ export const SCREENSHOTS: Record<ScreenshotId, ScreenshotAsset> = {
   },
   online: {
     src: imgOnline,
-    alt: 'Fluxo de agendamento online — seleção de serviços',
+    alt: 'Fluxo de agendamento online, seleção de serviços',
   },
   'agendamento-profissional': {
     src: imgAgendamentoProfissional,
-    alt: 'Fluxo de agendamento online — escolha do profissional',
+    alt: 'Fluxo de agendamento online, escolha do profissional',
   },
   'agendamento-data': {
     src: imgAgendamentoData,
-    alt: 'Fluxo de agendamento online — seleção de data no calendário',
+    alt: 'Fluxo de agendamento online, seleção de data no calendário',
   },
   'agendamento-confirmacao': {
     src: imgAgendamentoConfirmacao,
-    alt: 'Fluxo de agendamento online — revisão e confirmação',
+    alt: 'Fluxo de agendamento online, revisão e confirmação',
   },
   relatorios: {
     src: imgFinanceiro,
@@ -116,22 +116,25 @@ export const VISUAL_DEMO_SCREENSHOTS = [
   {
     id: 'agenda-detalhe',
     titulo: 'Detalhe do agendamento',
-    beneficio:
-      'Cliente, serviço, valor e histórico na mesma tela — com ações para receber, remarcar ou cancelar.',
+    beneficio: 'Tudo sobre o horário em uma tela',
+    descricao:
+      'Cliente, serviço, valor e histórico reunidos. Receba, remarque ou cancele sem trocar de tela.',
     screenshot: 'agenda-detalhe' as ScreenshotId,
   },
   {
     id: 'financeiro',
     titulo: 'Financeiro e comissões',
-    beneficio:
-      'Acompanhe receita, despesas e comissões da equipe com indicadores prontos para o fechamento do dia.',
+    beneficio: 'Caixa e comissões no mesmo módulo',
+    descricao:
+      'Receita, despesas e valores por profissional prontos para o fechamento do dia ou do mês.',
     screenshot: 'comissao' as ScreenshotId,
   },
   {
     id: 'online',
     titulo: 'Agendamento online',
-    beneficio:
-      'O cliente escolhe serviço, data e horário. O compromisso entra direto na sua agenda.',
+    beneficio: 'Cliente marca pelo celular',
+    descricao:
+      'Serviço, data e horário escolhidos pelo cliente após criar conta. O compromisso entra direto na sua agenda.',
     screenshot: 'agendamento-confirmacao' as ScreenshotId,
   },
 ] as const

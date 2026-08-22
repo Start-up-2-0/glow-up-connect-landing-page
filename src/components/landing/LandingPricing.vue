@@ -50,18 +50,18 @@ const planosOrdenados = computed(() => {
 
 const copyTitulo = computed(() =>
   tipoAssinatura.value === 'ProfissionalAutonomo'
-    ? 'Planos para quem trabalha'
+    ? 'Planos para autônomos'
     : 'Escolha o plano',
 )
 
 const copyHighlight = computed(() =>
-  tipoAssinatura.value === 'ProfissionalAutonomo' ? 'sozinho' : 'do seu negócio',
+  tipoAssinatura.value === 'ProfissionalAutonomo' ? 'do seu perfil' : 'do seu negócio',
 )
 
 const copySubtitle = computed(() =>
   tipoAssinatura.value === 'ProfissionalAutonomo'
-    ? 'Essencial e Premium para barbeiros e cabeleireiros autônomos — sem taxa escondida.'
-    : 'Planos para barbearias e salões com equipe — escolha o que cabe na sua operação hoje.',
+    ? 'Essencial e Premium para barbeiros e cabeleireiros que trabalham sozinhos.'
+    : 'Planos para barbearias e salões com equipe. Escolha o que cabe na operação hoje.',
 )
 
 function isPopular(plano: Plano): boolean {

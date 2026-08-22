@@ -22,7 +22,7 @@ const chapter = STORY_CHAPTERS.demonstracao
           eyebrow="Demonstração"
           title="Telas reais"
           highlight="da operação"
-          subtitle="Capturas do Glow Up Connect com dados de demonstração — o que você vê ao usar agenda, financeiro e agendamento online."
+          subtitle="Capturas reais do Glow Up Connect. Veja como ficam agenda, financeiro e agendamento online."
         />
 
         <div
@@ -48,7 +48,7 @@ const chapter = STORY_CHAPTERS.demonstracao
                 {{ demo.beneficio }}
               </h3>
               <p class="mt-4 max-w-md font-poppins text-sm leading-relaxed text-glow-text-muted sm:text-base">
-                Interface pensada para quem atende e para quem gerencia: legível no celular e completa no computador.
+                {{ demo.descricao }}
               </p>
             </div>
             <div :class="index % 2 === 1 ? 'lg:order-1' : ''" class="min-w-0 max-w-full">

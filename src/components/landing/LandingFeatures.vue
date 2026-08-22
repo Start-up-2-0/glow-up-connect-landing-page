@@ -13,8 +13,8 @@ const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.funcionalidades
 const featureItems = computed(() => semItensDeLoja(FEATURES))
 const subtitle = FEATURE_FLAGS.lojasHabilitadas
-  ? 'Ferramentas pensadas para a rotina de barbearias, salões e profissionais autônomos — do horário marcado ao caixa do dia.'
-  : 'Ferramentas pensadas para a rotina de barbeiros e cabeleireiros autônomos — do horário marcado ao caixa do dia.'
+  ? 'Recursos que cobrem a operação de barbearias, salões e profissionais autônomos.'
+  : 'Recursos que cobrem a operação de barbeiros e cabeleireiros autônomos.'
 </script>
 
 <template>
@@ -28,9 +28,8 @@ const subtitle = FEATURE_FLAGS.lojasHabilitadas
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader
           eyebrow="Funcionalidades"
-          title="O que a Glow"
-          highlight="resolve"
-          title-after="no dia a dia"
+          title="Recursos para"
+          highlight="gerir o negócio"
           :subtitle="subtitle"
         />
 

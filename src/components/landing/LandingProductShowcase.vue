@@ -79,7 +79,7 @@ function goNext() {
           :subtitle="
             FEATURE_FLAGS.lojasHabilitadas
               ? SHOWCASE_INTRO.subtitulo
-              : 'Do agendamento ao caixa: telas pensadas para barbeiros e cabeleireiros autônomos.'
+              : 'Telas da plataforma para barbeiros e cabeleireiros autônomos, da agenda ao financeiro.'
           "
         />
 

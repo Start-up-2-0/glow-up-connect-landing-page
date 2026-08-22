@@ -13,7 +13,7 @@ const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.cta
 const subtitulo = FEATURE_FLAGS.lojasHabilitadas
   ? FINAL_CTA.subtitulo
-  : 'Crie sua conta, cadastre serviços e horários e comece a atender com agenda e caixa no mesmo sistema.'
+  : 'Crie sua conta, cadastre serviços e horários e comece a receber agendamentos. Seus clientes se cadastram e marcam online.'
 </script>
 
 <template>

@@ -36,11 +36,6 @@ async function handleLogoClick() {
   await goToSection(LANDING_SECTIONS.inicio)
 }
 
-async function handleCtaClick() {
-  menuOpen.value = false
-  await goToSection(LANDING_SECTIONS.planos)
-}
-
 function updateActiveSection() {
   if (typeof document === 'undefined') return
 
@@ -134,13 +129,12 @@ watch(
         >
           Entrar
         </a>
-        <button type="button" @click="handleCtaClick">
-          <LandingCtaButton
-            label="Começar agora"
-            size="sm"
-            class="!h-10 !rounded-full !px-4 !text-sm"
-          />
-        </button>
+        <LandingCtaButton
+          :href="`${APP_URL}/auth/register`"
+          label="Criar conta"
+          size="sm"
+          class="!h-10 !rounded-full !px-4 !text-sm"
+        />
       </div>
 
       <div class="flex items-center gap-2 lg:hidden">
@@ -197,9 +191,12 @@ watch(
           >
             Cadastrar
           </a>
-          <button type="button" class="pt-2" @click="handleCtaClick">
-            <LandingCtaButton label="Começar agora" class="w-full justify-center" />
-          </button>
+          <LandingCtaButton
+            :href="`${APP_URL}/auth/register`"
+            label="Criar conta"
+            class="w-full justify-center"
+            @click="menuOpen = false"
+          />
         </nav>
       </div>
     </Transition>
