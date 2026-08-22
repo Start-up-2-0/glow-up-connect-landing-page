@@ -13,8 +13,8 @@ const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.funcionalidades
 const featureItems = computed(() => semItensDeLoja(FEATURES))
 const subtitle = FEATURE_FLAGS.lojasHabilitadas
-  ? 'Para barbeiros e cabeleireiros autônomos — e para barbearias e salões pequenos, médios e grandes. Recursos que resolvem a rotina, não só preenchem uma lista.'
-  : 'Para barbeiros e cabeleireiros autônomos. Recursos que resolvem a rotina, não só preenchem uma lista.'
+  ? 'Ferramentas pensadas para a rotina de barbearias, salões e profissionais autônomos — do horário marcado ao caixa do dia.'
+  : 'Ferramentas pensadas para a rotina de barbeiros e cabeleireiros autônomos — do horário marcado ao caixa do dia.'
 </script>
 
 <template>
@@ -28,9 +28,9 @@ const subtitle = FEATURE_FLAGS.lojasHabilitadas
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader
           eyebrow="Funcionalidades"
-          title="Tudo que o seu"
-          highlight="atendimento"
-          title-after="precisa"
+          title="O que a Glow"
+          highlight="resolve"
+          title-after="no dia a dia"
           :subtitle="subtitle"
         />
 
@@ -52,7 +52,7 @@ const subtitle = FEATURE_FLAGS.lojasHabilitadas
             <h3 class="mt-5 font-montserrat text-lg font-semibold text-glow-text">
               {{ feature.titulo }}
             </h3>
-            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
+            <p class="mt-2 font-poppins text-sm leading-relaxed text-glow-text-muted">
               {{ feature.descricao }}
             </p>
             <p class="mt-4 border-t border-glow-border-soft pt-4 font-satoshi text-xs font-semibold text-glow-gold">

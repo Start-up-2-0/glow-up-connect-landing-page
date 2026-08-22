@@ -54,8 +54,8 @@ useJsonLd([
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     description: FEATURE_FLAGS.lojasHabilitadas
-      ? 'Plataforma de gestão para barbeiros, cabeleireiros e salões — negócios pequenos, médios e grandes: agenda, clientes, financeiro e agendamento online.'
-      : 'Plataforma de gestão para barbeiros e cabeleireiros autônomos: agenda, clientes, financeiro e agendamento online.',
+      ? 'Sistema para barbeiros, cabeleireiros e salões: agenda, clientes, financeiro e agendamento online.'
+      : 'Sistema para barbeiros e cabeleireiros autônomos: agenda, clientes, financeiro e agendamento online.',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'BRL',
@@ -87,7 +87,7 @@ watch(() => route.hash, handleHashScroll)
       <LandingFeatures />
       <LandingBenefits />
       <LandingVisualDemos />
-      <LandingSocialProof />
+      <LandingSocialProof v-if="FEATURE_FLAGS.showSocialProof" />
       <LandingPricing />
       <LandingFaq />
       <LandingFinalCta />

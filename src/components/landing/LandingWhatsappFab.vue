@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { getWhatsappHref } from '@/utils/whatsapp'
 
-const whatsappUrl = computed(() => {
-  const phone = import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined
-  if (!phone) return 'https://wa.me/5579999999999'
-  const digits = phone.replace(/\D/g, '')
-  if (!digits) return null
-  const text = encodeURIComponent(
-    'Olá! Quero saber mais sobre o Glow Up Connect para o meu negócio.',
-  )
-  return `https://wa.me/${digits}?text=${text}`
-})
+const whatsappUrl = computed(() =>
+  getWhatsappHref('Olá! Quero saber mais sobre o Glow Up Connect para o meu negócio.'),
+)
 </script>
 
 <template>

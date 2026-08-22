@@ -19,10 +19,10 @@ const chapter = STORY_CHAPTERS.demonstracao
     <div class="px-4 pb-20 pt-4 lg:px-8 lg:pb-28 lg:pt-6">
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader
-          eyebrow="Demonstração visual"
-          title="A mesma interface"
-          highlight="do dia a dia"
-          subtitle="Capturas reais do Glow Up Connect — o que sua equipe vê ao abrir o app, com dados de demonstração."
+          eyebrow="Demonstração"
+          title="Telas reais"
+          highlight="da operação"
+          subtitle="Capturas do Glow Up Connect com dados de demonstração — o que você vê ao usar agenda, financeiro e agendamento online."
         />
 
         <div
@@ -47,9 +47,8 @@ const chapter = STORY_CHAPTERS.demonstracao
               <h3 class="mt-3 font-montserrat text-2xl font-semibold leading-snug text-glow-text sm:text-3xl">
                 {{ demo.beneficio }}
               </h3>
-              <p class="mt-4 max-w-md font-poppins text-base font-light leading-relaxed text-glow-text-muted">
-                Interface pensada para barbeiros, cabeleireiros e salões: clara no celular e
-                completa no computador da gestão.
+              <p class="mt-4 max-w-md font-poppins text-sm leading-relaxed text-glow-text-muted sm:text-base">
+                Interface pensada para quem atende e para quem gerencia: legível no celular e completa no computador.
               </p>
             </div>
             <div :class="index % 2 === 1 ? 'lg:order-1' : ''" class="min-w-0 max-w-full">

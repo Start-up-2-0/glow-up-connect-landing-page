@@ -41,9 +41,10 @@
     --glow-surface-tint: rgba(146, 103, 155, 0.06);
 
     --glow-text: var(--palette-purple-black);
-    --glow-text-muted: var(--palette-gray-purple);
+    /* Muted/subtle um pouco mais escuros no claro — subtítulos e corpo secundário legíveis */
+    --glow-text-muted: #4f4358;
     --glow-text-soft: #3d2a5c;
-    --glow-text-subtle: var(--palette-purple-light);
+    --glow-text-subtle: #5a4a6a;
     --glow-text-hover: var(--palette-purple-medium);
     --glow-placeholder: var(--palette-gray-lilac);
 
@@ -53,13 +54,17 @@
 
     --glow-accent: var(--palette-lilac-medium);
     --glow-accent-glow: rgba(207, 176, 218, 0.45);
-    --glow-gold: var(--palette-lilac-light);
-    --glow-gold-dark: var(--palette-lilac-medium);
+    /*
+     * Acento de texto/ícone no tema claro: lilás médio-escuro (não lilac-light),
+     * para contraste adequado sobre canvas lavanda. CTA permanece lilac-medium.
+     */
+    --glow-gold: #6b456f;
+    --glow-gold-dark: var(--palette-purple-medium);
     --glow-gold-cta: var(--palette-lilac-medium);
     --glow-gold-soft: var(--glow-accent-glow);
     --glow-gold-selected: rgba(146, 103, 155, 0.14);
 
-    --brand-gold: var(--palette-lilac-light);
+    --brand-gold: #6b456f;
     --brand-gold-dark: var(--palette-lilac-medium);
 
     --glow-primary: var(--brand-blue);
@@ -117,11 +122,12 @@
     --glow-surface-tint: rgba(245, 240, 232, 0.04);
 
     --glow-text: #f5f0e8;
-    --glow-text-muted: rgba(245, 240, 232, 0.45);
-    --glow-text-soft: rgba(245, 240, 232, 0.82);
-    --glow-text-subtle: rgba(245, 240, 232, 0.58);
-    --glow-text-hover: rgba(245, 240, 232, 0.72);
-    --glow-placeholder: rgba(245, 240, 232, 0.38);
+    /* Opacidades maiores no escuro — corpo secundário e labels não “somem” */
+    --glow-text-muted: rgba(245, 240, 232, 0.68);
+    --glow-text-soft: rgba(245, 240, 232, 0.88);
+    --glow-text-subtle: rgba(245, 240, 232, 0.78);
+    --glow-text-hover: rgba(245, 240, 232, 0.9);
+    --glow-placeholder: rgba(245, 240, 232, 0.42);
 
     --glow-border-soft: rgba(245, 240, 232, 0.07);
     --glow-border-sidebar: rgba(245, 240, 232, 0.09);

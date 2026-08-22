@@ -40,7 +40,7 @@ const intro = computed(() =>
         titulo: 'Feito para quem atende',
         destaque: 'sozinho',
         subtitulo:
-          'Atendemos barbeiros e cabeleireiros(as) autônomos — agenda, clientes e financeiro no celular.',
+          'Para barbeiros e cabeleireiros(as) que atendem sozinhos — agenda, clientes e financeiro no celular.',
       },
 )
 
@@ -119,7 +119,7 @@ function verPlanos(perfil: AudienceProfile) {
               <h3 class="mt-2 font-montserrat text-xl font-semibold text-glow-text">
                 {{ perfil.titulo }}
               </h3>
-              <p class="mt-3 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
+              <p class="mt-3 font-poppins text-sm leading-relaxed text-glow-text-muted">
                 {{ perfil.descricao }}
               </p>
 
@@ -127,7 +127,7 @@ function verPlanos(perfil: AudienceProfile) {
                 <li
                   v-for="ponto in perfil.pontos"
                   :key="ponto"
-                  class="flex items-start gap-2 font-poppins text-sm font-light text-glow-text-subtle"
+                  class="flex items-start gap-2 font-poppins text-sm text-glow-text-subtle"
                 >
                   <span
                     class="mt-1.5 size-1.5 shrink-0 rounded-full bg-glow-gold"

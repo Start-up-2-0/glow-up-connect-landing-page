@@ -17,12 +17,12 @@ function toggle(index: number) {
 <template>
   <section :id="LANDING_SECTIONS.faq" class="bg-transparent px-4 py-20 lg:px-8 lg:py-28">
     <div class="mx-auto max-w-[880px]">
-      <LandingSectionHeader
-        eyebrow="FAQ"
-        title="Dúvidas"
-        highlight="frequentes"
-        subtitle="Respostas diretas antes de você precisar falar com o suporte."
-      />
+        <LandingSectionHeader
+          eyebrow="FAQ"
+          title="Perguntas"
+          highlight="frequentes"
+          subtitle="Respostas objetivas antes de você precisar falar com o suporte."
+        />
 
       <div
         ref="revealRoot"
@@ -57,7 +57,7 @@ function toggle(index: number) {
             :class="openIndex === index ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
           >
             <div class="overflow-hidden">
-              <p class="px-5 pb-5 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
+              <p class="px-5 pb-5 font-poppins text-sm leading-relaxed text-glow-text-muted">
                 {{ item.resposta }}
               </p>
             </div>

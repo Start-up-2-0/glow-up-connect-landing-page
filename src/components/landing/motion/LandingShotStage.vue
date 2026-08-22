@@ -109,7 +109,7 @@ const mobileCallouts = computed(() => false)
         <p class="font-satoshi text-[10px] font-semibold uppercase tracking-[0.14em] text-glow-gold">
           {{ item.label }}
         </p>
-        <p class="mt-1 font-poppins text-sm font-light text-glow-text-muted">
+        <p class="mt-1 font-poppins text-sm text-glow-text-muted">
           {{ item.detail }}
         </p>
       </li>

@@ -117,21 +117,21 @@ export const VISUAL_DEMO_SCREENSHOTS = [
     id: 'agenda-detalhe',
     titulo: 'Detalhe do agendamento',
     beneficio:
-      'Veja cliente, serviço, valor e histórico em uma tela clara — ações rápidas para receber, remarcar ou cancelar.',
+      'Cliente, serviço, valor e histórico na mesma tela — com ações para receber, remarcar ou cancelar.',
     screenshot: 'agenda-detalhe' as ScreenshotId,
   },
   {
     id: 'financeiro',
     titulo: 'Financeiro e comissões',
     beneficio:
-      'Acompanhe receita, despesas e comissões da equipe com indicadores e gráficos prontos para a operação diária.',
+      'Acompanhe receita, despesas e comissões da equipe com indicadores prontos para o fechamento do dia.',
     screenshot: 'comissao' as ScreenshotId,
   },
   {
     id: 'online',
     titulo: 'Agendamento online',
     beneficio:
-      'Seus clientes escolhem serviço, data e horário em poucos passos — a agenda do salão se organiza sozinha.',
+      'O cliente escolhe serviço, data e horário. O compromisso entra direto na sua agenda.',
     screenshot: 'agendamento-confirmacao' as ScreenshotId,
   },
 ] as const

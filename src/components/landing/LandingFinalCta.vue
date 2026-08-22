@@ -13,7 +13,7 @@ const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.cta
 const subtitulo = FEATURE_FLAGS.lojasHabilitadas
   ? FINAL_CTA.subtitulo
-  : 'Cadastre-se, configure em poucos passos e comece a atender com agenda e caixa no mesmo lugar.'
+  : 'Crie sua conta, cadastre serviços e horários e comece a atender com agenda e caixa no mesmo sistema.'
 </script>
 
 <template>
@@ -43,11 +43,11 @@ const subtitulo = FEATURE_FLAGS.lojasHabilitadas
         class="landing-reveal relative mx-auto max-w-3xl text-center"
         :class="isVisible && 'is-visible'"
       >
-        <h2 class="font-montserrat text-3xl font-light leading-[1.15] text-glow-text sm:text-4xl lg:text-5xl">
+        <h2 class="font-montserrat text-[1.75rem] font-medium leading-[1.2] text-glow-text sm:text-4xl lg:text-[2.75rem]">
           {{ FINAL_CTA.titulo }}
           <span class="font-black text-glow-gold"> {{ FINAL_CTA.destaque }}</span>
         </h2>
-        <p class="mx-auto mt-5 max-w-xl font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg">
+        <p class="mx-auto mt-4 max-w-lg font-poppins text-sm leading-relaxed text-glow-text-muted sm:mt-5 sm:text-base">
           {{ subtitulo }}
         </p>
         <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">

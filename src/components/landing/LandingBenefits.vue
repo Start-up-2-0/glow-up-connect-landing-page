@@ -24,10 +24,10 @@ const benefitItems = computed(() => semItensDeLoja(BUSINESS_BENEFITS))
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader
           tone="dark"
-          eyebrow="Benefícios para o negócio"
-          title="Resultados que aparecem"
-          highlight="na operação"
-          subtitle="Menos furos na agenda, caixa mais previsível e cliente melhor atendido — impacto que você sente no dia a dia."
+          eyebrow="Benefícios"
+          title="O que muda"
+          highlight="na prática"
+          subtitle="Menos horário perdido no WhatsApp, caixa mais claro e cliente com histórico — o ganho está na rotina, não em promessas."
         />
 
         <div
@@ -48,7 +48,7 @@ const benefitItems = computed(() => semItensDeLoja(BUSINESS_BENEFITS))
             <h3 class="mt-5 font-montserrat text-lg font-semibold text-glow-text">
               {{ benefit.titulo }}
             </h3>
-            <p class="mt-2 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
+            <p class="mt-2 font-poppins text-sm leading-relaxed text-glow-text-muted">
               {{ benefit.descricao }}
             </p>
           </article>

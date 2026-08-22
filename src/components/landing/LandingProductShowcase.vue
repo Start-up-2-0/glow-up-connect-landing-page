@@ -19,7 +19,7 @@ const showcaseItems = computed(() => {
       ...item,
       titulo: 'Explorar profissionais',
       beneficio:
-        'Apareça para novos clientes na região e atraia demanda qualificada para o seu atendimento.',
+        'Apareça para quem busca profissionais na região e receba novos contatos pelo mapa.',
     }
   })
   return items
@@ -125,7 +125,7 @@ function goNext() {
             >
               <p
                 :key="active.id"
-                class="min-w-0 max-w-2xl font-poppins text-sm font-light leading-relaxed text-glow-text-muted sm:text-base"
+                class="min-w-0 max-w-2xl font-poppins text-sm leading-relaxed text-glow-text-muted sm:text-base"
               >
                 {{ active.beneficio }}
               </p>

@@ -118,7 +118,7 @@ onUnmounted(() => {
                 >
                   {{ plano.nome }}
                 </h2>
-                <p class="mt-2 font-poppins text-sm font-light leading-snug text-glow-text-subtle">
+                <p class="mt-2 font-poppins text-sm leading-snug text-glow-text-muted">
                   {{ plano.descricao }}
                 </p>
               </div>
@@ -178,7 +178,7 @@ onUnmounted(() => {
                 >
                   <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
                 </svg>
-                <span class="font-poppins text-sm font-light leading-snug text-glow-text-subtle">
+                <span class="font-poppins text-sm leading-snug text-glow-text-muted">
                   {{ feature }}
                 </span>
               </li>

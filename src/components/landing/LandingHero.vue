@@ -24,7 +24,7 @@ onMounted(() => bind(heroSection.value))
 
 const subtitulo = FEATURE_FLAGS.lojasHabilitadas
   ? HERO_COPY.subtitulo
-  : 'Agenda, clientes e financeiro para barbeiros e cabeleireiros autônomos — tudo em um só lugar.'
+  : 'A Glow ajuda barbeiros e cabeleireiros autônomos a organizar horários, acompanhar o caixa e receber agendamentos online — sem depender só do WhatsApp.'
 const audiencia = FEATURE_FLAGS.lojasHabilitadas
   ? HERO_COPY.audiencia
   : (['Barbeiros', 'Cabeleireiros(as)'] as const)
@@ -76,15 +76,15 @@ const portes = FEATURE_FLAGS.lojasHabilitadas ? HERO_COPY.portes : HERO_COPY.por
           </p>
 
           <h1
-            class="hero-enter hero-enter-d2 mt-6 font-montserrat text-[2rem] font-light leading-snug text-glow-text sm:text-5xl sm:leading-[1.08] xl:text-[3.75rem]"
+            class="hero-enter hero-enter-d2 mt-6 font-montserrat text-[1.875rem] font-medium leading-snug text-glow-text sm:text-5xl sm:leading-[1.08] xl:text-[3.5rem]"
           >
             <span class="block">{{ HERO_COPY.tituloLinha1 }}</span>
             <span class="block font-black text-glow-gold">{{ HERO_COPY.tituloDestaque }}</span>
-            <span class="block">{{ HERO_COPY.tituloLinha2 }}</span>
+            <span v-if="HERO_COPY.tituloLinha2" class="block">{{ HERO_COPY.tituloLinha2 }}</span>
           </h1>
 
           <p
-            class="hero-enter hero-enter-d3 mt-6 max-w-lg font-poppins text-base font-light leading-relaxed text-glow-text-subtle sm:text-lg"
+            class="hero-enter hero-enter-d3 mt-5 max-w-lg font-poppins text-[0.9375rem] leading-relaxed text-glow-text-muted sm:mt-6 sm:text-lg"
           >
             {{ subtitulo }}
           </p>
@@ -141,7 +141,7 @@ const portes = FEATURE_FLAGS.lojasHabilitadas ? HERO_COPY.portes : HERO_COPY.por
           >
             <aside
               class="hero-float-card hero-float-card--delay pointer-events-auto"
-              aria-label="Agenda de hoje: 5 atendimentos"
+              aria-label="Agenda do dia organizada"
             >
               <span
                 class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-glow-gold-cta/20 text-glow-gold"
@@ -155,10 +155,10 @@ const portes = FEATURE_FLAGS.lojasHabilitadas ? HERO_COPY.portes : HERO_COPY.por
               </span>
               <div class="min-w-0">
                 <p class="font-satoshi text-[10px] font-medium uppercase tracking-[0.14em] text-glow-text-muted">
-                  Agenda de hoje
+                  Agenda do dia
                 </p>
                 <p class="mt-0.5 font-montserrat text-base font-bold leading-none text-glow-text">
-                  5 atendimentos
+                  Horários organizados
                 </p>
               </div>
             </aside>
@@ -170,7 +170,7 @@ const portes = FEATURE_FLAGS.lojasHabilitadas ? HERO_COPY.portes : HERO_COPY.por
           >
             <aside
               class="hero-float-card pointer-events-auto"
-              aria-label="Receita no mês: R$ 13,2 mil"
+              aria-label="Financeiro do negócio sob controle"
             >
               <span
                 class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-glow-success-bg text-glow-success"
@@ -182,11 +182,10 @@ const portes = FEATURE_FLAGS.lojasHabilitadas ? HERO_COPY.portes : HERO_COPY.por
               </span>
               <div class="min-w-0">
                 <p class="font-satoshi text-[10px] font-medium uppercase tracking-[0.14em] text-glow-text-muted">
-                  Receita no mês
+                  Financeiro
                 </p>
-                <p class="mt-0.5 flex items-baseline gap-1.5 font-montserrat text-base font-bold leading-none text-glow-gold">
-                  R$ 13,2k
-                  <span class="font-satoshi text-[10px] font-semibold text-glow-success">+18%</span>
+                <p class="mt-0.5 font-montserrat text-base font-bold leading-none text-glow-text">
+                  Caixa sob controle
                 </p>
               </div>
             </aside>

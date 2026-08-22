@@ -77,7 +77,7 @@ const precoComDesconto = computed(() =>
       </span>
     </div>
 
-    <p class="mt-5 min-h-[3.25rem] line-clamp-3 font-poppins text-base font-light leading-[1.2] text-glow-text-subtle">
+    <p class="mt-5 min-h-[3.25rem] line-clamp-3 font-poppins text-base leading-[1.25] text-glow-text-muted">
       {{ plano.descricao }}
     </p>
 
@@ -118,7 +118,7 @@ const precoComDesconto = computed(() =>
         >
           <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
         </svg>
-        <span class="line-clamp-2 font-poppins text-sm font-light leading-snug text-glow-text-subtle">
+        <span class="line-clamp-2 font-poppins text-sm leading-snug text-glow-text-muted">
           {{ feature }}
         </span>
       </li>

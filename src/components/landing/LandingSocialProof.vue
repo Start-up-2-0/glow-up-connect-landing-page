@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Seção de prova social (métricas e depoimentos).
+ * Oculta em produção via FEATURE_FLAGS.showSocialProof (default: false),
+ * até existirem dados reais — não inventar números.
+ */
 import { LANDING_SECTIONS, SOCIAL_STATS, TESTIMONIALS } from '@/constants/landing'
 import { STORY_CHAPTERS } from '@/constants/showcaseCallouts'
 import { useRevealOnScroll } from '@/composables/useRevealOnScroll'
@@ -22,8 +27,8 @@ const chapter = STORY_CHAPTERS.resultados
         <LandingSectionHeader
           eyebrow="Prova social"
           title="Quem já usa"
-          highlight="sente a diferença"
-          subtitle="Números e depoimentos de negócios pequenos, médios e grandes — barbeiros, cabeleireiros e estabelecimentos."
+          highlight="a Glow"
+          subtitle="Quando houver métricas e depoimentos reais, eles aparecem aqui."
         />
 
         <div

@@ -21,16 +21,16 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   dashboard: [
     {
       id: 'kpi',
-      label: 'Indicadores ao vivo',
-      detail: 'Receita, agenda, clientes e avaliação em um olhar.',
+      label: 'Indicadores do dia',
+      detail: 'Agenda, clientes e movimento do caixa em um olhar.',
       x: 34,
       y: 26,
       side: 'right',
     },
     {
       id: 'agenda-dia',
-      label: 'Agenda de hoje',
-      detail: 'Próximos horários com status — sem planilha.',
+      label: 'Próximos horários',
+      detail: 'Quem vem a seguir, com status — sem planilha.',
       x: 42,
       y: 54,
       side: 'right',
@@ -40,14 +40,14 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'status',
       label: 'Status claros',
-      detail: 'Confirmado, realizado ou cancelado — sem dúvida.',
+      detail: 'Confirmado, realizado ou cancelado — fácil de ler.',
       x: 78,
       y: 36,
       side: 'left',
     },
     {
       id: 'lista',
-      label: 'Lista operacional',
+      label: 'Lista do dia',
       detail: 'Cliente, serviço, horário e valor em cada card.',
       x: 48,
       y: 58,
@@ -58,7 +58,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'historico',
       label: 'Histórico do cliente',
-      detail: 'Contato e último agendamento na ponta dos dedos.',
+      detail: 'Contato e último agendamento à mão.',
       x: 52,
       y: 46,
       side: 'right',
@@ -67,8 +67,8 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   financeiro: [
     {
       id: 'caixa',
-      label: 'Caixa sob controle',
-      detail: 'Receita, despesa e lucro do período em cards claros.',
+      label: 'Caixa do período',
+      detail: 'Receita, despesa e resultado em cards simples.',
       x: 34,
       y: 26,
       side: 'right',
@@ -76,7 +76,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
     {
       id: 'fluxo',
       label: 'Fluxo de caixa',
-      detail: 'Entradas e saídas por semana — decisões com número.',
+      detail: 'Entradas e saídas por semana para acompanhar o movimento.',
       x: 48,
       y: 82,
       side: 'top',
@@ -85,8 +85,8 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   comissao: [
     {
       id: 'metas',
-      label: 'Comissões transparentes',
-      detail: 'Metas e progresso por profissional, sem conflito.',
+      label: 'Comissões',
+      detail: 'Valores por profissional, sem cálculo na mão.',
       x: 48,
       y: 58,
       side: 'right',
@@ -95,8 +95,8 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   online: [
     {
       id: 'selfserve',
-      label: 'Cliente agenda 24h',
-      detail: 'Escolhe o serviço, vê duração e preço — sem WhatsApp.',
+      label: 'Cliente agenda sozinho',
+      detail: 'Escolhe serviço, vê duração e preço — sem WhatsApp.',
       x: 48,
       y: 44,
       side: 'right',
@@ -115,8 +115,8 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   explorar: [
     {
       id: 'vitrine',
-      label: 'Vitrine regional',
-      detail: 'Lojas no mapa para atrair novos clientes na região.',
+      label: 'No mapa da região',
+      detail: 'Apareça para quem busca barbearias e salões por perto.',
       x: 58,
       y: 64,
       side: 'left',
@@ -125,8 +125,8 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   servicos: [
     {
       id: 'catalogo',
-      label: 'Catálogo atualizado',
-      detail: 'Preço, duração e status Ativo/Inativo por serviço.',
+      label: 'Catálogo de serviços',
+      detail: 'Preço, duração e status ativo/inativo por serviço.',
       x: 40,
       y: 40,
       side: 'right',
@@ -135,8 +135,8 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   'agenda-detalhe': [
     {
       id: 'cliente',
-      label: 'Contexto do cliente',
-      detail: 'Nome, contato e status do horário em um resumo.',
+      label: 'Dados do horário',
+      detail: 'Nome, contato e status em um resumo.',
       x: 40,
       y: 32,
       side: 'right',
@@ -153,7 +153,7 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
   'agendamento-confirmacao': [
     {
       id: 'resumo',
-      label: 'Confirmação clara',
+      label: 'Confirmação',
       detail: 'Serviço, data, horário e valor antes de finalizar.',
       x: 52,
       y: 46,
@@ -163,12 +163,13 @@ export const SHOWCASE_CALLOUTS: Record<string, ShotCallout[]> = {
 }
 
 export const STORY_CHAPTERS = {
-  publico: { index: '01', label: 'Do pequeno ao grande' },
+  publico: { index: '01', label: 'Para quem é' },
   funcionamento: { index: '02', label: 'Como funciona' },
   funcionalidades: { index: '03', label: 'Funcionalidades' },
   beneficios: { index: '04', label: 'Benefícios' },
   explorar: { index: '05', label: 'Explorar lojas e profissionais' },
   demonstracao: { index: '06', label: 'Demonstração' },
+  /** Seção oculta em produção (FEATURE_FLAGS.showSocialProof). */
   resultados: { index: '07', label: 'Resultados' },
   oferta: { index: '08', label: 'Planos' },
   cta: { index: '09', label: 'Comece agora' },

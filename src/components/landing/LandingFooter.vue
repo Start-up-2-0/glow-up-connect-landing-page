@@ -11,19 +11,21 @@ import { navLinksVisiveis } from '@/utils/tipoAssinatura'
 import { ROUTE_PATHS } from '@/constants/routes'
 import { APP_URL } from '@/constants/urls'
 import { useLandingScroll } from '@/composables/useLandingScroll'
+import {
+  getWhatsappHref,
+  getWhatsappLabel,
+  getWhatsappTelHref,
+} from '@/utils/whatsapp'
 
 const { goToSection, goToNavLink } = useLandingScroll()
 const navLinks = navLinksVisiveis()
 const tagline = FEATURE_FLAGS.lojasHabilitadas
   ? FOOTER_TAGLINE
-  : 'Gestão para barbeiros e cabeleireiros autônomos — do agendamento ao caixa.'
+  : 'Sistema para barbeiros e cabeleireiros autônomos — agenda, clientes e financeiro no dia a dia.'
 
-const whatsappHref = computed(() => {
-  const phone = import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined
-  if (!phone) return null
-  const digits = phone.replace(/\D/g, '')
-  return digits ? `https://wa.me/${digits}` : null
-})
+const whatsappHref = computed(() => getWhatsappHref())
+const phoneLabel = computed(() => getWhatsappLabel())
+const phoneHref = computed(() => getWhatsappTelHref())
 
 const socialLinks = computed(() => {
   const links: { label: string; href: string }[] = [
@@ -54,7 +56,7 @@ const socialLinks = computed(() => {
             <span class="font-light">GlowUp </span>
             <span class="font-black">Connect</span>
           </RouterLink>
-          <p class="mt-5 max-w-sm font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
+          <p class="mt-5 max-w-sm font-poppins text-sm leading-relaxed text-glow-text-muted">
             {{ tagline }}
           </p>
           <p class="mt-6 font-satoshi text-sm font-black text-glow-gold">
@@ -115,8 +117,12 @@ const socialLinks = computed(() => {
             <a :href="FOOTER_CONTACT.emailHref" class="break-all transition hover:text-glow-text">
               {{ FOOTER_CONTACT.email }}
             </a>
-            <a :href="FOOTER_CONTACT.phoneHref" class="transition hover:text-glow-text">
-              {{ FOOTER_CONTACT.phone }}
+            <a
+              v-if="phoneLabel && phoneHref"
+              :href="phoneHref"
+              class="transition hover:text-glow-text"
+            >
+              {{ phoneLabel }}
             </a>
           </div>
           <div class="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:flex-wrap sm:gap-3">

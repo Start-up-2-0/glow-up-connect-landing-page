@@ -9,8 +9,8 @@ import LandingStorySection from '@/components/landing/motion/LandingStorySection
 const { isVisible } = useRevealOnScroll()
 const chapter = STORY_CHAPTERS.funcionamento
 const subtitle = FEATURE_FLAGS.lojasHabilitadas
-  ? 'Sem curva íngreme: você cadastra, configura e já começa a atender — do autônomo ao grande estabelecimento.'
-  : 'Sem curva íngreme: você cadastra, configura e já começa a atender como profissional autônomo.'
+  ? 'Quatro passos para sair do cadastro e começar a atender com a agenda no ar.'
+  : 'Quatro passos para sair do cadastro e começar a atender como profissional autônomo.'
 const passos = FEATURE_FLAGS.lojasHabilitadas
   ? HOW_IT_WORKS
   : HOW_IT_WORKS.map((step) =>
@@ -18,13 +18,13 @@ const passos = FEATURE_FLAGS.lojasHabilitadas
         ? {
             ...step,
             descricao:
-              'Cadastre-se em minutos como profissional autônomo. Sem instalação — tudo na nuvem.',
+              'Cadastre-se como profissional autônomo. Funciona no navegador, sem instalar nada.',
           }
         : step.step === '02'
           ? {
               ...step,
               descricao:
-                'Adicione serviços, horários e preços. Em poucos passos sua operação já está no ar.',
+                'Inclua serviços, preços e horários de atendimento. Em poucos minutos a base já está pronta.',
             }
           : step,
     )
@@ -41,9 +41,8 @@ const passos = FEATURE_FLAGS.lojasHabilitadas
       <div class="mx-auto max-w-[1280px]">
         <LandingSectionHeader
           eyebrow="Como funciona"
-          title="Do primeiro acesso"
-          highlight="ao atendimento"
-          title-after="em quatro passos"
+          title="Do cadastro"
+          highlight="ao primeiro horário"
           :subtitle="subtitle"
         />
 
@@ -71,7 +70,7 @@ const passos = FEATURE_FLAGS.lojasHabilitadas
               <h3 class="mt-5 font-montserrat text-xl font-semibold text-glow-text">
                 {{ step.titulo }}
               </h3>
-              <p class="mt-3 font-poppins text-sm font-light leading-relaxed text-glow-text-muted">
+              <p class="mt-3 font-poppins text-sm leading-relaxed text-glow-text-muted">
                 {{ step.descricao }}
               </p>
             </li>

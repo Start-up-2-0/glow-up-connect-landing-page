@@ -37,7 +37,7 @@ const { isVisible } = useRevealOnScroll()
     </p>
 
     <h2
-      class="max-w-full break-words font-montserrat text-[1.625rem] font-light leading-[1.3] text-balance text-glow-text sm:text-4xl sm:leading-[1.2] lg:text-5xl xl:text-[3.5rem] xl:leading-[1.12]"
+      class="max-w-full break-words font-montserrat text-[1.5rem] font-medium leading-[1.3] text-balance text-glow-text sm:text-[2.125rem] sm:leading-[1.2] lg:text-4xl xl:text-[2.75rem] xl:leading-[1.15]"
     >
       <span>{{ title }}</span>
       <span v-if="highlight" class="font-black text-glow-gold">
@@ -48,8 +48,8 @@ const { isVisible } = useRevealOnScroll()
 
     <p
       v-if="subtitle"
-      class="mt-4 font-poppins text-[0.9375rem] font-light leading-relaxed text-glow-text-subtle sm:mt-5 sm:text-lg"
-      :class="align === 'center' ? 'mx-auto max-w-2xl' : 'max-w-xl'"
+      class="mt-3 font-poppins text-sm leading-relaxed text-glow-text-muted sm:mt-4 sm:text-base sm:leading-relaxed"
+      :class="align === 'center' ? 'mx-auto max-w-xl' : 'max-w-lg'"
     >
       {{ subtitle }}
     </p>
