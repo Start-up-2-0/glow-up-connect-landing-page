@@ -1,5 +1,5 @@
-export const CONSENT_POLICY_VERSION = '1.0'
-export const TERMS_VERSION = '1.0'
+export const CONSENT_POLICY_VERSION = '1.1'
+export const TERMS_VERSION = '1.1'
 
 export const CONSENT_STORAGE_KEYS = {
   COOKIE_PREFERENCES: 'guc_cookie_consent',

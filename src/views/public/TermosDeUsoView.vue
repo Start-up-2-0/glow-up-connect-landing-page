@@ -25,7 +25,7 @@ useJsonLd({
 <template>
   <LegalDocumentShell
     title="Termos de uso"
-    :subtitle="`Versão ${TERMS_VERSION} — última atualização: junho de 2026`"
+    :subtitle="`Versão ${TERMS_VERSION} — última atualização: 24 de agosto de 2026`"
   >
     <section>
       <h2>1. Aceitação</h2>
@@ -103,8 +103,25 @@ useJsonLd({
       <h2>9. Alterações e rescisão</h2>
       <p>
         Podemos atualizar estes termos mediante publicação de nova versão. O uso continuado após a
-        alteração constitui aceitação. Você pode encerrar sua conta a qualquer momento; podemos
-        suspender contas que violem estes termos.
+        alteração constitui aceitação. Podemos suspender contas que violem estes termos.
+      </p>
+      <p>
+        Você pode solicitar o encerramento da sua conta a qualquer momento em
+        <strong>Configurações → Privacidade</strong>. A solicitação inicia um período de segurança
+        antes da conclusão definitiva.
+      </p>
+      <div class="legal-callout">
+        <strong>Você tem 30 dias para mudar de ideia.</strong>
+        Durante os 30 dias seguintes à solicitação, a conta permanece em processo de exclusão e pode
+        ser reativada pelo login com e-mail e senha. Se não houver reativação, a exclusão é concluída
+        ao final do prazo. Os dados pessoais são então eliminados ou anonimizados, exceto quando a
+        conservação for necessária para cumprir obrigação legal ou regulatória, exercer direitos em
+        processos ou atender a outra hipótese autorizada pela legislação aplicável.
+      </div>
+      <p>
+        Para proprietários de estabelecimentos, a solicitação pode suspender a visibilidade pública
+        da loja e o acesso operacional da equipe durante esse período. A reativação dentro dos 30 dias
+        restaura o acesso conforme as condições da assinatura.
       </p>
     </section>
 

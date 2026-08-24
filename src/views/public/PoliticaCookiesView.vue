@@ -25,7 +25,7 @@ useJsonLd({
 <template>
   <LegalDocumentShell
     title="Política de cookies"
-    :subtitle="`Versão ${CONSENT_POLICY_VERSION} — última atualização: junho de 2026`"
+    :subtitle="`Versão ${CONSENT_POLICY_VERSION} — última atualização: 24 de agosto de 2026`"
   >
     <section>
       <h2>O que são cookies?</h2>
@@ -93,6 +93,23 @@ useJsonLd({
         Cookies e integrações de terceiros que não são estritamente necessários dependem do seu
         consentimento, que pode ser retirado a qualquer momento.
       </p>
+    </section>
+
+    <section>
+      <h2>Conta, cookies e exclusão dos dados</h2>
+      <p>
+        Apagar cookies do navegador ou revogar cookies de terceiros não exclui sua conta. A
+        exclusão da conta deve ser solicitada separadamente na área
+        <strong>Configurações → Privacidade</strong> do aplicativo.
+      </p>
+      <div class="legal-callout">
+        <strong>Prazo de 30 dias para reativação.</strong>
+        Após a solicitação, a conta entra em processo de exclusão por 30 dias. Durante esse período,
+        você pode cancelar o processo reativando a conta pelo login com seu e-mail e senha. Encerrado
+        o prazo sem reativação, a exclusão é concluída e os dados pessoais são eliminados ou
+        anonimizados, salvo aqueles que precisem ser conservados para cumprir obrigação legal ou
+        regulatória, exercer direitos em processos ou atender às demais hipóteses permitidas pela LGPD.
+      </div>
     </section>
 
     <section>

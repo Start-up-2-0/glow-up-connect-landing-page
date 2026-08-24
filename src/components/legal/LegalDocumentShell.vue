@@ -14,18 +14,24 @@ withDefaults(
 </script>
 
 <template>
-  <article class="mx-auto max-w-3xl">
-    <header class="mb-8 border-b border-glow-border-soft pb-6">
-      <p class="text-sm font-medium text-glow-gold-dark">Documento legal</p>
-      <h1 class="mt-2 font-urbanist text-3xl font-semibold text-glow-text">
+  <article class="legal-document mx-auto max-w-4xl">
+    <header class="legal-document__hero">
+      <div class="legal-document__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M7 3.75h7l3 3V20.25H7V3.75Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+          <path d="M14 3.75v3h3M9.5 11h5M9.5 14.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+        </svg>
+      </div>
+      <div>
+        <p class="legal-document__eyebrow">Transparência e segurança</p>
+        <h1 class="legal-document__title">
         {{ title }}
-      </h1>
-      <p v-if="subtitle" class="mt-2 text-sm text-glow-text-subtle">
-        {{ subtitle }}
-      </p>
+        </h1>
+        <p v-if="subtitle" class="legal-document__version">{{ subtitle }}</p>
+      </div>
     </header>
 
-    <div class="prose-legal space-y-6 text-sm leading-relaxed text-glow-text-subtle">
+    <div class="prose-legal text-sm leading-relaxed text-glow-text-subtle">
       <slot />
     </div>
 
@@ -45,11 +51,50 @@ withDefaults(
 
 <style scoped>
 .prose-legal :deep(h2) {
-  margin-top: 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: Urbanist, sans-serif;
+  font-size: 1.075rem;
+  font-weight: 700;
   color: var(--glow-text);
 }
+
+.legal-document__hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--glow-border-soft);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--glow-bg-elevated), color-mix(in srgb, var(--glow-gold-cta) 8%, var(--glow-bg-elevated)));
+  box-shadow: var(--glow-shadow-sm);
+}
+
+.legal-document__icon { display: flex; width: 3rem; height: 3rem; flex: 0 0 auto; align-items: center; justify-content: center; border-radius: .9rem; background: var(--glow-gold-selected); color: var(--glow-gold-dark); }
+.legal-document__icon svg { width: 1.5rem; height: 1.5rem; }
+.legal-document__eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--glow-gold-dark); }
+.legal-document__title { margin-top: .3rem; font-family: Urbanist, sans-serif; font-size: 2rem; line-height: 1.15; font-weight: 700; color: var(--glow-text); }
+.legal-document__version { margin-top: .5rem; font-size: .8rem; color: var(--glow-text-subtle); }
+
+.prose-legal :deep(section) {
+  margin-top: .8rem;
+  border: 1px solid var(--glow-border-soft);
+  border-radius: 1rem;
+  padding: 1.25rem 1.4rem;
+  background: var(--glow-bg-elevated);
+  box-shadow: var(--glow-shadow-sm);
+}
+
+.prose-legal :deep(.legal-callout) {
+  margin-top: 1rem;
+  border: 1px solid color-mix(in srgb, var(--glow-gold-cta) 38%, var(--glow-border-soft));
+  border-left: 4px solid var(--glow-gold-cta);
+  border-radius: .85rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--glow-gold-cta) 9%, var(--glow-bg-elevated));
+  color: var(--glow-text);
+}
+
+.prose-legal :deep(.legal-callout strong) { color: var(--glow-gold-dark); }
 
 .prose-legal :deep(ul) {
   margin-left: 1.25rem;
@@ -62,5 +107,12 @@ withDefaults(
 
 .prose-legal :deep(p) {
   margin-top: 0.5rem;
+}
+
+@media (max-width: 639px) {
+  .legal-document__hero { padding: 1.1rem; }
+  .legal-document__icon { width: 2.5rem; height: 2.5rem; }
+  .legal-document__title { font-size: 1.65rem; }
+  .prose-legal :deep(section) { padding: 1rem; }
 }
 </style>
