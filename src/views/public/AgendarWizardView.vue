@@ -280,13 +280,15 @@ async function handleConfirmar() {
 </script>
 
 <template>
-  <div class="agendar-page space-y-7">
-    <AgendarLojaApresentacao
-      v-if="estabelecimentoResumo && !contextoInvalido"
-      :loja="estabelecimentoResumo"
-    />
+  <div class="agendar-page">
+    <div :class="[isSuccessStep ? 'mx-auto w-full' : AGENDAR_WIZARD_CONTENT_CLASS, 'agendar-unified-card']">
+      <AgendarLojaApresentacao
+        v-if="estabelecimentoResumo && !contextoInvalido"
+        :loja="estabelecimentoResumo"
+        embedded
+      />
 
-    <div :class="[isSuccessStep ? 'mx-auto w-full' : AGENDAR_WIZARD_CONTENT_CLASS, 'agendar-flow']">
+      <div class="agendar-flow">
       <BaseAlert v-if="contextoInvalido" variant="error" class="mb-6">
         Link de agendamento inválido. Solicite um novo link ao profissional.
       </BaseAlert>
@@ -729,6 +731,7 @@ async function handleConfirmar() {
           </template>
         </AgendarSucessoConfirmacao>
       </template>
+      </div>
     </div>
 
     <AgendarLoginModal

@@ -4,9 +4,12 @@ import { RouterLink } from 'vue-router'
 import type { EstabelecimentoPublico } from '@/types/estabelecimento.types'
 import { lojaPublicaPath } from '@/constants/routes'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   loja: EstabelecimentoPublico
-}>()
+  embedded?: boolean
+}>(), {
+  embedded: false,
+})
 
 const endereco = computed(() => {
   const item = props.loja.endereco
@@ -20,7 +23,11 @@ const comodidades = computed(() =>
 </script>
 
 <template>
-  <section class="agendar-loja" aria-labelledby="agendar-loja-nome">
+  <section
+    class="agendar-loja"
+    :class="{ 'agendar-loja--embedded': embedded }"
+    aria-labelledby="agendar-loja-nome"
+  >
     <div class="agendar-loja__glow" aria-hidden="true" />
 
     <div class="agendar-loja__content">
@@ -149,14 +156,48 @@ const comodidades = computed(() =>
 .agendar-loja__action-copy span { color: var(--glow-gold); font: 700 .68rem Satoshi, sans-serif; letter-spacing: .16em; text-transform: uppercase; }
 .agendar-loja__action-copy strong { color: var(--glow-text-soft); font: 600 .84rem Satoshi, sans-serif; }
 
+.agendar-loja--embedded {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.agendar-loja--embedded .agendar-loja__content { padding: 1.25rem; }
+.agendar-loja--embedded .agendar-loja__logo { width: 4.25rem; height: 4.25rem; border-radius: 1rem; }
+.agendar-loja--embedded .agendar-loja__name { font-size: clamp(1.25rem, 4vw, 1.75rem); }
+.agendar-loja--embedded .agendar-loja__action-copy { padding-block: .7rem; }
+
 @media (min-width: 760px) {
   .agendar-loja__content { display: grid; grid-template-columns: minmax(18rem, .8fr) minmax(22rem, 1.2fr); gap: 2rem; padding: 1.75rem; }
   .agendar-loja__details { margin: 0; padding: 0 0 0 2rem; border-top: 0; border-left: 1px solid var(--glow-border-soft); }
   .agendar-loja__action-copy { flex-direction: row; align-items: center; justify-content: space-between; padding-inline: 1.75rem; }
+  .agendar-loja--embedded .agendar-loja__content { grid-template-columns: minmax(15rem, .85fr) minmax(20rem, 1.15fr); gap: 1.5rem; padding: 1.25rem 1.5rem; }
+  .agendar-loja--embedded .agendar-loja__details { padding-left: 1.5rem; }
 }
 
 @media (max-width: 480px) {
   .agendar-loja { width: min(100% - 1rem, 1120px); border-radius: 1.25rem; }
   .agendar-loja__logo { width: 4.5rem; height: 4.5rem; border-radius: 1rem; }
+  .agendar-loja--embedded { width: 100%; border-radius: 0; }
+  .agendar-loja--embedded .agendar-loja__content { padding: 1rem; }
+  .agendar-loja--embedded .agendar-loja__identity { gap: .75rem; }
+  .agendar-loja--embedded .agendar-loja__logo { width: 3.5rem; height: 3.5rem; border-radius: .8rem; }
+  .agendar-loja--embedded .agendar-loja__eyebrow { font-size: .6rem; }
+  .agendar-loja--embedded .agendar-loja__name { margin-top: .1rem; font-size: 1.2rem; }
+  .agendar-loja--embedded .agendar-loja__meta { margin-top: .4rem; }
+  .agendar-loja--embedded .agendar-loja__badge { padding: .22rem .5rem; font-size: .65rem; }
+  .agendar-loja--embedded .agendar-loja__details { margin-top: .75rem; padding-top: .75rem; }
+  .agendar-loja--embedded .agendar-loja__address { font-size: .75rem; line-height: 1.45; }
+  .agendar-loja--embedded .agendar-loja__description { display: none; }
+  .agendar-loja--embedded .agendar-loja__amenities { margin-top: .7rem; overflow: hidden; }
+  .agendar-loja--embedded .agendar-loja__amenities > p { display: none; }
+  .agendar-loja--embedded .agendar-loja__amenities ul { flex-wrap: nowrap; overflow-x: auto; padding-bottom: .2rem; scrollbar-width: none; }
+  .agendar-loja--embedded .agendar-loja__amenities ul::-webkit-scrollbar { display: none; }
+  .agendar-loja--embedded .agendar-loja__amenities li { flex: 0 0 auto; padding: .3rem .55rem; font-size: .68rem; }
+  .agendar-loja--embedded .agendar-loja__profile-link { margin-top: .65rem; font-size: .72rem; }
+  .agendar-loja--embedded .agendar-loja__action-copy { display: none; }
 }
 </style>

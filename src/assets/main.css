@@ -200,17 +200,21 @@
   }
 
   .agendar-page {
-    @apply pb-6;
+    @apply pb-4;
+  }
+
+  .agendar-unified-card {
+    @apply overflow-hidden rounded-[1.5rem] border border-glow-border-soft shadow-glow-md backdrop-blur-sm;
+    background-color: color-mix(in srgb, var(--glow-surface) 94%, transparent);
   }
 
   .agendar-flow {
-    @apply rounded-[1.75rem] border border-glow-border-soft p-3 shadow-glow-md backdrop-blur-sm sm:p-5;
-    background-color: color-mix(in srgb, var(--glow-surface) 38%, transparent);
+    @apply border-t border-glow-border-soft p-3 sm:p-5;
   }
 
   .agendar-wizard-stepper {
-    @apply mb-5 rounded-2xl border border-glow-border-soft p-4 shadow-sm sm:p-5;
-    background-color: color-mix(in srgb, var(--glow-surface) 92%, transparent);
+    @apply mb-0 border-b border-glow-border-soft px-2 pb-5 pt-2 sm:px-3 sm:pb-6 sm:pt-3;
+    background-color: transparent;
   }
 
   .agendar-wizard-stepper__row {
@@ -278,12 +282,12 @@
   }
 
   .agendar-step-panel {
-    @apply rounded-2xl border border-glow-border-soft p-5 shadow-sm sm:p-8;
-    background-color: color-mix(in srgb, var(--glow-surface) 96%, transparent);
+    @apply rounded-none border-0 px-2 pb-3 pt-5 shadow-none sm:px-3 sm:pb-4 sm:pt-7;
+    background-color: transparent;
   }
 
   .agendar-step-panel__icon {
-    @apply mb-5 flex size-11 items-center justify-center rounded-xl border text-glow-gold;
+    @apply mb-4 flex size-10 items-center justify-center rounded-xl border text-glow-gold;
     border-color: color-mix(in srgb, var(--glow-gold) 25%, transparent);
     background-color: color-mix(in srgb, var(--glow-gold) 10%, transparent);
   }
@@ -405,7 +409,7 @@
   }
 
   .agendar-opcao-card {
-    @apply min-h-[88px] transition duration-200 hover:-translate-y-0.5 hover:border-glow-gold hover:shadow-md;
+    @apply min-h-[76px] transition duration-200 hover:-translate-y-0.5 hover:border-glow-gold hover:shadow-md;
   }
 
   .agendar-profissional-card {
@@ -544,7 +548,7 @@
   }
 
   .agendar-prof-modo-card {
-    @apply flex w-full items-start gap-4 rounded-2xl border border-glow-border-soft bg-glow-surface p-5 text-left shadow-sm transition duration-200;
+    @apply flex w-full items-start gap-3 rounded-2xl border border-glow-border-soft bg-glow-surface p-4 text-left shadow-sm transition duration-200;
   }
 
   .agendar-prof-modo-card:hover {
@@ -577,6 +581,65 @@
   .agendar-services-list {
     scrollbar-color: color-mix(in srgb, var(--glow-gold) 35%, transparent) transparent;
     scrollbar-width: thin;
+  }
+
+  @media (max-width: 639px) {
+    .agendar-publico-main {
+      @apply px-2 pb-8;
+    }
+
+    .agendar-unified-card {
+      @apply rounded-2xl;
+    }
+
+    .agendar-flow {
+      @apply p-2;
+    }
+
+    .agendar-wizard-stepper__row {
+      @apply mb-4;
+    }
+
+    .agendar-wizard-stepper__back {
+      @apply size-9;
+    }
+
+    .agendar-wizard-stepper__title {
+      @apply text-base;
+    }
+
+    .agendar-step-panel {
+      @apply space-y-4 px-1 pb-2 pt-4;
+    }
+
+    .agendar-section-title,
+    .agendar-section-title--identidade {
+      @apply text-lg;
+    }
+
+    .agendar-section-subtitle {
+      @apply text-sm;
+    }
+
+    .agendar-step-panel__icon {
+      @apply mb-3 size-9;
+    }
+
+    .agendar-opcao-card {
+      @apply min-h-[68px] gap-3 p-3;
+    }
+
+    .agendar-opcao-card > div:first-child {
+      @apply size-8;
+    }
+
+    .agendar-prof-modo-card {
+      @apply min-h-[72px] p-3;
+    }
+
+    .agendar-review-card {
+      @apply px-4 py-4;
+    }
   }
 
   .agendar-prof-pick-card {

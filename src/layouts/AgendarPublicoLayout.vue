@@ -16,7 +16,7 @@ import LandingNavbar from '@/components/landing/LandingNavbar.vue'
 
     <LandingNavbar />
 
-    <main id="conteudo-principal" class="agendar-publico-main relative z-10 pt-24 sm:pt-28">
+    <main id="conteudo-principal" class="agendar-publico-main relative z-10 pt-20 sm:pt-24">
       <slot />
     </main>
   </div>
