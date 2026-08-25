@@ -626,11 +626,31 @@
     }
 
     .agendar-opcao-card {
-      @apply min-h-[68px] gap-3 p-3;
+      @apply min-h-[72px] gap-3 p-3;
     }
 
     .agendar-opcao-card > div:first-child {
       @apply size-8;
+    }
+
+    .agendar-opcao-card > div:nth-child(2) p:first-child {
+      @apply text-[15px] leading-[1.25];
+    }
+
+    .agendar-opcao-card > div:nth-child(2) p:last-child {
+      @apply mt-1 text-[13px] leading-[1.35];
+    }
+
+    .agendar-opcao-card__action {
+      @apply size-9 p-0;
+    }
+
+    .agendar-opcao-card__action-label {
+      @apply hidden;
+    }
+
+    .agendar-opcao-card__action svg {
+      @apply size-3;
     }
 
     .agendar-prof-modo-card {

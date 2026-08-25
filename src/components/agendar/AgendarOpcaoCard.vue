@@ -21,8 +21,13 @@ const emit = defineEmits<{
       <p class="font-montserrat text-base font-semibold text-glow-text">{{ title }}</p>
       <p class="mt-0.5 font-poppins text-sm font-light text-glow-text-muted">{{ description }}</p>
     </div>
-    <button type="button" :class="AGENDAR_BTN_OUTLINE_CLASS" @click="emit('action')">
-      {{ actionLabel }}
+    <button
+      type="button"
+      :class="[AGENDAR_BTN_OUTLINE_CLASS, 'agendar-opcao-card__action']"
+      :aria-label="actionLabel"
+      @click="emit('action')"
+    >
+      <span class="agendar-opcao-card__action-label">{{ actionLabel }}</span>
       <svg class="size-2.5" viewBox="0 0 5 10" fill="none" aria-hidden="true">
         <path
           d="M0.5 0.5L4.5 5L0.5 9.5"
