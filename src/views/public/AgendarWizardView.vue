@@ -280,13 +280,13 @@ async function handleConfirmar() {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="agendar-page space-y-7">
     <AgendarLojaApresentacao
       v-if="estabelecimentoResumo && !contextoInvalido"
       :loja="estabelecimentoResumo"
     />
 
-    <div :class="isSuccessStep ? 'mx-auto w-full' : AGENDAR_WIZARD_CONTENT_CLASS">
+    <div :class="[isSuccessStep ? 'mx-auto w-full' : AGENDAR_WIZARD_CONTENT_CLASS, 'agendar-flow']">
       <BaseAlert v-if="contextoInvalido" variant="error" class="mb-6">
         Link de agendamento inválido. Solicite um novo link ao profissional.
       </BaseAlert>
@@ -414,7 +414,7 @@ async function handleConfirmar() {
             Preencha seus dados para continuar o agendamento
           </h1>
 
-          <div class="space-y-6">
+          <div class="agendar-contact-grid">
             <div>
               <label :class="GLOW_LABEL_CLASS" for="agendar-nome">Nome completo</label>
               <input
@@ -568,7 +568,7 @@ async function handleConfirmar() {
             Nenhum serviço disponível no momento.
           </p>
 
-          <div class="max-h-[420px] space-y-3 overflow-y-auto pr-1">
+          <div class="agendar-services-list max-h-[520px] space-y-3 overflow-y-auto pr-1">
             <AgendarServicoCard
               v-for="servico in servicos"
               :key="servico.id"
@@ -638,7 +638,7 @@ async function handleConfirmar() {
             Nenhum horário livre nesta data. Escolha outro dia disponível.
           </p>
 
-          <div v-else-if="slotsDoDia.length > 0" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <div v-else-if="slotsDoDia.length > 0" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             <button
               v-for="(slot, index) in slotsDoDia"
               :key="`${slot.inicio}-${index}`"

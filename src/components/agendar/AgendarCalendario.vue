@@ -139,13 +139,13 @@ function handleSelect(iso: string) {
 
 <template>
   <div
-    class="w-full rounded-xl border border-glow-border-soft bg-glow-surface p-5"
+    class="agendar-calendar w-full"
     :class="embedded ? 'max-w-full' : 'mx-auto max-w-[463px]'"
   >
     <div class="mb-6 flex items-center justify-between">
       <button
         type="button"
-        class="flex size-8 items-center justify-center rounded-full text-glow-text transition hover:bg-glow-hover-surface"
+        class="agendar-calendar__nav"
         aria-label="Mês anterior"
         @click="shiftMonth(-1)"
       >
@@ -156,7 +156,7 @@ function handleSelect(iso: string) {
       <p class="font-satoshi text-xl font-bold text-glow-text">{{ monthLabel(visibleMonth) }}</p>
       <button
         type="button"
-        class="flex size-8 items-center justify-center rounded-full text-glow-text transition hover:bg-glow-hover-surface"
+        class="agendar-calendar__nav"
         aria-label="Próximo mês"
         @click="shiftMonth(1)"
       >

@@ -53,8 +53,18 @@ const emit = defineEmits<{
         v-for="bar in AGENDAR_FIGMA_TOTAL"
         :key="bar"
         class="agendar-wizard-stepper__bar"
-        :class="{ 'agendar-wizard-stepper__bar--active': bar === stepIndex }"
-      />
+        :class="{
+          'agendar-wizard-stepper__bar--completed': bar < stepIndex,
+          'agendar-wizard-stepper__bar--active': bar === stepIndex,
+        }"
+      >
+        <span class="agendar-wizard-stepper__bar-index" aria-hidden="true">
+          <svg v-if="bar < stepIndex" viewBox="0 0 12 12" fill="none">
+            <path d="m2.5 6 2.2 2.2 4.8-4.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span v-else>{{ bar }}</span>
+        </span>
+      </div>
     </div>
   </div>
 </template>
