@@ -778,6 +778,7 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
 
   async function init() {
     contextoInvalido.value = false
+    await loadEstabelecimentoResumo()
 
     if (initialProfissionalGuid) {
       restoreDraft()
@@ -815,7 +816,7 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
       return
     }
 
-    await Promise.all([loadEstabelecimentoResumo(), loadProfissionais()])
+    await loadProfissionais()
 
     if (isVisitante.value && !modoIdentidade.value) {
       step.value = 'identidade'
@@ -857,6 +858,7 @@ export function useAgendarWizard(publicGuid: string, initialProfissionalGuid = '
     profissionalSelecionadoNome,
     profissionalSelecionadoFoto,
     estabelecimentoNome,
+    estabelecimentoResumo,
     servicos,
     slots,
     slotsDoDia,

@@ -11,6 +11,7 @@ import AgendarCalendario from '@/components/agendar/AgendarCalendario.vue'
 import AgendarRevisaoStep from '@/components/agendar/AgendarRevisaoStep.vue'
 import AgendarSucessoConfirmacao from '@/components/agendar/AgendarSucessoConfirmacao.vue'
 import AgendarLoginModal from '@/components/agendar/AgendarLoginModal.vue'
+import AgendarLojaApresentacao from '@/components/agendar/AgendarLojaApresentacao.vue'
 import UserAvatar from '@/components/layout/UserAvatar.vue'
 import TelefoneInput from '@/components/ui/TelefoneInput.vue'
 import { useAgendarWizard } from '@/composables/useAgendarWizard'
@@ -65,6 +66,7 @@ const {
   profissionalSelecionadoNome,
   profissionalSelecionadoFoto,
   estabelecimentoNome,
+  estabelecimentoResumo,
   servicos,
   slotsDoDia,
   datasAtendimento,
@@ -279,6 +281,11 @@ async function handleConfirmar() {
 
 <template>
   <div class="space-y-6">
+    <AgendarLojaApresentacao
+      v-if="estabelecimentoResumo && !contextoInvalido"
+      :loja="estabelecimentoResumo"
+    />
+
     <div :class="isSuccessStep ? 'mx-auto w-full' : AGENDAR_WIZARD_CONTENT_CLASS">
       <BaseAlert v-if="contextoInvalido" variant="error" class="mb-6">
         Link de agendamento inválido. Solicite um novo link ao profissional.

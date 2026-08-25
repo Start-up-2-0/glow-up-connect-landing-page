@@ -55,6 +55,15 @@ export interface EstabelecimentoPublico {
   categoriaId?: number
   categoria?: string
   tipoAssinatura?: 'Estabelecimento' | 'ProfissionalAutonomo' | null
+  comodidades?: ComodidadePublica[]
+}
+
+export interface ComodidadePublica {
+  id: number
+  nome: string
+  slug: string
+  icone: string
+  ordem: number
 }
 
 export interface ListarProximosParams {
